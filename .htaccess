@@ -1,21 +1,44 @@
+# Disable directory browsing completely across all folders
+Options -Indexes +FollowSymLinks -MultiViews
+
 <IfModule mod_rewrite.c>
-Options +FollowSymLinks -MultiViews
 RewriteEngine On
 
-# 1. Redirect /index.php to root / or directory
+# ==============================================================================
+# 1. SECURITY & SENSITIVE RESOURCE PROTECTION
+# ==============================================================================
+
+# Block direct access to hidden files and directories (.git, .env, .htaccess, etc.)
+RewriteRule (^\.|/\.) - [F,L]
+
+# Block direct access to sensitive backend directories, config, test scripts, and docs
+RewriteRule (^|/)(config|README\.md|test_db\.php|test_db|composer\.(json|lock)|.*\.sql|.*\.log|.*\.bak|.*\.ini) - [F,L,NC]
+
+# Block direct directory browsing of resource folders (images, css, js, video, api, config)
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(images|css|js|video|api|config)(/.*)?$ - [F,L,NC]
+
+# Prevent execution of any scripts inside static resource folders
+RewriteRule ^(images|css|js|video)/.*\.(php|phtml|sh|cgi|pl|py)$ - [F,L,NC]
+
+# ==============================================================================
+# 2. CLEAN EXTENSIONLESS URL ROUTING
+# ==============================================================================
+
+# Redirect /index.php to root / or directory
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/index\.php [NC]
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteRule ^ %1/ [R=301,L]
 
-# 2. Redirect direct requests for file.php to extensionless /file
+# Redirect direct requests for file.php to extensionless /file
 # Exclude POST requests to preserve form bodies
-# Exclude /api/ endpoints to prevent interrupting backend JSON endpoints
+# Exclude /api/ endpoints so AJAX JSON endpoints continue working
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.?]+)\.php [NC]
 RewriteCond %{REQUEST_URI} !/api/ [NC]
 RewriteRule ^ %1 [R=301,L]
 
-# 3. Internally rewrite extensionless requests to file.php if file.php exists
+# Internally rewrite extensionless requests to file.php if file.php exists
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L,QSA]
