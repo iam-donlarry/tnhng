@@ -81,9 +81,9 @@ if ($pdo) {
         <span><strong>TNH SEASON 3 IS LIVE</strong> • 100 POINTS TO QUALIFY FOR GRAND FINALE</span>
       </div>
       <div class="topbar-links">
-        <a href="promoter.php" class="topbar-link"><i data-lucide="smartphone" style="width: 13px; height: 13px;"></i> Ambassador Portal</a>
+        <a href="promoter" class="topbar-link"><i data-lucide="smartphone" style="width: 13px; height: 13px;"></i> Ambassador Portal</a>
         <span class="topbar-sep">|</span>
-        <a href="admin.php" class="topbar-link"><i data-lucide="shield" style="width: 13px; height: 13px;"></i> Admin Console</a>
+        <a href="admin" class="topbar-link"><i data-lucide="shield" style="width: 13px; height: 13px;"></i> Admin Console</a>
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@ if ($pdo) {
   <!-- ================= MINIMAL PRIMARY NAVIGATION ================= -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.php" class="brand-logo" aria-label="William Lawson's The Next Highlandah">
+      <a href="./" class="brand-logo" aria-label="William Lawson's The Next Highlandah">
         <img src="images/logo.svg" alt="William Lawson's" class="brand-logo-img">
         <div class="brand-text-wrap">
           <span class="brand-title">THE NEXT HIGHLANDAH</span>
@@ -101,9 +101,9 @@ if ($pdo) {
 
       <nav class="nav-desktop">
         <ul class="nav-links">
-          <li><a href="index.php" class="nav-link">Home</a></li>
-          <li><a href="leaderboard.php" class="nav-link">Leaderboard</a></li>
-          <li><a href="outlets.php" class="nav-link active">Outlets</a></li>
+          <li><a href="./" class="nav-link">Home</a></li>
+          <li><a href="leaderboard" class="nav-link">Leaderboard</a></li>
+          <li><a href="outlets" class="nav-link active">Outlets</a></li>
         </ul>
       </nav>
 
@@ -122,19 +122,19 @@ if ($pdo) {
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobile-nav-drawer">
       <ul>
-        <li><a href="index.php" class="nav-link mobile-link">Home</a></li>
-        <li><a href="leaderboard.php" class="nav-link mobile-link">Full Leaderboard</a></li>
-        <li><a href="outlets.php" class="nav-link mobile-link active">Outlet Tour & Dates</a></li>
+        <li><a href="./" class="nav-link mobile-link">Home</a></li>
+        <li><a href="leaderboard" class="nav-link mobile-link">Full Leaderboard</a></li>
+        <li><a href="outlets" class="nav-link mobile-link active">Outlet Tour & Dates</a></li>
       </ul>
       <div class="mobile-nav-actions">
         <a href="#check-points-anchor" class="btn btn-primary mobile-link" style="width: 100%;">
           <i data-lucide="award"></i> Check My Clan Points
         </a>
         <div class="mobile-portal-grid">
-          <a href="promoter.php" class="btn btn-outline btn-sm">
+          <a href="promoter" class="btn btn-outline btn-sm">
             <i data-lucide="smartphone"></i> Ambassador
           </a>
-          <a href="admin.php" class="btn btn-outline btn-sm">
+          <a href="admin" class="btn btn-outline btn-sm">
             <i data-lucide="shield"></i> Admin
           </a>
         </div>
@@ -147,7 +147,7 @@ if ($pdo) {
     <section class="page-hero">
       <div class="container">
         <div class="breadcrumb-nav">
-          <a href="index.php" class="breadcrumb-link">Home</a>
+          <a href="./" class="breadcrumb-link">Home</a>
           <span class="breadcrumb-sep">/</span>
           <span class="breadcrumb-current">Activation Outlets</span>
         </div>
@@ -176,7 +176,7 @@ if ($pdo) {
               <h3>TOP UP ANYONE? NO RULES. GREAT SCOTCH.</h3>
               <p>Experience real Highlandah energy live on-site. Ice cold scotch, locked game challenges, live DJ sets, and official clan giveaways.</p>
             </div>
-            <a href="leaderboard.php" class="btn btn-primary">
+            <a href="leaderboard" class="btn btn-primary">
               <i data-lucide="trophy"></i> View Current Leaderboard
             </a>
           </div>
@@ -329,18 +329,18 @@ if ($pdo) {
         <div class="footer-links-col">
           <h4 class="footer-col-title">Campaign Navigation</h4>
           <ul class="footer-menu">
-            <li><a href="index.php">Campaign Homepage</a></li>
-            <li><a href="leaderboard.php">National Leaderboard</a></li>
-            <li><a href="outlets.php">Activation Outlets & Tour</a></li>
-            <li><a href="index.php#scorecard">Challenge Scorecard</a></li>
+            <li><a href="./">Campaign Homepage</a></li>
+            <li><a href="leaderboard">National Leaderboard</a></li>
+            <li><a href="outlets">Activation Outlets & Tour</a></li>
+            <li><a href="./#scorecard">Challenge Scorecard</a></li>
           </ul>
         </div>
 
         <div class="footer-links-col">
           <h4 class="footer-col-title">Internal Portals</h4>
           <ul class="footer-menu">
-            <li><a href="promoter.php">On-Site Ambassador Console</a></li>
-            <li><a href="admin.php">Campaign Management & Audit</a></li>
+            <li><a href="promoter">On-Site Ambassador Console</a></li>
+            <li><a href="admin">Campaign Management & Audit</a></li>
             <li><span>Official Domain: <strong>TNHNG.COM</strong></span></li>
             <li><span>Strictly 18+ Drink Responsibly</span></li>
           </ul>

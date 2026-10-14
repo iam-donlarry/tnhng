@@ -49,7 +49,7 @@ if ($pdo) {
             <i data-lucide="log-out"></i> Logout
           </button>
         <?php else: ?>
-          <a href="index.php" class="btn btn-outline btn-sm">
+          <a href="./" class="btn btn-outline btn-sm">
             <i data-lucide="arrow-left"></i> Public Site
           </a>
         <?php endif; ?>

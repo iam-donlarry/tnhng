@@ -43,7 +43,7 @@ if ($pdo) {
   <header class="portal-header">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <a href="index.php" style="text-decoration: none; display: flex; align-items: center;">
+        <a href="./" style="text-decoration: none; display: flex; align-items: center;">
           <img src="images/logo.svg" alt="William Lawson's" class="brand-logo-img" style="height: 38px;">
         </a>
         <div>
@@ -66,7 +66,7 @@ if ($pdo) {
             <i data-lucide="log-out"></i> Logout
           </button>
         <?php else: ?>
-          <a href="index.php" class="btn btn-outline btn-sm">
+          <a href="./" class="btn btn-outline btn-sm">
             <i data-lucide="arrow-left"></i> Public Site
           </a>
         <?php endif; ?>
