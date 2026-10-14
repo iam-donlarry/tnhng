@@ -136,7 +136,7 @@ if ($pdo) {
       <!-- ================= AMBASSADOR CONSOLE ================= -->
       
       <!-- Outlet Banner & Shift Switcher -->
-      <div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div class="glass-panel promoter-outlet-banner">
         <div>
           <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Current Active Outlet:</div>
           <div style="font-size: 1.3rem; font-weight: 700; color: var(--wl-green); display: flex; align-items: center; gap: 0.5rem;">
@@ -172,45 +172,45 @@ if ($pdo) {
 
       <!-- TAB 1: LOOKUP & AWARD POINTS -->
       <div id="tab-lookup" class="tab-content">
-        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+        <div class="promoter-layout-grid">
           
           <!-- Participant Search Card -->
-          <div class="glass-panel" style="padding: 2rem;">
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff;">
+          <div class="glass-panel promoter-main-panel">
+            <h3 class="promoter-step-title">
               <i data-lucide="user-check" style="color: var(--wl-green);"></i> 1. FIND PARTICIPANT
             </h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
               Enter the participant's Clan ID (e.g. <code>TNH-7701</code>) or registered Email Address. Any participant registered at any outlet can play here!
             </p>
 
-            <form id="promoter-search-form" class="lookup-form-wrap" style="margin: 0; max-width: 100%;">
+            <form id="promoter-search-form" class="lookup-form-wrap">
               <input type="text" id="promoter-search-input" class="form-control" placeholder="Enter Clan ID (TNH-XXXX), Email, or Phone..." required>
-              <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+              <button type="submit" class="btn btn-primary lookup-submit-btn">
                 <i data-lucide="search"></i> Lookup
               </button>
             </form>
 
             <!-- Participant Found Card (Hidden until searched) -->
-            <div id="participant-card-wrap" style="display: none; margin-top: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1.5rem;">
-              <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--wl-green); border-radius: 12px; padding: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-                  <div>
+            <div id="participant-card-wrap" class="participant-card-wrap" style="display: none;">
+              <div class="participant-summary-card">
+                <div class="participant-header-row">
+                  <div class="participant-info">
                     <span class="ambassador-badge" id="card-clan-id">TNH-0000</span>
-                    <h2 style="font-size: 1.8rem; color: #fff; margin-top: 0.25rem;" id="card-name">Participant Name</h2>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);" id="card-contact">08012345678 • email@example.com</div>
-                    <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;" id="card-origin">Origin: VI Outlet</div>
+                    <h2 class="participant-name" id="card-name">Participant Name</h2>
+                    <div class="participant-contact" id="card-contact">08012345678 • email@example.com</div>
+                    <div class="participant-origin" id="card-origin">Origin: VI Outlet</div>
                   </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Current Score</div>
-                    <div style="font-family: var(--font-display); font-size: 2.5rem; color: var(--wl-green); line-height: 1;" id="card-points">0 PTS</div>
+                  <div class="participant-score-box">
+                    <div class="score-label">Current Score</div>
+                    <div class="score-points" id="card-points">0 PTS</div>
                     <div id="card-badge" style="margin-top: 0.25rem;"></div>
                   </div>
                 </div>
 
-                <div class="progress-track" style="height: 10px; margin-bottom: 0.5rem;">
+                <div class="progress-track" style="height: 10px; margin: 0.75rem 0 0.5rem;">
                   <div class="progress-fill" id="card-progress" style="width: 0%;"></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim);">
+                <div class="participant-progress-meta">
                   <span>0 PTS</span>
                   <span id="card-needed">100 PTS to Grand Finale</span>
                   <span>100 PTS</span>
@@ -219,19 +219,19 @@ if ($pdo) {
 
               <!-- ================= 2. ON-SITE SPIN THE WHEEL GAME ================= -->
               <div id="promoter-wheel-section" class="wheel-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                  <div>
+                <div class="wheel-section-header">
+                  <div class="wheel-section-title-wrap">
                     <span class="ambassador-badge" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                      <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> On-Site Bottle Spin Challenge
+                      <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> On-Site Wheel Spin Challenge
                     </span>
-                    <h3 style="font-size: 1.6rem; color: #fff; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <h3 class="wheel-section-title">
                       <i data-lucide="disc-3" style="color: var(--wl-green);"></i> 2. SPIN THE WHEEL
                     </h3>
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
                       Random challenge draw for <strong id="wheel-participant-name" style="color: var(--wl-green);">Participant</strong>. Maintain Highlandah fair play!
                     </p>
                   </div>
-                  <div id="wheel-status-pill" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); background: rgba(0,0,0,0.5); padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div id="wheel-status-pill" class="wheel-status-pill">
                     Ready to Spin
                   </div>
                 </div>
@@ -243,7 +243,7 @@ if ($pdo) {
                       <canvas id="highlandah-wheel-canvas"></canvas>
                     </div>
                     <button type="button" id="spin-wheel-btn" class="btn btn-primary btn-lg wheel-spin-cta">
-                      <i data-lucide="rotate-cw"></i> SPIN THE BOTTLE / WHEEL
+                      <i data-lucide="rotate-cw"></i> SPIN THE WHEEL
                     </button>
                     <span style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.5rem; display: block;">
                       Tap with the participant to start random challenge draw
@@ -259,7 +259,7 @@ if ($pdo) {
                       </div>
                       <h4 style="font-size: 1.25rem; color: #fff; margin-bottom: 0.35rem;">AWAITING WHEEL DRAW</h4>
                       <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 320px; margin: 0 auto;">
-                        Tap <strong>SPIN THE BOTTLE / WHEEL</strong> with the participant to randomly draw their on-premise challenge.
+                        Tap <strong>SPIN THE WHEEL</strong> with the participant to randomly draw their on-premise challenge.
                       </p>
                     </div>
 
@@ -270,7 +270,7 @@ if ($pdo) {
                         <div style="font-family: var(--font-display); font-size: 2.2rem; color: var(--wl-green); line-height: 1;" id="drawn-points-badge">+5 PTS</div>
                       </div>
 
-                      <h3 id="drawn-title" style="font-size: 1.45rem; color: #fff; margin-top: 0.5rem; line-height: 1.2;">
+                      <h3 id="drawn-title" style="font-size: 1.45rem; color: #fff; margin-top: 0.5rem; line-height: 1.2; word-break: break-word;">
                         CHALLENGE TITLE
                       </h3>
 
@@ -278,7 +278,7 @@ if ($pdo) {
                         <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">
                           Official Challenge Rule:
                         </div>
-                        <p id="drawn-rule" style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p id="drawn-rule" style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4; word-break: break-word;">
                           Rule description
                         </p>
                       </div>
@@ -286,11 +286,11 @@ if ($pdo) {
                       <!-- Interactive Countdown Timer (for 15s or 60s timed tasks) -->
                       <div id="drawn-timer-wrap" style="display: none;">
                         <div class="timer-box">
-                          <div>
+                          <div class="timer-display-wrap">
                             <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Challenge Countdown</div>
                             <div class="timer-digits" id="timer-display">00:15</div>
                           </div>
-                          <div style="display: flex; gap: 0.4rem;">
+                          <div class="timer-controls">
                             <button type="button" id="timer-start-btn" class="btn btn-outline btn-sm">
                               <i data-lucide="play"></i> Start
                             </button>
@@ -347,8 +347,8 @@ if ($pdo) {
               </div>
 
               <!-- ================= 3. MANUAL OVERRIDE / POINTS ALLOCATOR FORM ================= -->
-              <div style="margin-top: 2rem; background: var(--bg-surface); border: 1px solid var(--border-glass); border-radius: 14px; padding: 1.75rem;">
-                <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem;">
+              <div class="manual-override-card">
+                <h3 class="manual-override-title">
                   <i data-lucide="award" style="color: var(--wl-green);"></i> 3. MANUAL CHALLENGE SELECTION & OVERRIDE
                 </h3>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
@@ -372,17 +372,16 @@ if ($pdo) {
 
                   <div class="form-grid-2col">
                     <div class="form-group">
-                      <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                      <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
                         <span>Scorecard Points *</span>
                         <span style="font-size: 0.7rem; color: var(--wl-green); text-transform: uppercase;">
                           <i data-lucide="lock" style="width: 12px; height: 12px; display: inline;"></i> Fixed (Non-Editable)
                         </span>
                       </label>
                       <div style="position: relative;">
-                        <input type="number" id="alloc-points" name="points" class="form-control" readonly required 
-                                placeholder="Select challenge above..." 
-                                style="background: rgba(0, 0, 0, 0.45); color: var(--wl-green); font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 1px; cursor: not-allowed; border: 1px solid rgba(0,200,83,0.35);">
-                        <span style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); color: var(--text-dim); font-size: 1.1rem;">PTS</span>
+                        <input type="number" id="alloc-points" name="points" class="form-control alloc-points-input" readonly required 
+                                placeholder="Select challenge above...">
+                        <span class="alloc-points-suffix">PTS</span>
                       </div>
                       <small style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem; display: block;">
                         Points are locked strictly to official scorecard value.
@@ -410,19 +409,22 @@ if ($pdo) {
               </div>
 
               <!-- History at this outlet -->
-              <div style="margin-top: 2rem;">
-                <h4 style="font-size: 1rem; color: #fff; text-transform: uppercase; margin-bottom: 0.75rem;">
-                  <i data-lucide="history"></i> Previous Points Earned by this Participant
-                </h4>
-                <div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: 8px;">
-                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                    <thead style="background: #14181d;">
+              <div class="history-section-wrap">
+                <div class="history-header">
+                  <h4 class="history-title">
+                    <i data-lucide="history"></i> Previous Points Earned by this Participant
+                  </h4>
+                  <span class="history-hint"><i data-lucide="move-horizontal"></i> Scroll table horizontally</span>
+                </div>
+                <div class="history-table-container">
+                  <table class="history-table">
+                    <thead>
                       <tr>
-                        <th style="padding: 0.5rem; text-align: left; color: var(--text-dim);">Date</th>
-                        <th style="padding: 0.5rem; text-align: left; color: var(--text-dim);">Challenge</th>
-                        <th style="padding: 0.5rem; text-align: left; color: var(--text-dim);">Points</th>
-                        <th style="padding: 0.5rem; text-align: left; color: var(--text-dim);">Outlet</th>
-                        <th style="padding: 0.5rem; text-align: left; color: var(--text-dim);">Awarded By</th>
+                        <th>Date</th>
+                        <th>Challenge</th>
+                        <th>Points</th>
+                        <th>Outlet</th>
+                        <th>Awarded By</th>
                       </tr>
                     </thead>
                     <tbody id="participant-mini-history"></tbody>
@@ -558,6 +560,13 @@ if ($pdo) {
       if (targetContent) targetContent.style.display = 'block';
       const activeBtn = btnEl || (window.event && window.event.target ? window.event.target.closest('.filter-tab') : null);
       if (activeBtn) activeBtn.classList.add('active-tab');
+
+      if (tabId === 'tab-lookup' && wheelInstance && activeParticipantData) {
+        setTimeout(() => {
+          wheelInstance.setupCanvas();
+          wheelInstance.drawWheel();
+        }, 50);
+      }
     }
 
     // Promoter Search Participant
@@ -635,11 +644,11 @@ if ($pdo) {
       } else {
         tbody.innerHTML = data.history.map(h => `
           <tr>
-            <td style="padding: 0.4rem 0.5rem; color: var(--text-dim);">${h.created_at.substring(0, 16)}</td>
-            <td style="padding: 0.4rem 0.5rem; color: #fff;">${h.challenge_name}</td>
-            <td style="padding: 0.4rem 0.5rem; color: ${h.points > 0 ? 'var(--wl-green)' : '#ef4444'}; font-weight: 700;">${h.points > 0 ? '+' + h.points : '0 (Failed)'}</td>
-            <td style="padding: 0.4rem 0.5rem; color: var(--wl-green);">${h.outlet_name}</td>
-            <td style="padding: 0.4rem 0.5rem; color: var(--text-muted);">${h.promoter_name || 'Staff'}</td>
+            <td class="col-date">${h.created_at.substring(0, 16)}</td>
+            <td class="col-challenge">${h.challenge_name}</td>
+            <td class="col-points ${h.points > 0 ? 'pts-pass' : 'pts-fail'}">${h.points > 0 ? '+' + h.points : '0 (Failed)'}</td>
+            <td class="col-outlet">${h.outlet_name}</td>
+            <td class="col-promoter">${h.promoter_name || 'Staff'}</td>
           </tr>
         `).join('');
       }
@@ -662,14 +671,14 @@ if ($pdo) {
         if (!wheelInstance || wheelInstance.isSpinning) return;
 
         spinWheelBtn.disabled = true;
-        spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw" style="animation: spin 1s linear infinite;"></i> SPINNING THE BOTTLE...';
+        spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw" style="animation: spin 1s linear infinite;"></i> SPINNING THE WHEEL...';
         lucide.createIcons();
         document.getElementById('wheel-status-pill').textContent = 'Spinning...';
         resetWheelResultState();
 
         wheelInstance.spin((selectedSlice) => {
           spinWheelBtn.disabled = false;
-          spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw"></i> SPIN THE BOTTLE / WHEEL';
+          spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw"></i> SPIN THE WHEEL';
           lucide.createIcons();
           handleWheelSelection(selectedSlice);
         });

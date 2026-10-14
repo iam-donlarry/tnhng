@@ -3464,29 +3464,229 @@ select.form-control {
 }
 
 /* ==========================================================================
-   PROMOTER ON-SITE SPIN THE WHEEL & CHALLENGE EVALUATION PANEL
+   PROMOTER PORTAL POST-LOOKUP RESPONSIVE DESIGN SYSTEM (ZERO OVERFLOW)
    ========================================================================== */
+
+/* Layout Grid Container */
+.promoter-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Outlet Banner */
+.promoter-outlet-banner {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Main Promoter Glass Panel */
+.promoter-main-panel {
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.promoter-step-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  word-break: break-word;
+}
+
+/* Lookup Form */
+.lookup-form-wrap {
+  display: flex;
+  gap: 0.75rem;
+  align-items: stretch;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.lookup-submit-btn {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Participant Found Card Wrap */
+.participant-card-wrap {
+  margin-top: 1.5rem;
+  border-top: 1px dashed var(--border-glass);
+  padding-top: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Participant Summary Card */
+.participant-summary-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--wl-green);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 200, 83, 0.12);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.participant-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.participant-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.participant-name {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-top: 0.25rem;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.participant-contact {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.participant-origin {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.25rem;
+  word-break: break-word;
+}
+
+.participant-score-box {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.participant-score-box .score-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.participant-score-box .score-points {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--wl-green);
+  line-height: 1;
+}
+
+.participant-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ================= 2. SPIN THE WHEEL SECTION ================= */
 .wheel-section {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-medium);
   border-radius: 14px;
-  padding: 1.75rem;
+  padding: 1.5rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+.wheel-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.wheel-section-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.wheel-section-title {
+  font-size: 1.6rem;
+  color: #fff;
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  word-break: break-word;
+}
+
+.wheel-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+/* Wheel Layout Grid */
 .wheel-layout {
   display: grid;
-  grid-template-columns: minmax(320px, 460px) 1fr;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+  gap: 1.75rem;
   align-items: start;
-  margin-top: 1.5rem;
-}
-
-@media (max-width: 900px) {
-  .wheel-layout {
-    grid-template-columns: 1fr;
-  }
+  margin-top: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .wheel-canvas-card {
@@ -3496,31 +3696,38 @@ select.form-control {
   justify-content: center;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  padding: 1.25rem 0.85rem;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .wheel-canvas-wrap {
   width: 100%;
-  max-width: 440px;
-  aspect-ratio: 1 / 1;
+  max-width: 360px;
+  position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
 .wheel-canvas-wrap canvas {
   width: 100% !important;
-  height: 100% !important;
-  max-width: 440px;
-  max-height: 440px;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+  max-width: 100% !important;
   display: block;
+  margin: 0 auto;
 }
 
 .wheel-spin-cta {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   width: 100%;
   max-width: 320px;
   font-family: var(--font-heading);
@@ -3531,13 +3738,18 @@ select.form-control {
 .wheel-result-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 1.75rem;
-  min-height: 400px;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 380px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: var(--transition);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .wheel-result-card.active-challenge {
@@ -3548,13 +3760,17 @@ select.form-control {
 .timer-box {
   background: #000000;
   border: 2px solid var(--wl-green);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  margin: 1rem 0;
+  border-radius: 8px;
+  padding: 0.85rem 1.15rem;
+  margin: 0.85rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .timer-digits {
@@ -3571,6 +3787,11 @@ select.form-control {
   animation: pulseWarning 0.5s infinite alternate;
 }
 
+.timer-controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
 @keyframes pulseWarning {
   0% { transform: scale(1); opacity: 1; }
   100% { transform: scale(1.08); opacity: 0.8; }
@@ -3579,8 +3800,12 @@ select.form-control {
 .verdict-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
-  margin-top: 1.25rem;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .btn-verdict-pass {
@@ -3589,15 +3814,17 @@ select.form-control {
   font-weight: 800;
   font-family: var(--font-heading);
   border: none;
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 0.85rem;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   transition: var(--transition);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-verdict-pass:hover:not(:disabled) {
@@ -3612,15 +3839,17 @@ select.form-control {
   font-weight: 800;
   font-family: var(--font-heading);
   border: 1px solid rgba(239, 68, 68, 0.5);
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 0.85rem;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   transition: var(--transition);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-verdict-fail:hover:not(:disabled) {
@@ -3629,5 +3858,492 @@ select.form-control {
   transform: translateY(-2px);
 }
 
+/* ================= 3. MANUAL CHALLENGE SELECTION & OVERRIDE ================= */
+.manual-override-card {
+  margin-top: 1.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.manual-override-title {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  word-break: break-word;
+}
+
+.manual-override-subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.manual-override-card form {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.manual-override-card .form-group {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.manual-override-card select,
+.manual-override-card input,
+.manual-override-card .form-control {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+select#alloc-challenge {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.form-grid-2col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.alloc-points-input {
+  background: rgba(0, 0, 0, 0.45) !important;
+  color: var(--wl-green) !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.5rem !important;
+  letter-spacing: 1px;
+  cursor: not-allowed;
+  border: 1px solid rgba(0, 200, 83, 0.35) !important;
+  padding-right: 3.5rem !important;
+}
+
+.alloc-points-suffix {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* ================= 4. PARTICIPANT MINI HISTORY TABLE ================= */
+.history-section-wrap {
+  margin-top: 1.75rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.history-title {
+  font-size: 1rem;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.history-hint {
+  display: none;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.history-table-container {
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.history-table {
+  width: 100% !important;
+  min-width: 480px !important;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.history-table thead {
+  background: #14181d;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.history-table th {
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.history-table td {
+  padding: 0.5rem 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-table td.col-date {
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.history-table td.col-challenge {
+  color: #ffffff;
+  font-weight: 500;
+  white-space: normal;
+  min-width: 140px;
+  max-width: 220px;
+}
+
+.history-table td.col-points {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.history-table td.col-points.pts-pass {
+  color: var(--wl-green);
+}
+
+.history-table td.col-points.pts-fail {
+  color: #ef4444;
+}
+
+.history-table td.col-outlet {
+  color: var(--wl-green);
+  white-space: nowrap;
+}
+
+.history-table td.col-promoter {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES (TABLETS & MOBILE SMARTPHONES)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  .wheel-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .wheel-result-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .promoter-main-panel {
+    padding: 1.25rem 1rem;
+  }
+
+  .wheel-section {
+    padding: 1.25rem 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .manual-override-card {
+    padding: 1.25rem 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .history-hint {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Prevent horizontal edge bleeding */
+  .container {
+    padding: 0 0.5rem !important;
+  }
+
+  .promoter-layout-grid {
+    gap: 1.25rem;
+  }
+
+  .promoter-outlet-banner {
+    padding: 0.85rem 0.65rem !important;
+    margin-bottom: 1rem !important;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .promoter-outlet-banner #switch-outlet-select,
+  .promoter-outlet-banner #switch-outlet-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .filter-tabs {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.4rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .filter-tab {
+    white-space: normal !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 0.5rem 0.35rem !important;
+    font-size: 0.76rem !important;
+  }
+
+  .promoter-main-panel {
+    padding: 1rem 0.65rem !important;
+    border-radius: 10px !important;
+  }
+
+  .promoter-step-title {
+    font-size: 1.25rem;
+  }
+
+  .lookup-form-wrap {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .lookup-submit-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Participant Summary */
+  .participant-summary-card {
+    padding: 0.85rem 0.65rem !important;
+    border-radius: 8px !important;
+  }
+
+  .participant-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .participant-name {
+    font-size: 1.35rem;
+  }
+
+  .participant-score-box {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 200, 83, 0.08);
+    border: 1px solid rgba(0, 200, 83, 0.25);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .participant-score-box .score-points {
+    font-size: 1.75rem;
+  }
+
+  /* Wheel Section Mobile */
+  .wheel-section {
+    padding: 0.85rem 0.5rem !important;
+    margin-top: 1.25rem !important;
+    border-radius: 8px !important;
+  }
+
+  .wheel-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .wheel-section-title {
+    font-size: 1.2rem;
+  }
+
+  .wheel-status-pill {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .wheel-canvas-card {
+    padding: 0.85rem 0.4rem !important;
+    border-radius: 8px !important;
+  }
+
+  .wheel-canvas-wrap {
+    max-width: 290px !important;
+  }
+
+  .wheel-spin-cta {
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .wheel-result-card {
+    padding: 0.85rem 0.65rem !important;
+    border-radius: 8px !important;
+  }
+
+  #drawn-title {
+    font-size: 1.2rem !important;
+  }
+
+  #drawn-points-badge {
+    font-size: 1.65rem !important;
+  }
+
+  .timer-box {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  .timer-digits {
+    font-size: 1.75rem;
+  }
+
+  .timer-controls {
+    justify-content: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .timer-controls .btn {
+    flex: 1;
+    padding: 0.45rem 0.55rem;
+  }
+
+  /* Verdict Buttons Stacked on Mobile */
+  .verdict-actions {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .btn-verdict-pass,
+  .btn-verdict-fail {
+    padding: 0.75rem 0.65rem;
+    font-size: 0.85rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Manual Override Mobile */
+  .manual-override-card {
+    padding: 0.85rem 0.65rem !important;
+    margin-top: 1.25rem !important;
+    border-radius: 8px !important;
+  }
+
+  .manual-override-title {
+    font-size: 1.15rem;
+  }
+
+  .form-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .alloc-points-input {
+    font-size: 1.25rem !important;
+  }
+
+  .history-section-wrap {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .promoter-main-panel {
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  .participant-summary-card {
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  .wheel-section {
+    padding: 0.75rem 0.4rem !important;
+  }
+
+  .wheel-canvas-card {
+    padding: 0.75rem 0.35rem !important;
+  }
+
+  .wheel-canvas-wrap {
+    max-width: 260px !important;
+  }
+
+  .manual-override-card {
+    padding: 0.75rem 0.5rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .wheel-canvas-wrap {
+    max-width: 240px !important;
+  }
+
+  .participant-name {
+    font-size: 1.2rem;
+  }
+}
 
 

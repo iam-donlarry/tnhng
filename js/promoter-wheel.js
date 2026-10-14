@@ -139,9 +139,13 @@
       this.setupCanvas();
       this.drawWheel();
 
+      this.resizeDebounceTimer = null;
       window.addEventListener('resize', () => {
-        this.setupCanvas();
-        this.drawWheel();
+        clearTimeout(this.resizeDebounceTimer);
+        this.resizeDebounceTimer = setTimeout(() => {
+          this.setupCanvas();
+          this.drawWheel();
+        }, 80);
       });
     }
 
@@ -197,18 +201,36 @@
     }
 
     setupCanvas() {
+      if (!this.canvas) return;
+      const wrap = this.canvas.parentElement;
+      const parentWidth = wrap ? wrap.clientWidth : 0;
       const rect = this.canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-      const size = Math.min(rect.width || 420, 520);
 
-      this.canvas.width = size * dpr;
-      this.canvas.height = size * dpr;
+      // Determine display size based on the wrap container width, capped at 380px
+      let availWidth = 320;
+      if (parentWidth > 0) {
+        availWidth = parentWidth;
+      } else if (rect.width > 0) {
+        availWidth = rect.width;
+      }
+
+      const size = Math.max(180, Math.min(availWidth, 380));
+
+      this.canvas.width = Math.round(size * dpr);
+      this.canvas.height = Math.round(size * dpr);
+
+      // CRITICAL: reset transform matrix before re-scaling by DPR to prevent exponential magnification
+      if (this.ctx.setTransform) {
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
       this.ctx.scale(dpr, dpr);
 
       this.size = size;
       this.center = size / 2;
-      // 28px clearance for North pointer at top
-      this.radius = this.center - 28;
+      // Proportional clearance for North pointer at top
+      const pointerClearance = Math.max(16, Math.min(26, size * 0.065));
+      this.radius = this.center - pointerClearance;
     }
 
     drawWheel() {
@@ -273,33 +295,38 @@
         ctx.textBaseline = 'middle';
         ctx.fillStyle = slice.textColor;
 
-        // Dynamic font sizing
-        ctx.font = 'bold 11px "Outfit", "Syne", sans-serif';
+        // Dynamic font sizing proportional to wheel radius
+        const fontSize = Math.max(8.5, Math.min(11, Math.floor(radius * 0.076)));
+        ctx.font = `bold ${fontSize}px "Outfit", "Syne", sans-serif`;
         ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
         ctx.shadowBlur = 4;
+
+        // Dynamic radial text margin from outer rim
+        const textMargin = Math.max(16, Math.min(26, radius * 0.155));
 
         // Text formatting: wrap if long
         const words = slice.label.split(' ');
         if (words.length > 3) {
           const line1 = words.slice(0, 2).join(' ');
           const line2 = words.slice(2).join(' ');
-          ctx.fillText(line1, radius - 26, -7);
-          ctx.fillText(line2, radius - 26, 8);
+          ctx.fillText(line1, radius - textMargin, -Math.round(fontSize * 0.65));
+          ctx.fillText(line2, radius - textMargin, Math.round(fontSize * 0.7));
         } else {
-          ctx.fillText(slice.label, radius - 26, 0);
+          ctx.fillText(slice.label, radius - textMargin, 0);
         }
 
         ctx.restore();
       }
 
       // Perimeter Rivet Pegs
+      const pegR = Math.max(2.5, Math.min(4, radius * 0.024));
       for (let i = 0; i < this.numSlices; i++) {
         const angle = i * this.arc;
         const px = Math.cos(angle) * (radius + 2);
         const py = Math.sin(angle) * (radius + 2);
 
         ctx.beginPath();
-        ctx.arc(px, py, 4, 0, 2 * Math.PI);
+        ctx.arc(px, py, pegR, 0, 2 * Math.PI);
         ctx.fillStyle = '#ffd54f';
         ctx.fill();
         ctx.lineWidth = 1;
@@ -323,17 +350,18 @@
 
       ctx.save();
       // Outer brass hub ring with rich drop shadow
+      const outerRingThick = Math.max(3.5, hubRadius * 0.12);
       ctx.beginPath();
-      ctx.arc(center, center, hubRadius + 6, 0, 2 * Math.PI);
+      ctx.arc(center, center, hubRadius + outerRingThick, 0, 2 * Math.PI);
       ctx.fillStyle = '#000000';
       ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = Math.max(10, Math.min(18, hubRadius * 0.35));
       ctx.fill();
-      ctx.lineWidth = 4;
+      ctx.lineWidth = Math.max(2.5, hubRadius * 0.08);
       ctx.strokeStyle = '#ffd54f'; // Gold trim
       ctx.stroke();
 
-      // Inner Badge circle - solid black background (replacing green)
+      // Inner Badge circle - solid black background
       ctx.beginPath();
       ctx.arc(center, center, hubRadius, 0, 2 * Math.PI);
       ctx.fillStyle = '#000000'; // Black background
@@ -353,13 +381,15 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#ffffff';
-        ctx.font = '900 12px "Bebas Neue", sans-serif';
-        ctx.fillText("WILLIAM", center, center - 12);
-        ctx.fillText("LAWSON'S", center, center + 2);
+        const bebasSize = Math.max(8, Math.min(12, Math.floor(hubRadius * 0.28)));
+        ctx.font = `900 ${bebasSize}px "Bebas Neue", sans-serif`;
+        ctx.fillText("WILLIAM", center, center - (bebasSize * 0.8));
+        ctx.fillText("LAWSON'S", center, center + (bebasSize * 0.2));
 
         ctx.fillStyle = '#ffd54f';
-        ctx.font = 'bold 8px "Outfit", sans-serif';
-        ctx.fillText("ESTP 1849", center, center + 15);
+        const estpSize = Math.max(6, Math.min(8, Math.floor(hubRadius * 0.18)));
+        ctx.font = `bold ${estpSize}px "Outfit", sans-serif`;
+        ctx.fillText("ESTP 1849", center, center + (bebasSize * 1.1));
       }
 
       ctx.restore();
@@ -373,31 +403,33 @@
       // Pointer is positioned at NORTH (12 o'clock, top) pointing DOWN into the wheel
       ctx.save();
 
+      const tipDepth = Math.max(10, Math.min(14, radius * 0.085));
       const tipX = center;
-      const tipY = center - radius + 14; // Penetrates slightly past the perimeter into the winning slice
-      const baseY = center - radius - 18; // Base sits at top rim
+      const tipY = center - radius + tipDepth; // Penetrates slightly past the perimeter into the winning slice
+      const baseHalfW = Math.max(12, Math.min(18, radius * 0.11));
+      const baseY = center - radius - baseHalfW; // Base sits at top rim
 
       // Drop shadow for 3D depth
       ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-      ctx.shadowBlur = 12;
-      ctx.shadowOffsetY = 4;
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetY = 3;
 
       // 1. Triangular Pointer Needle pointing South from North edge
       ctx.beginPath();
       ctx.moveTo(tipX, tipY);
-      ctx.lineTo(center - 18, baseY);
-      ctx.lineTo(center + 18, baseY);
+      ctx.lineTo(center - baseHalfW, baseY);
+      ctx.lineTo(center + baseHalfW, baseY);
       ctx.closePath();
 
       // Premium metallic gold gradient
-      const ptrGrad = ctx.createLinearGradient(center - 18, baseY, center + 18, tipY);
+      const ptrGrad = ctx.createLinearGradient(center - baseHalfW, baseY, center + baseHalfW, tipY);
       ptrGrad.addColorStop(0, '#ffe082');
       ptrGrad.addColorStop(0.45, '#ffd54f');
       ptrGrad.addColorStop(1, '#ff8f00');
       ctx.fillStyle = ptrGrad;
       ctx.fill();
 
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2;
       ctx.strokeStyle = '#ffffff';
       ctx.stroke();
 
@@ -410,8 +442,9 @@
       ctx.stroke();
 
       // 3. Top Anchor Cap & Emerald Rivet
+      const capR = Math.max(6, Math.min(9, radius * 0.055));
       ctx.beginPath();
-      ctx.arc(center, baseY, 9, 0, 2 * Math.PI);
+      ctx.arc(center, baseY, capR, 0, 2 * Math.PI);
       ctx.fillStyle = '#ffd54f';
       ctx.fill();
       ctx.lineWidth = 2;
@@ -420,7 +453,7 @@
 
       // Highlandah Green emerald center jewel
       ctx.beginPath();
-      ctx.arc(center, baseY, 4.5, 0, 2 * Math.PI);
+      ctx.arc(center, baseY, capR * 0.5, 0, 2 * Math.PI);
       ctx.fillStyle = '#00c853';
       ctx.fill();
 
