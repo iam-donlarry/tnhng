@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage: The Next Highlandah Season 3 Campaign & Clan Registration -->
+  <url>
+    <loc>https://tnhng.com/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg</image:loc>
+      <image:title>William Lawson's The Next Highlandah Season 3</image:title>
+      <image:caption>Don't Ask For It. Earn It! Official Campaign Microsite</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tnhng.com/images/whiskey_bottles.png</image:loc>
+      <image:title>William Lawson's Blended Scotch Whisky</image:title>
+      <image:caption>No Rules. Great Scotch.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Live Clan Standings & National Leaderboard -->
+  <url>
+    <loc>https://tnhng.com/leaderboard</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg</image:loc>
+      <image:title>The Next Highlandah National Clan Leaderboard</image:title>
+      <image:caption>Live Points Leaderboard & Grand Finale Qualifiers</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Partner Outlets, Bars, Lounges & Activation Tour Schedule -->
+  <url>
+    <loc>https://tnhng.com/outlets</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg</image:loc>
+      <image:title>Partner Outlets & Activation Dates Nationwide</image:title>
+      <image:caption>Find participating bars in Lagos, Abuja, and Port Harcourt</image:caption>
+    </image:image>
+  </url>
+</urlset>

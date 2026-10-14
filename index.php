@@ -16,11 +16,119 @@ if ($pdo) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Next Highlandah | William Lawson's Season 3</title>
-  <meta name="description" content="TNH Season 3 is live. Register for your official Clan Pass, visit partner outlets across Nigeria, conquer on-site bottle challenges, and stack points toward the 100-point Grand Finale threshold.">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>The Next Highlandah Season 3 | William Lawson's Official Campaign</title>
+  <meta name="title" content="The Next Highlandah Season 3 | William Lawson's Official Campaign">
+  <meta name="description" content="TNH Season 3 is live in Nigeria. Register your official Clan Pass, conquer wheel spin challenges at participating bars, and bank 100 points to enter the Grand Finale VIP draw.">
+  <meta name="keywords" content="The Next Highlandah, William Lawson's Nigeria, TNH Season 3, Scotch Whisky, Highlandah Clan Pass, wheel spin challenge, earn points, Lagos nightlife, Abuja bars, Port Harcourt lounges, Earn It">
+  <meta name="author" content="William Lawson's Blended Scotch Whisky">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://tnhng.com/">
+
+  <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tnhng.com/">
+  <meta property="og:site_name" content="The Next Highlandah | William Lawson's">
+  <meta property="og:title" content="The Next Highlandah Season 3 | Don't Ask For It. Earn It!">
+  <meta property="og:description" content="Register your Clan ID once. Conquer wheel spin challenges at participating bars nationwide and bank points toward the 100-point Grand Finale threshold.">
+  <meta property="og:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:secure_url" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="William Lawson's The Next Highlandah Season 3 Promotional Campaign">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://tnhng.com/">
+  <meta name="twitter:title" content="The Next Highlandah Season 3 | William Lawson's">
+  <meta name="twitter:description" content="Don't ask for it. Earn it! Register your Clan Pass, hit partner outlets across Nigeria, and bank 100 points for the Grand Finale draw.">
+  <meta name="twitter:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+
+  <!-- Favicon & Mobile Meta -->
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+  <link rel="apple-touch-icon" href="images/logo.svg">
+  <meta name="theme-color" content="#00c853">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
+  
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Structured Data: Organization, WebSite & Promotional Campaign Event Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://tnhng.com/#organization",
+        "name": "William Lawson's",
+        "url": "https://tnhng.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://tnhng.com/images/logo.svg"
+        },
+        "sameAs": [
+          "https://www.instagram.com/williamlawsons_ng",
+          "https://twitter.com/williamlawsons"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://tnhng.com/#website",
+        "url": "https://tnhng.com/",
+        "name": "The Next Highlandah",
+        "description": "Official William Lawson's Season 3 promotional campaign microsite in Nigeria",
+        "publisher": {
+          "@id": "https://tnhng.com/#organization"
+        },
+        "inLanguage": "en-NG"
+      },
+      {
+        "@type": "Event",
+        "@id": "https://tnhng.com/#campaign-event",
+        "name": "The Next Highlandah Season 3: Don't Ask For It. Earn It!",
+        "description": "William Lawson's nationwide on-trade consumer promotion across Nigeria. Register for a Clan Pass, complete physical wheel spin challenges with brand ambassadors, and earn 100 points for the Grand Finale draw.",
+        "startDate": "2026-10-01T18:00:00+01:00",
+        "endDate": "2026-12-31T23:59:59+01:00",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+          "@type": "Place",
+          "name": "Partner Bars & Lounges Nationwide",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "NG",
+            "addressRegion": "Nigeria"
+          }
+        },
+        "image": [
+          "https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg"
+        ],
+        "organizer": {
+          "@id": "https://tnhng.com/#organization"
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://tnhng.com/",
+          "price": "0",
+          "priceCurrency": "NGN",
+          "availability": "https://schema.org/InStock",
+          "validFrom": "2026-10-01"
+        },
+        "audience": {
+          "@type": "Audience",
+          "audienceType": "Legal Drinking Age (18+)"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -169,7 +277,7 @@ if ($pdo) {
           </h1>
 
           <p class="hero-lead">
-            Register your unique Clan ID once. Walk into any participating bar or lounge across Nigeria, let our Brand Ambassador spin the bottle, conquer physical challenges, and bank locked points.
+            Register your unique Clan ID once. Walk into any participating bar or lounge across Nigeria, let our Brand Ambassador spin the wheel, conquer physical challenges, and bank locked points.
           </p>
 
           <div class="hero-target-banner">
@@ -308,7 +416,7 @@ if ($pdo) {
         <div class="ticker-col">
           <span class="ticker-num">02</span>
           <div>
-            <strong>Physical Bottle Spin</strong>
+            <strong>Physical Wheel Spin</strong>
             <p>Challenges completed in-person with on-site ambassadors</p>
           </div>
         </div>
@@ -383,9 +491,9 @@ if ($pdo) {
           <div class="playbook-step">
             <div class="step-num-box">03</div>
             <div class="step-content">
-              <h3 class="step-title">The Physical Bottle Spin</h3>
+              <h3 class="step-title">The Physical Wheel Spin</h3>
               <p class="step-desc">
-                Our ambassador spins the official William Lawson's bottle at the activation bar. The bottle selects your challenge category: <strong>Bold</strong>, <strong>Unconventional</strong>, or <strong>Good-Humored</strong>.
+                Our ambassador spins the official William Lawson's wheel at the activation bar. The wheel selects your challenge category: <strong>Bold</strong>, <strong>Unconventional</strong>, or <strong>Good-Humored</strong>.
               </p>
               <div class="step-note">
                 <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Physical, live challenge
@@ -478,7 +586,7 @@ if ($pdo) {
             <span class="section-kicker" style="margin-bottom: 0.25rem;">Activation Bar Experience</span>
             <h3>SPIN. PLAY. ENJOY GREAT SCOTCH.</h3>
             <p>
-              Every challenge you conquer at our activation tour is paired with great whisky. Head to the bar, order your favorite William Lawson's serve, and let our ambassador spin the bottle for your next points challenge!
+              Every challenge you conquer at our activation tour is paired with great whisky. Head to the bar, order your favorite William Lawson's serve, and let our ambassador spin the wheel for your next points challenge!
             </p>
             <div class="serves-badges">
               <div class="serves-badge-item">
@@ -509,7 +617,7 @@ if ($pdo) {
           <span class="section-kicker">Official Rules & Scorecard</span>
           <h2 class="section-heading">CHALLENGES & POINT VALUES</h2>
           <p class="section-subheading">
-            Every challenge carries a predetermined, locked point allocation. Review the challenges you could be assigned during a bottle spin.
+            Every challenge carries a predetermined, locked point allocation. Review the challenges you could be assigned during a wheel spin.
           </p>
         </div>
 
@@ -707,7 +815,7 @@ if ($pdo) {
           <span class="section-kicker">Activation Calendar</span>
           <h2 class="section-heading">ACTIVATION OUTLETS & TOUR DATES</h2>
           <p class="section-subheading">
-            Visit our scheduled activation venues to meet our Brand Ambassadors, spin the bottle, and rack up points toward the 100-point threshold.
+            Visit our scheduled activation venues to meet our Brand Ambassadors, spin the wheel, and rack up points toward the 100-point threshold.
           </p>
         </div>
 
@@ -740,7 +848,7 @@ if ($pdo) {
                 <?= htmlspecialchars($out['address']) ?>, <?= htmlspecialchars($out['city']) ?>
               </p>
               <div class="outlet-footer">
-                <span class="outlet-action-note">Bottle Spin on Site</span>
+                <span class="outlet-action-note">Wheel Spin on Site</span>
                 <a href="#check-points-anchor" class="btn btn-outline btn-sm">Check Points</a>
               </div>
             </div>

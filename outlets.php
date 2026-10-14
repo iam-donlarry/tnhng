@@ -20,11 +20,87 @@ if ($pdo) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlet Tour & Activation Dates | The Next Highlandah</title>
-  <meta name="description" content="Explore partner bars, lounges, and clubs hosting live William Lawson's The Next Highlandah activation nights across Lagos, Abuja, and Port Harcourt. Spin the bottle and earn points!">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Partner Outlets & Activation Tour Dates | The Next Highlandah</title>
+  <meta name="title" content="Partner Outlets & Activation Tour Dates | The Next Highlandah">
+  <meta name="description" content="Find participating bars, lounges, and clubs hosting live William Lawson's The Next Highlandah activation nights across Lagos, Abuja, and Port Harcourt. Spin the bottle and bank points!">
+  <meta name="keywords" content="The Next Highlandah outlets, William Lawson's tour dates, Lagos bars, Abuja lounges, Port Harcourt clubs, scotch whisky activation, bottle spin challenges Nigeria">
+  <meta name="author" content="William Lawson's Blended Scotch Whisky">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://tnhng.com/outlets">
+
+  <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tnhng.com/outlets">
+  <meta property="og:site_name" content="The Next Highlandah | William Lawson's">
+  <meta property="og:title" content="Partner Outlets & Activation Tour Dates | The Next Highlandah">
+  <meta property="og:description" content="Discover partner bars, lounges, and clubs across Nigeria hosting live William Lawson's activation nights. Play physical challenges and bank locked points.">
+  <meta property="og:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:secure_url" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="William Lawson's The Next Highlandah Activation Outlets Nationwide">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://tnhng.com/outlets">
+  <meta name="twitter:title" content="Partner Outlets & Tour Dates | The Next Highlandah">
+  <meta name="twitter:description" content="Find partner bars and lounges hosting live William Lawson's activation nights across Lagos, Abuja, and Port Harcourt.">
+  <meta name="twitter:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+
+  <!-- Favicon & Mobile Meta -->
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+  <link rel="apple-touch-icon" href="images/logo.svg">
+  <meta name="theme-color" content="#00c853">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
+  
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Structured Data: BreadcrumbList & Place / ItemList Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://tnhng.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Outlets",
+            "item": "https://tnhng.com/outlets"
+          }
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://tnhng.com/outlets#webpage",
+        "url": "https://tnhng.com/outlets",
+        "name": "Activation Outlets & Tour Schedule | The Next Highlandah",
+        "description": "Directory of partner bars, lounges, and clubs hosting live William Lawson's activation games across Nigeria.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "The Next Highlandah",
+          "url": "https://tnhng.com/"
+        },
+        "inLanguage": "en-NG"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

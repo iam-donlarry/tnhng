@@ -1,0 +1,24 @@
+# robots.txt for https://tnhng.com - The Next Highlandah Season 3
+# William Lawson's Promotional Campaign
+
+User-agent: *
+Allow: /
+Allow: /leaderboard
+Allow: /outlets
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /video/
+
+# Disallow internal operational portals and system configuration
+Disallow: /promoter
+Disallow: /admin
+Disallow: /promoter.php
+Disallow: /admin.php
+Disallow: /config/
+Disallow: /api/
+Disallow: /test_db.php
+Disallow: /README.md
+
+# XML Sitemap
+Sitemap: https://tnhng.com/sitemap.xml

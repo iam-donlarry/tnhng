@@ -18,6 +18,7 @@ if ($pdo) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin & Supervisor Console | The Next Highlandah</title>
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>

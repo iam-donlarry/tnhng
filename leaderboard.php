@@ -62,11 +62,87 @@ function getInitials($fullName) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>National Leaderboard | The Next Highlandah (TNH Season 3)</title>
-  <meta name="description" content="Official live standings for William Lawson's The Next Highlandah Season 3. Track top points leaders across Nigeria competing for the 100-point Grand Finale threshold.">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Live National Clan Standings | The Next Highlandah Season 3</title>
+  <meta name="title" content="Live National Clan Standings | The Next Highlandah Season 3">
+  <meta name="description" content="Official real-time leaderboard for William Lawson's The Next Highlandah Season 3 in Nigeria. Track points leaders, top clan warriors, and finalists qualified for the 100-point VIP finale.">
+  <meta name="keywords" content="The Next Highlandah leaderboard, William Lawson's standings, clan points, finalists qualified, Nigeria scotch whisky challenge, top highlandahs, Earn It">
+  <meta name="author" content="William Lawson's Blended Scotch Whisky">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://tnhng.com/leaderboard">
+
+  <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tnhng.com/leaderboard">
+  <meta property="og:site_name" content="The Next Highlandah | William Lawson's">
+  <meta property="og:title" content="Live National Clan Standings | The Next Highlandah Season 3">
+  <meta property="og:description" content="Live national leaderboard for William Lawson's The Next Highlandah Season 3. Track top points leaders and qualified finalists across Nigeria.">
+  <meta property="og:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:secure_url" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Next Highlandah Season 3 Live National Clan Leaderboard">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://tnhng.com/leaderboard">
+  <meta name="twitter:title" content="Live Clan Standings | The Next Highlandah Season 3">
+  <meta name="twitter:description" content="Official live standings for William Lawson's The Next Highlandah Season 3. Track points leaders across Nigeria competing for the 100-point Grand Finale threshold.">
+  <meta name="twitter:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
+
+  <!-- Favicon & Mobile Meta -->
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+  <link rel="apple-touch-icon" href="images/logo.svg">
+  <meta name="theme-color" content="#00c853">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
+  
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Structured Data: BreadcrumbList & CollectionPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://tnhng.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Leaderboard",
+            "item": "https://tnhng.com/leaderboard"
+          }
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://tnhng.com/leaderboard#webpage",
+        "url": "https://tnhng.com/leaderboard",
+        "name": "National Clan Leaderboard | The Next Highlandah Season 3",
+        "description": "Live points leaderboard tracking registered participants, points awarded, and qualified finalists for William Lawson's Season 3 promotional campaign in Nigeria.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "The Next Highlandah",
+          "url": "https://tnhng.com/"
+        },
+        "inLanguage": "en-NG"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
