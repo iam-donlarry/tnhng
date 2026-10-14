@@ -16,6 +16,7 @@ Disallow: /admin
 Disallow: /promoter.php
 Disallow: /admin.php
 Disallow: /config/
+Disallow: /database/
 Disallow: /api/
 Disallow: /test_db.php
 Disallow: /README.md

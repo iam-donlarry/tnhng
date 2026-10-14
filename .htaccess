@@ -12,7 +12,7 @@ RewriteEngine On
 RewriteRule (^\.|/\.) - [F,L]
 
 # Block direct access to sensitive backend directories, config, test scripts, and docs
-RewriteRule (^|/)(config|README\.md|test_db\.php|test_db|composer\.(json|lock)|.*\.sql|.*\.log|.*\.bak|.*\.ini) - [F,L,NC]
+RewriteRule (^|/)(config|database|README\.md|test_db\.php|test_db|composer\.(json|lock)|.*\.sql|.*\.log|.*\.bak|.*\.ini) - [F,L,NC]
 
 # Block direct directory browsing of resource folders (images, css, js, video, api, config)
 RewriteCond %{REQUEST_FILENAME} -d
