@@ -148,6 +148,14 @@ if ($pdo) {
   <main>
     <!-- ================= HERO SECTION (COMMERCIAL EDITORIAL) ================= -->
     <section class="hero-section">
+      <!-- Background Video with Balanced Semi-Transparent Dark Overlay -->
+      <div class="hero-video-wrap" aria-hidden="true">
+        <video class="hero-video-bg" autoplay muted loop playsinline preload="auto">
+          <source src="video/hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay"></div>
+      </div>
+
       <div class="container hero-container">
         <div class="hero-content">
           <div class="campaign-pill">
@@ -173,10 +181,10 @@ if ($pdo) {
           </div>
 
           <div class="hero-cta-group">
-            <a href="leaderboard.php" class="btn btn-primary btn-lg">
+            <a href="leaderboard" class="btn btn-primary btn-lg">
               <i data-lucide="trophy"></i> Live Clan Standings
             </a>
-            <a href="outlets.php" class="btn btn-outline btn-lg">
+            <a href="outlets" class="btn btn-outline btn-lg">
               <i data-lucide="map-pin"></i> Find Outlets to Play
             </a>
           </div>
@@ -257,36 +265,63 @@ if ($pdo) {
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Ticker Strip -->
-      <div class="campaign-ticker-bar">
-        <div class="container ticker-container">
-          <div class="ticker-col">
-            <span class="ticker-num">01</span>
-            <div>
-              <strong>Single Clan Pass</strong>
-              <p>Register once, play at any partner outlet nationwide</p>
-            </div>
+    <!-- Dynamic Hero Video Mobile Bounding Script: Restricts video from top down to CTA buttons -->
+    <script>
+      (function() {
+        function alignHeroVideoToCTA() {
+          var wrap = document.querySelector('.hero-video-wrap');
+          var hero = document.querySelector('.hero-section');
+          var cta = document.querySelector('.hero-cta-group');
+          if (!wrap || !hero || !cta) return;
+
+          if (window.innerWidth <= 768) {
+            var heroTop = hero.getBoundingClientRect().top;
+            var ctaBottom = cta.getBoundingClientRect().bottom;
+            var targetHeight = Math.round(ctaBottom - heroTop + 8);
+            if (targetHeight > 100) {
+              wrap.style.height = targetHeight + 'px';
+            }
+          } else {
+            wrap.style.height = '';
+          }
+        }
+        alignHeroVideoToCTA();
+        window.addEventListener('resize', alignHeroVideoToCTA);
+        window.addEventListener('DOMContentLoaded', alignHeroVideoToCTA);
+        window.addEventListener('load', alignHeroVideoToCTA);
+      })();
+    </script>
+
+    <!-- Ticker Strip (Positioned immediately below hero section) -->
+    <div class="campaign-ticker-bar">
+      <div class="container ticker-container">
+        <div class="ticker-col">
+          <span class="ticker-num">01</span>
+          <div>
+            <strong>Single Clan Pass</strong>
+            <p>Register once, play at any partner outlet nationwide</p>
           </div>
-          <div class="ticker-divider"></div>
-          <div class="ticker-col">
-            <span class="ticker-num">02</span>
-            <div>
-              <strong>Physical Bottle Spin</strong>
-              <p>Challenges completed in-person with on-site ambassadors</p>
-            </div>
+        </div>
+        <div class="ticker-divider"></div>
+        <div class="ticker-col">
+          <span class="ticker-num">02</span>
+          <div>
+            <strong>Physical Bottle Spin</strong>
+            <p>Challenges completed in-person with on-site ambassadors</p>
           </div>
-          <div class="ticker-divider"></div>
-          <div class="ticker-col">
-            <span class="ticker-num">03</span>
-            <div>
-              <strong>Locked Point Allocation</strong>
-              <p>Fixed scorecard scoring, immediate live syncing</p>
-            </div>
+        </div>
+        <div class="ticker-divider"></div>
+        <div class="ticker-col">
+          <span class="ticker-num">03</span>
+          <div>
+            <strong>Locked Point Allocation</strong>
+            <p>Fixed scorecard scoring, immediate live syncing</p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- SECTION SEPARATOR (GREEN BOTTOM DISTRESSED EDGE - TOP OF SCROLLING TEXT) -->
     <div class="section-separator sep-bottom-green"></div>
