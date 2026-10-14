@@ -18,28 +18,8 @@ if ($pdo) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin & Supervisor Console | The Next Highlandah</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    .admin-nav-item {
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: var(--transition);
-      border: 1px solid transparent;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .admin-nav-item.active {
-      background: rgba(0, 200, 83, 0.15);
-      color: var(--wl-green);
-      border-color: rgba(0, 200, 83, 0.4);
-    }
-  </style>
 </head>
 <body style="padding-bottom: 4rem;">
 
@@ -47,8 +27,8 @@ if ($pdo) {
   <header class="portal-header">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <a href="index.php" style="text-decoration: none;">
-          <div class="brand-badge" style="background: var(--wl-green); color: #000; font-size: 1rem; padding: 0.2rem 0.5rem;">WL</div>
+        <a href="index.php" style="text-decoration: none; display: flex; align-items: center;">
+          <img src="images/logo.svg" alt="William Lawson's" class="brand-logo-img" style="height: 38px;">
         </a>
         <div>
           <div style="font-family: var(--font-display); font-size: 1.25rem; color: #fff; line-height: 1;">
@@ -81,37 +61,48 @@ if ($pdo) {
 
     <?php if (!$isAdmin): ?>
       <!-- ================= ADMIN SIGN IN ================= -->
-      <div class="glass-panel" style="max-width: 460px; margin: 3rem auto; padding: 2.5rem;">
-        <div style="text-align: center; margin-bottom: 2rem;">
-          <span style="display: inline-block; background: rgba(0, 200, 83, 0.15); border: 1px solid var(--wl-green); color: var(--wl-green); font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 6px; margin-bottom: 0.75rem;">
-            Supervisor Access Only
-          </span>
-          <h2 style="font-size: 2.2rem; line-height: 1; margin-bottom: 0.5rem;">ADMIN SIGN IN</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">
-            Sign in to manage ambassadors, review points logs across outlets, and export 1PD data.
-          </p>
+      <div class="auth-split-card">
+        <div class="auth-split-media">
+          <img src="images/section_bg.jpg" alt="William Lawson's Admin Command" class="auth-split-img">
+          <div class="auth-split-overlay"></div>
+          <div class="auth-split-badge-wrap">
+            <span class="ambassador-badge" style="background: rgba(0, 200, 83, 0.2); border-color: var(--wl-green);">Supervisor Command</span>
+          </div>
+          <div class="auth-split-caption">
+            <h3>CENTRAL AUDIT & 1PD</h3>
+            <p>Campaign surveillance, points reconciliation, ambassador provisioning, and data export.</p>
+          </div>
         </div>
-
-        <form id="admin-login-form">
-          <div class="form-group">
-            <label class="form-label">Email or Staff Code</label>
-            <input type="text" name="identifier" class="form-control" value="admin@tnhng.com" placeholder="e.g. admin@tnhng.com" required>
+        <div class="auth-split-form-wrap">
+          <div class="auth-form-header">
+            <span class="section-kicker" style="margin-bottom: 0.25rem;">Supervisor Access Only</span>
+            <h2 class="auth-title">ADMIN SIGN IN</h2>
+            <p class="auth-subtitle">
+              Sign in to manage ambassadors, review points logs across outlets, and export 1PD data.
+            </p>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" value="admin123" placeholder="Enter password" required>
-          </div>
+          <form id="admin-login-form">
+            <div class="form-group">
+              <label class="form-label">Email or Staff Code</label>
+              <input type="text" name="identifier" class="form-control" value="admin@tnhng.com" placeholder="e.g. admin@tnhng.com" required>
+            </div>
 
-          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
-            <i data-lucide="shield-check"></i> Sign In to Dashboard
-          </button>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" value="admin123" placeholder="Enter password" required>
+            </div>
 
-          <div style="background: rgba(0, 200, 83, 0.08); border: 1px solid rgba(0, 200, 83, 0.2); border-radius: 8px; padding: 0.75rem; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
-            <strong style="color: var(--wl-green);">Default Admin Credentials:</strong><br>
-            Email: <code>admin@tnhng.com</code> / Password: <code>admin123</code>
-          </div>
-        </form>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
+              <i data-lucide="shield-check"></i> Sign In to Dashboard
+            </button>
+
+            <div class="auth-hint-box">
+              <strong style="color: var(--wl-green);">Default Admin Credentials:</strong><br>
+              Email: <code>admin@tnhng.com</code> / Password: <code>admin123</code>
+            </div>
+          </form>
+        </div>
       </div>
 
     <?php else: ?>
@@ -161,17 +152,17 @@ if ($pdo) {
       </div>
 
       <!-- Sub-Navigation -->
-      <div style="display: flex; gap: 0.75rem; margin-bottom: 1.75rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem; overflow-x: auto;">
-        <button class="admin-nav-item active" onclick="showAdminSection('sec-promoters')">
+      <div class="admin-nav-tabs">
+        <button class="admin-nav-item active" onclick="showAdminSection('sec-promoters', this)">
           <i data-lucide="users"></i> Brand Ambassadors & Staff
         </button>
-        <button class="admin-nav-item" onclick="showAdminSection('sec-points-log')">
+        <button class="admin-nav-item" onclick="showAdminSection('sec-points-log', this)">
           <i data-lucide="receipt"></i> Points Allocation Audit Log
         </button>
-        <button class="admin-nav-item" onclick="showAdminSection('sec-participants')">
+        <button class="admin-nav-item" onclick="showAdminSection('sec-participants', this)">
           <i data-lucide="contact-2"></i> 1PD Participant Directory
         </button>
-        <button class="admin-nav-item" onclick="showAdminSection('sec-outlets')">
+        <button class="admin-nav-item" onclick="showAdminSection('sec-outlets', this)">
           <i data-lucide="map-pin"></i> Outlets & Venues
         </button>
       </div>
@@ -289,63 +280,37 @@ if ($pdo) {
 
       <!-- ================= SECTION 4: OUTLETS & VENUES ================= -->
       <section id="sec-outlets" class="admin-section" style="display: none;">
-        <div class="admin-grid-2col">
-          
-          <!-- Outlets List -->
-          <div class="glass-panel" style="padding: 2rem;">
-            <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 1rem;">ACTIVE CAMPAIGN OUTLETS</h3>
-            <div style="display: flex; flex-direction: column; gap: 1rem;" id="outlets-list-wrap">
-              <?php foreach ($outlets as $o): ?>
-                <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 10px; padding: 1.25rem;">
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <strong style="color: #fff; font-size: 1.1rem;"><?= htmlspecialchars($o['name']) ?></strong>
-                    <span style="font-size: 0.75rem; color: var(--wl-green); background: rgba(0,200,83,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">ACTIVE</span>
-                  </div>
-                  <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
-                    <?= htmlspecialchars($o['address']) ?>, <?= htmlspecialchars($o['city']) ?>
-                  </div>
-                  <div style="font-size: 0.75rem; color: var(--wl-green); margin-top: 0.5rem;">
-                    <i data-lucide="calendar" style="width: 12px; height: 12px; display: inline;"></i> <?= htmlspecialchars($o['event_date']) ?>
-                  </div>
-                </div>
-              <?php endforeach; ?>
+        <div class="glass-panel" style="padding: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="font-size: 1.6rem; color: #fff;">ACTIVE CAMPAIGN OUTLETS</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">
+                Partner bars, lounges, and clubs nationwide hosting official William Lawson's activation nights.
+              </p>
             </div>
+            <button id="open-add-outlet-btn" class="btn btn-primary btn-sm" onclick="openAddOutletModal()">
+              <i data-lucide="plus-circle"></i> Add Activation Outlet
+            </button>
           </div>
 
-          <!-- Add Outlet Form -->
-          <div class="glass-panel" style="padding: 2rem;">
-            <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 0.5rem;">ADD ACTIVATION OUTLET</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-              Add new venue to the campaign calendar. Ambassadors can immediately be assigned to this location.
-            </p>
-
-            <form id="add-outlet-form">
-              <div class="form-group">
-                <label class="form-label">Outlet / Venue Name *</label>
-                <input type="text" name="name" class="form-control" placeholder="e.g. The Highland Den - Lekki" required>
+          <div class="outlets-admin-grid" id="outlets-list-wrap">
+            <?php foreach ($outlets as $o): ?>
+              <div class="outlet-admin-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                  <strong style="color: #fff; font-size: 1.05rem;"><?= htmlspecialchars($o['name']) ?></strong>
+                  <span style="font-size: 0.72rem; color: var(--wl-green); background: rgba(0,200,83,0.12); border: 1px solid var(--wl-green); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700; font-family: var(--font-mono);">ACTIVE</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                  <i data-lucide="map-pin" style="width: 13px; height: 13px; display: inline; color: var(--wl-green); margin-right: 3px;"></i>
+                  <?= htmlspecialchars($o['address']) ?>, <?= htmlspecialchars($o['city']) ?>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--wl-green); font-family: var(--font-mono); margin-top: 0.25rem;">
+                  <i data-lucide="calendar" style="width: 12px; height: 12px; display: inline; margin-right: 3px;"></i>
+                  <?= htmlspecialchars($o['event_date']) ?>
+                </div>
               </div>
-
-              <div class="form-group">
-                <label class="form-label">City *</label>
-                <input type="text" name="city" class="form-control" placeholder="e.g. Lagos" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Physical Address</label>
-                <input type="text" name="address" class="form-control" placeholder="e.g. Plot 14 Admiralty Way, Lekki">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Activation Date & Time</label>
-                <input type="text" name="event_date" class="form-control" placeholder="e.g. Nov 08, 2026 - 6:00 PM">
-              </div>
-
-              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
-                <i data-lucide="plus-circle"></i> Save Activation Outlet
-              </button>
-            </form>
+            <?php endforeach; ?>
           </div>
-
         </div>
       </section>
 
@@ -399,6 +364,43 @@ if ($pdo) {
         </div>
       </div>
 
+      <!-- ================= MODAL: ADD OUTLET ================= -->
+      <div class="modal-overlay" id="add-outlet-modal">
+        <div class="modal-card" style="max-width: 520px;">
+          <button class="modal-close" onclick="closeAddOutletModal()">&times;</button>
+          <div style="color: var(--wl-green); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">
+            Tour Schedule Provisioning
+          </div>
+          <h3 style="font-size: 1.8rem; color: #fff; margin-bottom: 1.25rem;">ADD ACTIVATION OUTLET</h3>
+
+          <form id="add-outlet-form">
+            <div class="form-group">
+              <label class="form-label">Outlet / Venue Name *</label>
+              <input type="text" name="name" class="form-control" placeholder="e.g. The Highland Den - Lekki" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" name="city" class="form-control" placeholder="e.g. Lagos" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Physical Address</label>
+              <input type="text" name="address" class="form-control" placeholder="e.g. Plot 14 Admiralty Way, Lekki">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Activation Date & Time</label>
+              <input type="text" name="event_date" class="form-control" placeholder="e.g. Nov 08, 2026 - 6:00 PM">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
+              <i data-lucide="plus-circle"></i> Save Activation Outlet
+            </button>
+          </form>
+        </div>
+      </div>
+
     <?php endif; ?>
 
   </main>
@@ -440,12 +442,27 @@ if ($pdo) {
     }
 
     // Switch admin sections
-    function showAdminSection(secId) {
+    function showAdminSection(secId, btnEl) {
       document.querySelectorAll('.admin-section').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
-      document.getElementById(secId).style.display = 'block';
-      event.target.closest('.admin-nav-item').classList.add('active');
+      const targetSec = document.getElementById(secId);
+      if (targetSec) targetSec.style.display = 'block';
+      let activeBtn = btnEl;
+      if (!activeBtn && window.event && window.event.target) {
+        activeBtn = window.event.target.closest('.admin-nav-item');
+      }
+      if (!activeBtn) {
+        activeBtn = document.querySelector(`.admin-nav-item[onclick*="${secId}"]`);
+      }
+      if (activeBtn) activeBtn.classList.add('active');
     }
+
+    // Check URL parameters for direct section routing
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab') || window.location.hash.replace('#', '');
+    if (tabParam === 'outlets') showAdminSection('sec-outlets');
+    else if (tabParam === 'points-log') showAdminSection('sec-points-log');
+    else if (tabParam === 'participants') showAdminSection('sec-participants');
 
     // Load Admin Data
     <?php if ($isAdmin): ?>
@@ -547,7 +564,7 @@ if ($pdo) {
               <td><span style="color: #fff;">${p.registered_outlet || 'Web Activation'}</span></td>
               <td><span style="color: var(--text-muted);">${p.registered_by_name || 'Direct Web'}</span></td>
               <td><strong style="color: var(--wl-green); font-size: 1.15rem;">${p.total_points} PTS</strong></td>
-              <td>${p.is_qualified ? '<span class="qualified-tag">👑 QUALIFIED</span>' : '<span style="font-size: 0.8rem; color: var(--text-dim);">' + (100 - parseInt(p.total_points)) + ' pts to go</span>'}</td>
+              <td>${p.is_qualified ? '<span class="qualified-tag">QUALIFIED</span>' : '<span style="font-size: 0.8rem; color: var(--text-dim);">' + (100 - parseInt(p.total_points)) + ' pts to go</span>'}</td>
             </tr>
           `).join('');
         }
@@ -556,6 +573,31 @@ if ($pdo) {
       function openCreatePromoterModal() {
         document.getElementById('create-promoter-modal').classList.add('active');
       }
+      function closeCreatePromoterModal() {
+        document.getElementById('create-promoter-modal').classList.remove('active');
+      }
+
+      function openAddOutletModal() {
+        document.getElementById('add-outlet-modal').classList.add('active');
+      }
+      function closeAddOutletModal() {
+        document.getElementById('add-outlet-modal').classList.remove('active');
+      }
+
+      // Close modal on click of close button or clicking outside overlay
+      document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const overlay = btn.closest('.modal-overlay');
+          if (overlay) overlay.classList.remove('active');
+        });
+      });
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            overlay.classList.remove('active');
+          }
+        });
+      });
 
       // Create Promoter Form Submit
       const createPromoterForm = document.getElementById('create-promoter-form');
@@ -569,7 +611,7 @@ if ($pdo) {
           const data = await res.json();
           if (data.success) {
             showToast(data.message);
-            document.getElementById('create-promoter-modal').classList.remove('active');
+            closeCreatePromoterModal();
             createPromoterForm.reset();
             loadPromotersList();
             loadDashboardMetrics();
@@ -592,6 +634,7 @@ if ($pdo) {
           const data = await res.json();
           if (data.success) {
             showToast(data.message);
+            closeAddOutletModal();
             addOutletForm.reset();
             await highlandahAlert({ title: 'OUTLET SAVED', message: 'New activation outlet added to tour schedule!', type: 'success' });
             window.location.reload();

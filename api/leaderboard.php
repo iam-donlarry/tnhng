@@ -56,14 +56,19 @@ foreach ($rows as $row) {
     $row['rank'] = $rank++;
     $row['is_qualified'] = intval($row['total_points']) >= 100 ? 1 : 0;
     
-    // Mask name partially for leaderboard display (e.g. "Tunde B***") or alias
+    // Mask majority of name for public privacy (e.g. "Tu**** B*****")
     $nameParts = explode(' ', trim($row['full_name']));
-    $masked = $nameParts[0];
-    if (count($nameParts) > 1) {
-        $last = end($nameParts);
-        $masked .= ' ' . substr($last, 0, 1) . '***';
+    $maskedParts = [];
+    foreach ($nameParts as $part) {
+        $len = strlen($part);
+        if ($len <= 2) {
+            $maskedParts[] = substr($part, 0, 1) . '*';
+        } else {
+            $keep = min(2, max(1, intval($len / 3)));
+            $maskedParts[] = substr($part, 0, $keep) . str_repeat('*', max(3, $len - $keep));
+        }
     }
-    $row['display_name'] = $masked;
+    $row['display_name'] = implode(' ', $maskedParts);
     $rankedList[] = $row;
 }
 

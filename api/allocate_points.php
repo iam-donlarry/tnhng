@@ -38,6 +38,9 @@ $category = trim($_POST['category'] ?? 'General');
 $points = intval($_POST['points'] ?? 0);
 $notes = trim($_POST['notes'] ?? '');
 
+$outcome = strtolower(trim($_POST['outcome'] ?? 'passed'));
+$isPassed = ($outcome !== 'failed');
+
 // Resolve challenge details from official scorecard - strictly non-editable
 if ($challengeId) {
     $chStmt = $pdo->prepare("SELECT * FROM challenges WHERE id = ?");
@@ -46,8 +49,8 @@ if ($challengeId) {
     if ($chData) {
         $challengeName = $chData['title'];
         $category = $chData['category'];
-        // Points are locked strictly to official scorecard value
-        $points = intval($chData['points']);
+        // Points are locked strictly to official scorecard value if passed, or 0 if failed
+        $points = $isPassed ? intval($chData['points']) : 0;
     }
 }
 
@@ -56,9 +59,14 @@ if (empty($challengeName)) {
     exit;
 }
 
-if ($points <= 0) {
-    echo json_encode(['success' => false, 'message' => 'Points to allocate must be greater than 0.']);
+if ($isPassed && $points <= 0) {
+    echo json_encode(['success' => false, 'message' => 'Points to allocate for completed challenge must be greater than 0.']);
     exit;
+}
+
+if (!$isPassed) {
+    $points = 0;
+    $notes = !empty($notes) ? "FAILED: " . $notes : "Challenge Incomplete / Failed";
 }
 
 // Determine Outlet where points are being allocated (MANDATORY REQUIREMENT)
@@ -117,9 +125,14 @@ try {
 
     $pdo->commit();
 
+    $respMsg = $isPassed 
+        ? "+{$points} points allocated successfully at {$outletName}!" 
+        : "Challenge marked as Incomplete (0 points recorded) at {$outletName}.";
+
     echo json_encode([
         'success' => true,
-        'message' => "+{$points} points allocated successfully at {$outletName}!",
+        'outcome' => $outcome,
+        'message' => $respMsg,
         'log_id' => $logId,
         'allocated' => [
             'points' => $points,

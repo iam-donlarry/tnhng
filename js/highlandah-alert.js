@@ -180,11 +180,11 @@
     const type = opts.type || (message.toLowerCase().includes('congratulations') || message.toLowerCase().includes('qualif') ? 'finale' : (message.toLowerCase().includes('fail') || message.toLowerCase().includes('error') ? 'error' : 'success'));
     const btnText = opts.btnText || 'ACKNOWLEDGE';
 
-    let iconChar = '⚡';
-    if (type === 'finale') iconChar = '👑';
-    else if (type === 'warning') iconChar = '⚠️';
-    else if (type === 'error') iconChar = '🛑';
-    else if (type === 'success') iconChar = '🛡️';
+    let iconHtml = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>';
+    if (type === 'finale') iconHtml = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>';
+    else if (type === 'warning') iconHtml = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    else if (type === 'error') iconHtml = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+    else if (type === 'success') iconHtml = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>';
 
     return new Promise((resolve) => {
       // Remove any existing active overlay
@@ -198,7 +198,7 @@
 
       overlay.innerHTML = `
         <div class="hl-alert-box hl-type-${type}">
-          <div class="hl-icon-wrap">${iconChar}</div>
+          <div class="hl-icon-wrap">${iconHtml}</div>
           <span class="hl-brand-tag">WILLIAM LAWSON'S • HIGHLANDAH NOTICE</span>
           <h3 class="hl-title">${escapeHtml(title)}</h3>
           <div class="hl-desc">${formatMessage(message)}</div>
@@ -259,7 +259,7 @@
 
       overlay.innerHTML = `
         <div class="hl-alert-box hl-type-${type}">
-          <div class="hl-icon-wrap">⚠️</div>
+          <div class="hl-icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
           <span class="hl-brand-tag">WILLIAM LAWSON'S • DECISION</span>
           <h3 class="hl-title">${escapeHtml(title)}</h3>
           <div class="hl-desc">${formatMessage(message)}</div>

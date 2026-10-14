@@ -18,7 +18,7 @@ if ($pdo) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ambassador Game Master Portal | The Next Highlandah</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     .ambassador-badge {
@@ -43,8 +43,8 @@ if ($pdo) {
   <header class="portal-header">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <a href="index.php" style="text-decoration: none;">
-          <div class="brand-badge" style="font-size: 1rem; padding: 0.2rem 0.5rem;">WL</div>
+        <a href="index.php" style="text-decoration: none; display: flex; align-items: center;">
+          <img src="images/logo.svg" alt="William Lawson's" class="brand-logo-img" style="height: 38px;">
         </a>
         <div>
           <div style="font-family: var(--font-display); font-size: 1.25rem; color: #fff; line-height: 1;">
@@ -58,7 +58,7 @@ if ($pdo) {
 
       <div style="display: flex; align-items: center; gap: 0.75rem;">
         <?php if ($user): ?>
-          <div style="text-align: right; display: none; @media(min-width: 600px){ display: block; }">
+          <div style="text-align: right;" class="portal-user-meta">
             <div style="font-size: 0.85rem; font-weight: 700; color: #fff;"><?= htmlspecialchars($user['name']) ?></div>
             <div style="font-size: 0.75rem; color: var(--wl-green); font-family: var(--font-mono);"><?= htmlspecialchars($user['staff_code']) ?></div>
           </div>
@@ -78,52 +78,57 @@ if ($pdo) {
 
     <?php if (!$user): ?>
       <!-- ================= LOGIN SCREEN ================= -->
-      <div class="glass-panel" style="max-width: 480px; margin: 2.5rem auto; padding: 0; overflow: hidden; border: 1px solid rgba(0,200,83,0.3);">
-        <div style="height: 200px; overflow: hidden; position: relative; background: #06080a;">
-          <img src="images/image.png" alt="William Lawson's - Highlandahs Only!" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%;">
-          <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45);"></div>
-          <div style="position: absolute; top: 12px; left: 12px;">
-            <span class="ambassador-badge" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);">On-Site Staff Portal</span>
+      <div class="auth-split-card">
+        <div class="auth-split-media">
+          <img src="images/image.png" alt="William Lawson's Highlandahs Only" class="auth-split-img">
+          <div class="auth-split-overlay"></div>
+          <div class="auth-split-badge-wrap">
+            <span class="ambassador-badge">On-Site Staff Portal</span>
+          </div>
+          <div class="auth-split-caption">
+            <h3>THE NEXT HIGHLANDAH</h3>
+            <p>On-site game master & ambassador point allocation command.</p>
           </div>
         </div>
-        <div style="padding: 2rem;">
-          <div style="text-align: center; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 2rem; line-height: 1; margin-bottom: 0.5rem; color: #fff;">AMBASSADOR SIGN IN</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">
+        <div class="auth-split-form-wrap">
+          <div class="auth-form-header">
+            <span class="section-kicker" style="margin-bottom: 0.25rem;">Staff Access</span>
+            <h2 class="auth-title">AMBASSADOR SIGN IN</h2>
+            <p class="auth-subtitle">
               Log in to register consumers, look up Clan IDs, and allocate points at your outlet.
             </p>
           </div>
 
-        <form id="promoter-login-form">
-          <div class="form-group">
-            <label class="form-label">Staff Code or Email</label>
-            <input type="text" name="identifier" class="form-control" placeholder="e.g. PRM-101 or emeka@tnhng.com" value="PRM-101" required>
-          </div>
+          <form id="promoter-login-form">
+            <div class="form-group">
+              <label class="form-label">Staff Code or Email</label>
+              <input type="text" name="identifier" class="form-control" placeholder="e.g. PRM-101 or emeka@tnhng.com" value="PRM-101" required>
+            </div>
 
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Enter password" value="promoter123" required>
-          </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" placeholder="Enter password" value="promoter123" required>
+            </div>
 
-          <div class="form-group">
-            <label class="form-label">Current Outlet Shift Location</label>
-            <select name="current_outlet_id" class="form-control" required>
-              <?php foreach ($outlets as $o): ?>
-                <option value="<?= $o['id'] ?>"><?= htmlspecialchars($o['name']) ?> (<?= htmlspecialchars($o['city']) ?>)</option>
-              <?php endforeach; ?>
-            </select>
-          </div>
+            <div class="form-group">
+              <label class="form-label">Current Outlet Shift Location</label>
+              <select name="current_outlet_id" class="form-control" required>
+                <?php foreach ($outlets as $o): ?>
+                  <option value="<?= $o['id'] ?>"><?= htmlspecialchars($o['name']) ?> (<?= htmlspecialchars($o['city']) ?>)</option>
+                <?php endforeach; ?>
+              </select>
+            </div>
 
-          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
-            <i data-lucide="key"></i> Enter Ambassador Console
-          </button>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
+              <i data-lucide="key"></i> Enter Ambassador Console
+            </button>
 
-          <div style="background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.2); border-radius: 8px; padding: 0.75rem; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
-            <strong style="color: var(--wl-green);">Sample Credentials:</strong><br>
-            Staff Code: <code>PRM-101</code> / Password: <code>promoter123</code> (VI Outlet)<br>
-            Staff Code: <code>PRM-102</code> / Password: <code>promoter123</code> (Ikeja Outlet)
-          </div>
-        </form>
+            <div class="auth-hint-box">
+              <strong style="color: var(--wl-green);">Sample Credentials:</strong><br>
+              Staff Code: <code>PRM-101</code> / Password: <code>promoter123</code> (VI Outlet)<br>
+              Staff Code: <code>PRM-102</code> / Password: <code>promoter123</code> (Ikeja Outlet)
+            </div>
+          </form>
         </div>
       </div>
 
@@ -156,12 +161,12 @@ if ($pdo) {
       </div>
 
       <!-- Navigation Tabs -->
-      <div class="filter-tabs" style="justify-content: flex-start; margin-bottom: 1.75rem;">
-        <button class="filter-tab active-tab" onclick="switchTab('tab-lookup')">
-          <i data-lucide="search" style="width: 15px; height: 15px; display: inline;"></i> Lookup & Award Points
+      <div class="filter-tabs">
+        <button class="filter-tab active-tab" onclick="switchTab('tab-lookup', this)">
+          <i data-lucide="search"></i> Lookup & Award Points
         </button>
-        <button class="filter-tab" onclick="switchTab('tab-register')">
-          <i data-lucide="user-plus" style="width: 15px; height: 15px; display: inline;"></i> Fast On-Site Registration
+        <button class="filter-tab" onclick="switchTab('tab-register', this)">
+          <i data-lucide="user-plus"></i> Fast On-Site Registration
         </button>
       </div>
 
@@ -212,10 +217,139 @@ if ($pdo) {
                 </div>
               </div>
 
-              <!-- POINTS ALLOCATOR FORM -->
+              <!-- ================= 2. ON-SITE SPIN THE WHEEL GAME ================= -->
+              <div id="promoter-wheel-section" class="wheel-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                  <div>
+                    <span class="ambassador-badge" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                      <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> On-Site Bottle Spin Challenge
+                    </span>
+                    <h3 style="font-size: 1.6rem; color: #fff; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                      <i data-lucide="disc-3" style="color: var(--wl-green);"></i> 2. SPIN THE WHEEL
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
+                      Random challenge draw for <strong id="wheel-participant-name" style="color: var(--wl-green);">Participant</strong>. Maintain Highlandah fair play!
+                    </p>
+                  </div>
+                  <div id="wheel-status-pill" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); background: rgba(0,0,0,0.5); padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                    Ready to Spin
+                  </div>
+                </div>
+
+                <div class="wheel-layout">
+                  <!-- Wheel Canvas Column -->
+                  <div class="wheel-canvas-card">
+                    <div class="wheel-canvas-wrap">
+                      <canvas id="highlandah-wheel-canvas"></canvas>
+                    </div>
+                    <button type="button" id="spin-wheel-btn" class="btn btn-primary btn-lg wheel-spin-cta">
+                      <i data-lucide="rotate-cw"></i> SPIN THE BOTTLE / WHEEL
+                    </button>
+                    <span style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.5rem; display: block;">
+                      Tap with the participant to start random challenge draw
+                    </span>
+                  </div>
+
+                  <!-- Challenge Evaluation & Pass/Fail Verdict Column -->
+                  <div id="wheel-result-card" class="wheel-result-card">
+                    <!-- Awaiting Spin State -->
+                    <div id="wheel-empty-state" style="text-align: center; margin: auto; padding: 2rem 1rem;">
+                      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(0, 200, 83, 0.1); border: 1px dashed var(--wl-green); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i data-lucide="disc-3" style="width: 32px; height: 32px; color: var(--wl-green);"></i>
+                      </div>
+                      <h4 style="font-size: 1.25rem; color: #fff; margin-bottom: 0.35rem;">AWAITING WHEEL DRAW</h4>
+                      <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 320px; margin: 0 auto;">
+                        Tap <strong>SPIN THE BOTTLE / WHEEL</strong> with the participant to randomly draw their on-premise challenge.
+                      </p>
+                    </div>
+
+                    <!-- Active Drawn Challenge State -->
+                    <div id="wheel-challenge-state" style="display: none;">
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                        <span id="drawn-category-badge" class="ambassador-badge">BOLD</span>
+                        <div style="font-family: var(--font-display); font-size: 2.2rem; color: var(--wl-green); line-height: 1;" id="drawn-points-badge">+5 PTS</div>
+                      </div>
+
+                      <h3 id="drawn-title" style="font-size: 1.45rem; color: #fff; margin-top: 0.5rem; line-height: 1.2;">
+                        CHALLENGE TITLE
+                      </h3>
+
+                      <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; margin: 0.85rem 0;">
+                        <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">
+                          Official Challenge Rule:
+                        </div>
+                        <p id="drawn-rule" style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                          Rule description
+                        </p>
+                      </div>
+
+                      <!-- Interactive Countdown Timer (for 15s or 60s timed tasks) -->
+                      <div id="drawn-timer-wrap" style="display: none;">
+                        <div class="timer-box">
+                          <div>
+                            <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Challenge Countdown</div>
+                            <div class="timer-digits" id="timer-display">00:15</div>
+                          </div>
+                          <div style="display: flex; gap: 0.4rem;">
+                            <button type="button" id="timer-start-btn" class="btn btn-outline btn-sm">
+                              <i data-lucide="play"></i> Start
+                            </button>
+                            <button type="button" id="timer-pause-btn" class="btn btn-outline btn-sm" style="display: none;">
+                              <i data-lucide="pause"></i> Pause
+                            </button>
+                            <button type="button" id="timer-reset-btn" class="btn btn-outline btn-sm">
+                              <i data-lucide="rotate-ccw"></i> Reset
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Referee Verdict Section (Mandatory Pass/Fail) -->
+                      <div style="margin-top: 1rem; border-top: 1px dashed var(--border-subtle); padding-top: 1rem;">
+                        <label style="font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+                          Promoter Evaluation Verdict *
+                        </label>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+                          Did the participant complete the challenge according to official rules?
+                        </p>
+
+                        <div class="form-group" style="margin-bottom: 0.75rem;">
+                          <input type="text" id="verdict-notes-input" class="form-control" style="font-size: 0.82rem; padding: 0.5rem 0.75rem;" placeholder="Optional referee notes (e.g. 20 squats completed cleanly)">
+                        </div>
+
+                        <div class="verdict-actions">
+                          <button type="button" id="btn-verdict-pass" class="btn-verdict-pass">
+                            <i data-lucide="check-circle-2"></i> PASS — AWARD POINTS
+                          </button>
+                          <button type="button" id="btn-verdict-fail" class="btn-verdict-fail">
+                            <i data-lucide="x-circle"></i> FAIL — INCOMPLETE (0 PTS)
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Free Re-Spin State (When wheel lands on "Spin Again") -->
+                    <div id="wheel-respin-state" style="display: none; text-align: center; margin: auto; padding: 2rem 1rem;">
+                      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 213, 79, 0.15); border: 2px solid #ffd54f; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i data-lucide="rotate-cw" style="width: 32px; height: 32px; color: #ffd54f;"></i>
+                      </div>
+                      <span class="ambassador-badge" style="background: rgba(255, 213, 79, 0.2); color: #ffd54f; border-color: #ffd54f;">FREE RE-SPIN</span>
+                      <h3 style="font-size: 1.6rem; color: #fff; margin: 0.5rem 0 0.35rem;">SPIN AGAIN!</h3>
+                      <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 340px; margin: 0 auto 1.25rem;">
+                        The Highlandah Clan gives you another shot! No points added or lost. Tap below to spin the wheel again immediately.
+                      </p>
+                      <button type="button" id="btn-respin-trigger" class="btn btn-primary btn-lg" style="width: 100%; max-width: 260px;">
+                        <i data-lucide="rotate-cw"></i> Spin Again Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= 3. MANUAL OVERRIDE / POINTS ALLOCATOR FORM ================= -->
               <div style="margin-top: 2rem; background: var(--bg-surface); border: 1px solid var(--border-glass); border-radius: 14px; padding: 1.75rem;">
-                <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.5rem;">
-                  <i data-lucide="award" style="color: var(--wl-green);"></i> 2. ALLOCATE POINTS FOR CHALLENGE
+                <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem;">
+                  <i data-lucide="award" style="color: var(--wl-green);"></i> 3. MANUAL CHALLENGE SELECTION & OVERRIDE
                 </h3>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
                   Points will be accurately credited to this participant, tagging <strong><?= htmlspecialchars($user['outlet_name']) ?></strong> as the location and you as the referee.
@@ -355,8 +489,16 @@ if ($pdo) {
 
   <script src="js/highlandah-alert.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/promoter-wheel.js?v=<?= filemtime(__DIR__ . '/js/promoter-wheel.js') ?>"></script>
   <script>
     lucide.createIcons();
+
+    // Wheel & Active State Variables
+    let wheelInstance = null;
+    let activeParticipantData = null;
+    let activeDrawnChallenge = null;
+    let timerInterval = null;
+    let timerSecondsLeft = 0;
 
     // Promoter Login
     const loginForm = document.getElementById('promoter-login-form');
@@ -409,11 +551,13 @@ if ($pdo) {
     }
 
     // Tab Switching
-    function switchTab(tabId) {
+    function switchTab(tabId, btnEl) {
       document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.filter-tab').forEach(el => el.classList.remove('active-tab'));
-      document.getElementById(tabId).style.display = 'block';
-      event.target.closest('.filter-tab').classList.add('active-tab');
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) targetContent.style.display = 'block';
+      const activeBtn = btnEl || (window.event && window.event.target ? window.event.target.closest('.filter-tab') : null);
+      if (activeBtn) activeBtn.classList.add('active-tab');
     }
 
     // Promoter Search Participant
@@ -436,7 +580,25 @@ if ($pdo) {
       });
     }
 
-    let activeParticipantData = null;
+    function initOrResetWheel() {
+      if (!wheelInstance) {
+        wheelInstance = new HighlandahWheel('highlandah-wheel-canvas');
+      } else {
+        wheelInstance.setupCanvas();
+        wheelInstance.drawWheel();
+      }
+    }
+
+    function resetWheelResultState() {
+      clearInterval(timerInterval);
+      activeDrawnChallenge = null;
+      document.getElementById('wheel-empty-state').style.display = 'block';
+      document.getElementById('wheel-challenge-state').style.display = 'none';
+      document.getElementById('wheel-respin-state').style.display = 'none';
+      document.getElementById('wheel-result-card').classList.remove('active-challenge');
+      document.getElementById('wheel-status-pill').textContent = 'Ready to Spin';
+      document.getElementById('verdict-notes-input').value = '';
+    }
 
     function displayFoundParticipant(data) {
       activeParticipantData = data;
@@ -452,9 +614,13 @@ if ($pdo) {
       document.getElementById('card-progress').style.width = `${s.progress_percent}%`;
       document.getElementById('card-needed').textContent = s.is_qualified ? 'QUALIFIED!' : `${s.points_needed} pts needed`;
 
+      // Update name on wheel title
+      const wheelPartName = document.getElementById('wheel-participant-name');
+      if (wheelPartName) wheelPartName.textContent = p.full_name;
+
       const badgeEl = document.getElementById('card-badge');
       if (s.is_qualified) {
-        badgeEl.innerHTML = `<span class="qualified-tag">👑 GRAND FINALE QUALIFIED</span>`;
+        badgeEl.innerHTML = `<span class="qualified-tag">GRAND FINALE QUALIFIED</span>`;
       } else {
         badgeEl.innerHTML = ``;
       }
@@ -471,12 +637,245 @@ if ($pdo) {
           <tr>
             <td style="padding: 0.4rem 0.5rem; color: var(--text-dim);">${h.created_at.substring(0, 16)}</td>
             <td style="padding: 0.4rem 0.5rem; color: #fff;">${h.challenge_name}</td>
-            <td style="padding: 0.4rem 0.5rem; color: var(--wl-green); font-weight: 700;">+${h.points}</td>
+            <td style="padding: 0.4rem 0.5rem; color: ${h.points > 0 ? 'var(--wl-green)' : '#ef4444'}; font-weight: 700;">${h.points > 0 ? '+' + h.points : '0 (Failed)'}</td>
             <td style="padding: 0.4rem 0.5rem; color: var(--wl-green);">${h.outlet_name}</td>
             <td style="padding: 0.4rem 0.5rem; color: var(--text-muted);">${h.promoter_name || 'Staff'}</td>
           </tr>
         `).join('');
       }
+
+      // Initialize wheel and reset result panel
+      resetWheelResultState();
+      setTimeout(() => {
+        initOrResetWheel();
+      }, 50);
+    }
+
+    // Spin Wheel Button Trigger
+    const spinWheelBtn = document.getElementById('spin-wheel-btn');
+    if (spinWheelBtn) {
+      spinWheelBtn.addEventListener('click', () => {
+        if (!activeParticipantData) {
+          highlandahAlert({ title: 'LOOKUP REQUIRED', message: 'Please search and select a participant first before spinning the wheel.', type: 'warning' });
+          return;
+        }
+        if (!wheelInstance || wheelInstance.isSpinning) return;
+
+        spinWheelBtn.disabled = true;
+        spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw" style="animation: spin 1s linear infinite;"></i> SPINNING THE BOTTLE...';
+        lucide.createIcons();
+        document.getElementById('wheel-status-pill').textContent = 'Spinning...';
+        resetWheelResultState();
+
+        wheelInstance.spin((selectedSlice) => {
+          spinWheelBtn.disabled = false;
+          spinWheelBtn.innerHTML = '<i data-lucide="rotate-cw"></i> SPIN THE BOTTLE / WHEEL';
+          lucide.createIcons();
+          handleWheelSelection(selectedSlice);
+        });
+      });
+    }
+
+    // Re-Spin Button Trigger
+    const respinBtn = document.getElementById('btn-respin-trigger');
+    if (respinBtn) {
+      respinBtn.addEventListener('click', () => {
+        if (spinWheelBtn) spinWheelBtn.click();
+      });
+    }
+
+    // Handle Wheel Landing
+    function handleWheelSelection(slice) {
+      activeDrawnChallenge = slice;
+
+      if (slice.id === 15) {
+        // Free Re-Spin
+        document.getElementById('wheel-empty-state').style.display = 'none';
+        document.getElementById('wheel-challenge-state').style.display = 'none';
+        document.getElementById('wheel-respin-state').style.display = 'block';
+        document.getElementById('wheel-status-pill').textContent = 'Lucky Re-Spin!';
+        document.getElementById('wheel-result-card').classList.add('active-challenge');
+        lucide.createIcons();
+        return;
+      }
+
+      // Regular Challenge Drawn
+      document.getElementById('wheel-empty-state').style.display = 'none';
+      document.getElementById('wheel-respin-state').style.display = 'none';
+      document.getElementById('wheel-challenge-state').style.display = 'block';
+      document.getElementById('wheel-result-card').classList.add('active-challenge');
+      document.getElementById('wheel-status-pill').textContent = `Challenge Drawn (+${slice.points} PTS)`;
+
+      document.getElementById('drawn-category-badge').textContent = slice.category.toUpperCase();
+      document.getElementById('drawn-points-badge').textContent = `+${slice.points} PTS`;
+      document.getElementById('drawn-title').textContent = slice.label;
+      document.getElementById('drawn-rule').textContent = slice.rule;
+      document.getElementById('verdict-notes-input').value = '';
+
+      // Auto-fill fallback form below
+      const chSelect = document.getElementById('alloc-challenge');
+      if (chSelect) {
+        chSelect.value = slice.id;
+        document.getElementById('alloc-points').value = slice.points;
+      }
+
+      // Configure timer if time-bound (e.g. 15s or 60s)
+      setupChallengeTimer(slice.timeLimit);
+      lucide.createIcons();
+
+      // Smooth scroll to challenge card
+      document.getElementById('wheel-result-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Countdown Timer Functions
+    function setupChallengeTimer(seconds) {
+      clearInterval(timerInterval);
+      const timerWrap = document.getElementById('drawn-timer-wrap');
+      const timerDisplay = document.getElementById('timer-display');
+      const startBtn = document.getElementById('timer-start-btn');
+      const pauseBtn = document.getElementById('timer-pause-btn');
+
+      if (!seconds || seconds <= 0) {
+        timerWrap.style.display = 'none';
+        return;
+      }
+
+      timerWrap.style.display = 'block';
+      timerSecondsLeft = seconds;
+      updateTimerDisplay(timerSecondsLeft);
+      timerDisplay.classList.remove('time-up');
+      startBtn.style.display = 'inline-flex';
+      pauseBtn.style.display = 'none';
+    }
+
+    function updateTimerDisplay(secs) {
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      const el = document.getElementById('timer-display');
+      if (el) {
+        el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+    }
+
+    const timerStartBtn = document.getElementById('timer-start-btn');
+    if (timerStartBtn) {
+      timerStartBtn.addEventListener('click', () => {
+        const startBtn = document.getElementById('timer-start-btn');
+        const pauseBtn = document.getElementById('timer-pause-btn');
+        startBtn.style.display = 'none';
+        pauseBtn.style.display = 'inline-flex';
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          timerSecondsLeft--;
+          updateTimerDisplay(timerSecondsLeft);
+          if (timerSecondsLeft <= 0) {
+            clearInterval(timerInterval);
+            pauseBtn.style.display = 'none';
+            startBtn.style.display = 'inline-flex';
+            const el = document.getElementById('timer-display');
+            if (el) el.classList.add('time-up');
+            if (wheelInstance) wheelInstance.playWinSound();
+            showToast("TIME'S UP! Evaluate if participant completed the challenge.", 'warning');
+          }
+        }, 1000);
+      });
+    }
+
+    const timerPauseBtn = document.getElementById('timer-pause-btn');
+    if (timerPauseBtn) {
+      timerPauseBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        document.getElementById('timer-pause-btn').style.display = 'none';
+        document.getElementById('timer-start-btn').style.display = 'inline-flex';
+      });
+    }
+
+    const timerResetBtn = document.getElementById('timer-reset-btn');
+    if (timerResetBtn) {
+      timerResetBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        if (activeDrawnChallenge && activeDrawnChallenge.timeLimit) {
+          timerSecondsLeft = activeDrawnChallenge.timeLimit;
+          updateTimerDisplay(timerSecondsLeft);
+          const el = document.getElementById('timer-display');
+          if (el) el.classList.remove('time-up');
+        }
+        document.getElementById('timer-pause-btn').style.display = 'none';
+        document.getElementById('timer-start-btn').style.display = 'inline-flex';
+      });
+    }
+
+    // Submit Pass / Fail Verdict
+    async function submitChallengeVerdict(outcome) {
+      if (!activeParticipantData || !activeDrawnChallenge) {
+        highlandahAlert({ title: 'NO CHALLENGE ACTIVE', message: 'Please spin the wheel first to draw a challenge.', type: 'warning' });
+        return;
+      }
+
+      const notes = document.getElementById('verdict-notes-input').value.trim();
+      const passBtn = document.getElementById('btn-verdict-pass');
+      const failBtn = document.getElementById('btn-verdict-fail');
+      passBtn.disabled = true;
+      failBtn.disabled = true;
+
+      const fd = new FormData();
+      fd.append('participant_id', activeParticipantData.participant.id);
+      fd.append('challenge_id', activeDrawnChallenge.id);
+      fd.append('outcome', outcome);
+      fd.append('notes', notes);
+
+      try {
+        const res = await fetch('api/allocate_points.php', { method: 'POST', body: fd });
+        const data = await res.json();
+
+        if (data.success) {
+          if (outcome === 'passed') {
+            showToast(data.message, 'success');
+            if (data.participant.just_qualified) {
+              await highlandahAlert({
+                title: 'GRAND FINALE QUALIFIED!',
+                message: `CONGRATULATIONS!\n\nParticipant ${data.participant.full_name} has reached ${data.participant.total_points} points and officially QUALIFIED for the William Lawson's TNH Grand Finale!`,
+                type: 'finale',
+                btnText: 'SALUTE HIGHLANDAH'
+              });
+            }
+          } else {
+            showToast("Challenge recorded as Incomplete (0 points).", 'warning');
+            await highlandahAlert({
+              title: 'CHALLENGE INCOMPLETE',
+              message: `Challenge '${activeDrawnChallenge.label}' marked as Incomplete (0 points awarded).\n\nParticipant can spin again or attempt another challenge at this outlet!`,
+              type: 'info',
+              btnText: 'CONTINUE ACTIVATION'
+            });
+          }
+
+          // Refresh participant details & history table
+          const relookup = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(data.participant.clan_id)}`);
+          const refreshed = await relookup.json();
+          displayFoundParticipant(refreshed);
+
+          // Reset drawn card state
+          resetWheelResultState();
+        } else {
+          highlandahAlert({ title: 'ALLOCATION NOTICE', message: data.message || 'Failed to submit challenge verdict.', type: 'error' });
+        }
+      } catch (err) {
+        highlandahAlert({ title: 'NETWORK ERROR', message: 'Network error while submitting challenge verdict.', type: 'error' });
+      } finally {
+        passBtn.disabled = false;
+        failBtn.disabled = false;
+      }
+    }
+
+    const btnVerdictPass = document.getElementById('btn-verdict-pass');
+    if (btnVerdictPass) {
+      btnVerdictPass.addEventListener('click', () => submitChallengeVerdict('passed'));
+    }
+
+    const btnVerdictFail = document.getElementById('btn-verdict-fail');
+    if (btnVerdictFail) {
+      btnVerdictFail.addEventListener('click', () => submitChallengeVerdict('failed'));
     }
 
     // Auto-fill challenge points on select (strictly locked from scorecard)
@@ -511,7 +910,7 @@ if ($pdo) {
             showToast(data.message, 'success');
             if (data.participant.just_qualified) {
               await highlandahAlert({
-                title: '👑 GRAND FINALE QUALIFIED!',
+                title: 'GRAND FINALE QUALIFIED!',
                 message: `CONGRATULATIONS!\n\nParticipant ${data.participant.full_name} has just reached ${data.participant.total_points} points and officially QUALIFIED for the William Lawson's TNH Grand Finale!`,
                 type: 'finale',
                 btnText: 'SALUTE HIGHLANDAH'
@@ -553,7 +952,7 @@ if ($pdo) {
           if (data.success) {
             showToast(`Registered successfully! Clan ID: ${data.participant.clan_id}`);
             await highlandahAlert({
-              title: '⚡ HIGHLANDAH PASS ISSUED',
+              title: 'HIGHLANDAH PASS ISSUED',
               message: `Participant ${data.participant.full_name} has been enrolled!\n\nClan ID: ${data.participant.clan_id}\n\nProceed to award their first challenge points.`,
               type: 'success',
               btnText: 'GO TO POINTS ALLOCATION'

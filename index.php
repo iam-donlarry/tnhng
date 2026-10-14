@@ -18,7 +18,7 @@ if ($pdo) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Next Highlandah | William Lawson's Season 3</title>
   <meta name="description" content="TNH Season 3 is live. Register for your official Clan Pass, visit partner outlets across Nigeria, conquer on-site bottle challenges, and stack points toward the 100-point Grand Finale threshold.">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -31,17 +31,31 @@ if ($pdo) {
         <img src="images/image.png" alt="William Lawson's - Highlandahs Only!">
       </div>
       <div class="age-gate-content">
+        <img src="images/logo.svg" alt="William Lawson's" class="age-gate-logo">
         <div class="age-gate-badge">
           <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> 18+ Legal Drinking Age Required
         </div>
         <h2 class="age-gate-title">ARE YOU BOLD ENOUGH TO ENTER?</h2>
         <p class="age-gate-copy">
-          This promotional campaign is strictly reserved for persons of legal drinking age in Nigeria (18+). Please verify your date of birth to proceed into The Clan.
+          This promotional campaign is strictly reserved for persons of legal drinking age in Nigeria (18+). Please enter your year of birth to proceed into The Clan.
         </p>
 
-        <div class="form-group">
-          <label class="form-label" for="age-gate-dob">Date of Birth</label>
-          <input type="date" id="age-gate-dob" class="form-control" value="2000-01-01" required>
+        <div class="form-group age-year-group">
+          <label class="form-label" for="age-gate-year">Year of Birth</label>
+          <div class="age-year-input-wrap">
+            <input 
+              type="text" 
+              id="age-gate-year" 
+              class="form-control age-year-input" 
+              placeholder="____" 
+              maxlength="4" 
+              inputmode="numeric" 
+              pattern="[0-9]{4}" 
+              autocomplete="bday-year"
+              required
+            >
+          </div>
+          <div class="age-year-hint">Enter your 4-digit birth year</div>
         </div>
 
         <button id="age-gate-confirm" class="btn btn-primary btn-lg" style="width: 100%;">
@@ -74,7 +88,7 @@ if ($pdo) {
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.php" class="brand-logo" aria-label="William Lawson's The Next Highlandah">
-        <span class="brand-badge">WL</span>
+        <img src="images/logo.svg" alt="William Lawson's" class="brand-logo-img">
         <div class="brand-text-wrap">
           <span class="brand-title">THE NEXT HIGHLANDAH</span>
           <span class="brand-subtitle">SEASON 3 • OFFICIAL PROMOTION</span>
@@ -83,20 +97,15 @@ if ($pdo) {
 
       <nav class="nav-desktop">
         <ul class="nav-links">
-          <li><a href="#playbook" class="nav-link">How It Works</a></li>
-          <li><a href="#scorecard" class="nav-link">Challenges & Points</a></li>
-          <li><a href="#leaderboard-hub" class="nav-link">Leaderboard</a></li>
-          <li><a href="#outlets-tour" class="nav-link">Outlet Tour</a></li>
-          <li><a href="#vip-table" class="nav-link">VIP Finale</a></li>
+          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="leaderboard.php" class="nav-link">Leaderboard</a></li>
+          <li><a href="outlets.php" class="nav-link">Outlets</a></li>
         </ul>
       </nav>
 
       <div class="nav-actions">
-        <a href="#check-points-anchor" class="btn btn-outline btn-sm">
+        <a href="#check-points-anchor" class="btn btn-primary btn-sm">
           <i data-lucide="award"></i> Check Points
-        </a>
-        <a href="#join-clan" class="btn btn-primary btn-sm">
-          <i data-lucide="user-plus"></i> Join The Clan
         </a>
       </div>
 
@@ -109,16 +118,20 @@ if ($pdo) {
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobile-nav-drawer">
       <ul>
-        <li><a href="#playbook" class="nav-link mobile-link"><i data-lucide="compass"></i> How It Works</a></li>
-        <li><a href="#scorecard" class="nav-link mobile-link"><i data-lucide="target"></i> Challenges & Scorecard</a></li>
-        <li><a href="#leaderboard-hub" class="nav-link mobile-link"><i data-lucide="trophy"></i> Live Standings</a></li>
-        <li><a href="#check-points-anchor" class="nav-link mobile-link"><i data-lucide="award"></i> Check My Points</a></li>
-        <li><a href="#outlets-tour" class="nav-link mobile-link"><i data-lucide="map-pin"></i> Activation Outlets</a></li>
-        <li><a href="#vip-table" class="nav-link mobile-link"><i data-lucide="sparkles"></i> VIP Creator Table</a></li>
+        <li><a href="index.php" class="nav-link mobile-link active">Home</a></li>
+        <li><a href="leaderboard.php" class="nav-link mobile-link">Full Leaderboard</a></li>
+        <li><a href="outlets.php" class="nav-link mobile-link">Outlet Tour & Dates</a></li>
+        <li style="border-top: 1px solid var(--border-subtle); margin: 0.5rem 0; padding-top: 0.5rem;">
+          <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 0 0.5rem;">On This Page</span>
+        </li>
+        <li><a href="#playbook" class="nav-link mobile-link">How It Works</a></li>
+        <li><a href="#brand-range" class="nav-link mobile-link">The Highlandah Range</a></li>
+        <li><a href="#scorecard" class="nav-link mobile-link">Challenges & Scorecard</a></li>
+        <li><a href="#vip-table" class="nav-link mobile-link">VIP Finale Table</a></li>
       </ul>
       <div class="mobile-nav-actions">
-        <a href="#join-clan" class="btn btn-primary mobile-link" style="width: 100%;">
-          <i data-lucide="user-plus"></i> Join The Clan Now
+        <a href="#check-points-anchor" class="btn btn-primary mobile-link" style="width: 100%;">
+          <i data-lucide="award"></i> Check My Clan Points
         </a>
         <div class="mobile-portal-grid">
           <a href="promoter.php" class="btn btn-outline btn-sm">
@@ -160,11 +173,11 @@ if ($pdo) {
           </div>
 
           <div class="hero-cta-group">
-            <a href="#join-clan" class="btn btn-primary btn-lg">
-              <i data-lucide="arrow-right"></i> Forge Your Clan Pass
+            <a href="leaderboard.php" class="btn btn-primary btn-lg">
+              <i data-lucide="trophy"></i> Live Clan Standings
             </a>
-            <a href="#leaderboard-hub" class="btn btn-outline btn-lg">
-              <i data-lucide="trophy"></i> Check Standings
+            <a href="outlets.php" class="btn btn-outline btn-lg">
+              <i data-lucide="map-pin"></i> Find Outlets to Play
             </a>
           </div>
 
@@ -187,51 +200,59 @@ if ($pdo) {
           </div>
         </div>
 
-        <!-- Hero Ticket & Brand Warrior Presentation -->
+        <!-- Hero Combo: William Lawson's Bottles & Official Clan Ticket -->
         <div class="hero-visual">
-          <div class="hero-ticket-frame" id="hero-clan-pass">
-            <div class="ticket-header-strip">
-              <div class="ticket-logo-mark">
-                <span>WL</span> OFFICIAL CLAN TICKET
+          <div class="hero-product-combo">
+            <!-- Brand Bottle Lineup -->
+            <div class="hero-bottles-pod">
+              <img src="images/whiskey_bottles.png" alt="William Lawson's Blended Scotch Whisky & Spirit Drink" class="hero-bottles-img">
+              <div class="hero-bottles-tag">
+                <span>NO RULES. GREAT SCOTCH.</span>
               </div>
-              <span class="ticket-status-stamp">UNIVERSAL PASS</span>
             </div>
 
-            <div class="ticket-art-row">
-              <div class="ticket-mascot-container">
-                <img src="images/earn-it.png" alt="William Lawson's Highlandah Warrior" class="ticket-warrior-img">
+            <!-- Digital Clan Ticket (Redesigned Compact Near-Square Clan Pass) -->
+            <div class="hero-ticket-frame tilt-card sheen-glow" id="hero-clan-pass">
+              <!-- Warrior Artwork as Card Background -->
+              <div class="ticket-bg-art" aria-hidden="true"></div>
+
+              <div class="ticket-header-strip">
+                <div class="ticket-logo-mark">
+                  <span>WL</span> OFFICIAL CLAN PASS
+                </div>
+                <span class="ticket-status-stamp">UNIVERSAL PASS</span>
               </div>
-              <div class="ticket-details-col">
+
+              <div class="ticket-details-block">
                 <div class="ticket-id-display">
                   <span class="ticket-label">OFFICIAL CLAN ID</span>
                   <span class="pass-id">TNH-7701</span>
                 </div>
                 <div class="ticket-holder-info pass-info">
                   <span class="ticket-label">PARTICIPANT</span>
-                  <h4>Tunde "The Titan" Bakare</h4>
-                  <p><i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> Highland Arena • Lagos</p>
+                  <h4>Tu**** B*****</h4>
                 </div>
               </div>
-            </div>
 
-            <!-- Road to Finale Progress Meter -->
-            <div class="ticket-meter-box">
-              <div class="meter-labels">
-                <span>ROAD TO 100 PTS FINALE</span>
-                <span class="points-val">105 / 100 PTS</span>
+              <!-- Road to Finale Progress Meter -->
+              <div class="ticket-meter-box">
+                <div class="meter-labels">
+                  <span>ROAD TO 100 PTS FINALE</span>
+                  <span class="points-val">105 / 100 PTS</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: 100%;"></div>
+                </div>
+                <div class="ticket-meter-footer">
+                  <span class="ticket-badge-qualified">GRAND FINALE QUALIFIED</span>
+                  <span class="ticket-outlet-note">Active Clan Pass</span>
+                </div>
               </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width: 100%;"></div>
-              </div>
-              <div class="ticket-meter-footer">
-                <span class="ticket-badge-qualified">👑 GRAND FINALE QUALIFIED</span>
-                <span class="ticket-outlet-note">Playable at Any Outlet</span>
-              </div>
-            </div>
 
-            <div class="ticket-notches">
-              <span class="notch notch-left"></span>
-              <span class="notch notch-right"></span>
+              <div class="ticket-notches">
+                <span class="notch notch-left"></span>
+                <span class="notch notch-right"></span>
+              </div>
             </div>
           </div>
         </div>
@@ -266,6 +287,22 @@ if ($pdo) {
         </div>
       </div>
     </section>
+
+    <!-- SECTION SEPARATOR (GREEN BOTTOM DISTRESSED EDGE - TOP OF SCROLLING TEXT) -->
+    <div class="section-separator sep-bottom-green"></div>
+
+    <!-- ================= KINETIC OPPOSING PARALLAX STRIP 1 ================= -->
+    <div class="kinetic-text-strip" aria-hidden="true">
+      <div class="kinetic-track kinetic-track-left">
+        <span class="kinetic-text">NO RULES<span class="kinetic-dot">&bull;</span>GREAT SCOTCH<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT<span class="kinetic-dot">&bull;</span>NO RULES<span class="kinetic-dot">&bull;</span>GREAT SCOTCH<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT</span>
+      </div>
+      <div class="kinetic-track kinetic-track-right">
+        <span class="kinetic-text outline-text">THE NEXT HIGHLANDAH<span class="kinetic-dot">&bull;</span>SEASON 3<span class="kinetic-dot">&bull;</span>100 POINTS TO FINALE<span class="kinetic-dot">&bull;</span>HIGHLANDAHS ONLY<span class="kinetic-dot">&bull;</span>THE NEXT HIGHLANDAH<span class="kinetic-dot">&bull;</span>SEASON 3</span>
+      </div>
+    </div>
+
+    <!-- SECTION SEPARATOR (GREEN TOP DISTRESSED EDGE - BOTTOM OF SCROLLING TEXT) -->
+    <div class="section-separator sep-top-green"></div>
 
     <!-- ================= THE ACTIVATION PLAYBOOK (STEP BY STEP) ================= -->
     <section class="section section-playbook" id="playbook">
@@ -352,7 +389,85 @@ if ($pdo) {
       </div>
     </section>
 
-    <!-- ================= CHALLENGES & OFFICIAL SCORECARD ================= -->
+    <!-- SECTION SEPARATOR (BLACK BOTTOM DISTRESSED EDGE) -->
+    <div class="section-separator sep-bottom-black"></div>
+
+    <!-- ================= BRAND AWARENESS: THE HIGHLANDAH RANGE & SIGNATURE SERVES ================= -->
+    <section class="section section-brand-range" id="brand-range">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker">Brand Awareness & Spirits Portfolio</span>
+          <h2 class="section-heading">NO RULES. GREAT SCOTCH.</h2>
+          <p class="section-subheading">
+            William Lawson's doesn't follow traditional scotch whisky rules. Crafted with big, bold malts and unpeated scotch character, discover our signature bottles and refreshing on-premise serves.
+          </p>
+        </div>
+
+        <div class="brand-showcase-grid">
+          <!-- Card 1: Product Lineup -->
+          <div class="brand-showcase-card tilt-card sheen-glow">
+            <div class="brand-card-img-wrap">
+              <img src="images/whiskey_bottles.png" alt="William Lawson's Bottle Lineup" class="brand-card-img">
+            </div>
+            <h3 class="brand-card-title">THE HIGHLANDAH RANGE</h3>
+            <p class="brand-card-desc">
+              From our flagship Blended Scotch Whisky aged in Scotland, to our smooth Vanilla Spiced spirit drink and premixed ready-to-drink Whisky & Cola cans—crafted for bold individuals who dare to stand out.
+            </p>
+            <div class="brand-pills-row">
+              <span class="brand-mini-pill">Blended Scotch Whisky</span>
+              <span class="brand-mini-pill">Vanilla Spiced Drink</span>
+              <span class="brand-mini-pill">Whisky & Cola Can</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Signature Bar Serves -->
+          <div class="brand-showcase-card tilt-card sheen-glow">
+            <div class="brand-card-img-wrap">
+              <img src="images/drinks.png" alt="William Lawson's Signature Chilled Serves" class="brand-card-img">
+            </div>
+            <h3 class="brand-card-title">SERVED BOLD ON-PREMISE</h3>
+            <p class="brand-card-desc">
+              Hit our partner bars and lounges during live activations to experience our signature chilled serves over ice. Taste the bold, sweet character with cola, soda, or spiced ginger.
+            </p>
+            <div class="brand-pills-row">
+              <span class="brand-mini-pill">On The Rocks</span>
+              <span class="brand-mini-pill">Highball & Cola</span>
+              <span class="brand-mini-pill">Spiced & Ginger</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Serves Ritual Callout -->
+        <div class="serves-banner">
+          <div class="serves-content">
+            <span class="section-kicker" style="margin-bottom: 0.25rem;">Activation Bar Experience</span>
+            <h3>SPIN. PLAY. ENJOY GREAT SCOTCH.</h3>
+            <p>
+              Every challenge you conquer at our activation tour is paired with great whisky. Head to the bar, order your favorite William Lawson's serve, and let our ambassador spin the bottle for your next points challenge!
+            </p>
+            <div class="serves-badges">
+              <div class="serves-badge-item">
+                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
+                <span>Bold, sweet, unpeated profile</span>
+              </div>
+              <div class="serves-badge-item">
+                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
+                <span>Served ice-cold at partner outlets</span>
+              </div>
+              <div class="serves-badge-item">
+                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
+                <span>Strictly 18+ Drink Responsibly</span>
+              </div>
+            </div>
+          </div>
+          <div class="serves-img-wrap">
+            <img src="images/drinks.png" alt="Chilled William Lawson's Serves" class="serves-img">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHALLENGES & OFFICIAL SCORECARD ================= 
     <section class="section section-scorecard" id="scorecard">
       <div class="container">
         <div class="section-header">
@@ -395,9 +510,12 @@ if ($pdo) {
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
-    <!-- ================= 1PD REGISTRATION: JOIN THE CLAN ================= -->
+    <!-- SECTION SEPARATOR (DISTRESSED EDGE) -->
+    <div class="section-separator sep-bottom-black"></div>
+
+    <!-- ================= 1PD REGISTRATION: JOIN THE CLAN (TEMPORARILY COMMENTED OUT) =================
     <section class="section section-registration" id="join-clan">
       <div class="container registration-container">
         <div class="registration-card">
@@ -465,6 +583,7 @@ if ($pdo) {
         </div>
       </div>
     </section>
+    ================= END 1PD REGISTRATION ================= -->
 
     <!-- ================= STANDINGS & CHECK POINTS COMMAND CENTER ================= -->
     <section class="section section-standings" id="leaderboard-hub">
@@ -536,11 +655,17 @@ if ($pdo) {
               </tbody>
             </table>
           </div>
+
+          <div class="view-all-cta-box">
+            <a href="leaderboard.php" class="btn btn-primary btn-lg">
+              <i data-lucide="trophy"></i> View Full National Standings & Clan Podium &rarr;
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= OUTLET TOUR DATES ================= -->
+    <!-- ================= OUTLET TOUR DATES & LIFESTYLE CAN TOWER ================= -->
     <section class="section section-outlets" id="outlets-tour">
       <div class="container">
         <div class="section-header">
@@ -549,6 +674,20 @@ if ($pdo) {
           <p class="section-subheading">
             Visit our scheduled activation venues to meet our Brand Ambassadors, spin the bottle, and rack up points toward the 100-point threshold.
           </p>
+        </div>
+
+        <!-- Lifestyle KV Card: Can Tower & Highlandah Energy -->
+        <div class="outlets-lifestyle-card parallax-viewport">
+          <img src="images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg" alt="William Lawson's - Top Up Anyone? No Rules. Great Scotch." class="outlets-lifestyle-img parallax-img">
+          <div class="outlets-lifestyle-overlay">
+            <div class="lifestyle-copy">
+              <h3>TOP UP ANYONE? NO RULES. GREAT SCOTCH.</h3>
+              <p>Experience live Highlandah energy at partner bars and lounges across Lagos, Abuja, and Port Harcourt.</p>
+            </div>
+            <a href="#outlets-tour" class="btn btn-primary">
+              <i data-lucide="map-pin"></i> Find Your Activation Night
+            </a>
+          </div>
         </div>
 
         <div class="outlets-grid">
@@ -567,18 +706,40 @@ if ($pdo) {
               </p>
               <div class="outlet-footer">
                 <span class="outlet-action-note">Bottle Spin on Site</span>
-                <a href="#join-clan" class="btn btn-outline btn-sm">Get Pass & Play</a>
+                <a href="#check-points-anchor" class="btn btn-outline btn-sm">Check Points</a>
               </div>
             </div>
           <?php endforeach; ?>
         </div>
+
+        <div class="view-all-cta-box">
+          <a href="outlets.php" class="btn btn-primary btn-lg">
+            <i data-lucide="map-pin"></i> View Full Tour Calendar & Venue Directory &rarr;
+          </a>
+        </div>
       </div>
     </section>
+
+    <!-- SECTION SEPARATOR (GREEN BOTTOM DISTRESSED EDGE - TOP OF SCROLLING TEXT) -->
+    <div class="section-separator sep-bottom-green"></div>
+
+    <!-- ================= KINETIC OPPOSING PARALLAX STRIP 2 ================= -->
+    <div class="kinetic-text-strip kinetic-strip-compact" aria-hidden="true">
+      <div class="kinetic-track kinetic-track-left">
+        <span class="kinetic-text outline-text">DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT<span class="kinetic-dot">&bull;</span>GRAND FINALE VIP TABLE<span class="kinetic-dot">&bull;</span>HANG OUT WITH THE CREATOR<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT</span>
+      </div>
+      <div class="kinetic-track kinetic-track-right">
+        <span class="kinetic-text">WILLIAM LAWSON'S<span class="kinetic-dot">&bull;</span>TOUR DATES<span class="kinetic-dot">&bull;</span>LAGOS<span class="kinetic-dot">&bull;</span>ABUJA<span class="kinetic-dot">&bull;</span>PORT HARCOURT<span class="kinetic-dot">&bull;</span>WILLIAM LAWSON'S</span>
+      </div>
+    </div>
+
+    <!-- SECTION SEPARATOR (GREEN TOP DISTRESSED EDGE - BOTTOM OF SCROLLING TEXT) -->
+    <div class="section-separator sep-top-green"></div>
 
     <!-- ================= VIP CREATOR TABLE SPOTLIGHT ================= -->
     <section class="section section-vip" id="vip-table">
       <div class="container">
-        <div class="vip-card">
+        <div class="vip-card sheen-glow">
           <div class="vip-content">
             <span class="vip-badge">GRAND FINALE SPOTLIGHT</span>
             <h2 class="vip-heading">
@@ -590,10 +751,10 @@ if ($pdo) {
               Top contenders who cross the 100-point threshold will be entered into the final selection to share the exclusive VIP table with our celebrity creator at the Grand Finale.
             </p>
             <div class="vip-cta-row">
-              <a href="#join-clan" class="btn btn-primary btn-lg">
-                <i data-lucide="user-plus"></i> Register & Start Earning Points
+              <a href="outlets.php" class="btn btn-primary btn-lg">
+                <i data-lucide="map-pin"></i> Find Activation Outlets
               </a>
-              <a href="#leaderboard-hub" class="btn btn-outline btn-lg">
+              <a href="leaderboard.php" class="btn btn-outline btn-lg">
                 <i data-lucide="trophy"></i> View Current Top Contenders
               </a>
             </div>
@@ -604,6 +765,9 @@ if ($pdo) {
         </div>
       </div>
     </section>
+
+    <!-- SECTION SEPARATOR (BLACK TOP DISTRESSED EDGE INTO FOOTER) -->
+    <div class="section-separator sep-top-black"></div>
   </main>
 
   <!-- ================= CORPORATE COMPLIANCE FOOTER ================= -->
@@ -612,23 +776,23 @@ if ($pdo) {
       <div class="footer-top">
         <div class="footer-brand-col">
           <div class="footer-logo">
-            <span class="brand-badge">WL</span>
+            <img src="images/logo.svg" alt="William Lawson's" class="footer-brand-logo-img">
             <span class="footer-brand-name">WILLIAM LAWSON'S</span>
           </div>
           <p class="footer-tagline">
             The Next Highlandah (Season 3). Bold, unconventional, good-humored. First-party data campaign and multi-outlet points management platform.
           </p>
           <div class="legal-age-warning">
-            ⚠️ STRICTLY 18+. DRINK RESPONSIBLY. NOT FOR SALE TO PERSONS UNDER 18 YEARS OF AGE.
+            STRICTLY 18+. DRINK RESPONSIBLY. NOT FOR SALE TO PERSONS UNDER 18 YEARS OF AGE.
           </div>
         </div>
 
         <div class="footer-links-col">
-          <h4 class="footer-col-title">Internal Portals</h4>
+          <h4 class="footer-col-title">Campaign Navigation</h4>
           <ul class="footer-menu">
-            <li><a href="promoter.php">On-Site Ambassador Console</a></li>
-            <li><a href="admin.php">Campaign Management & Audit</a></li>
-            <li><a href="#leaderboard-hub">National Standings</a></li>
+            <li><a href="index.php">Campaign Homepage</a></li>
+            <li><a href="leaderboard.php">National Leaderboard</a></li>
+            <li><a href="outlets.php">Activation Outlets & Tour</a></li>
             <li><a href="#scorecard">Challenge Scorecard</a></li>
           </ul>
         </div>
@@ -656,7 +820,7 @@ if ($pdo) {
     <div class="modal-card modal-pass-card">
       <button class="modal-close" aria-label="Close modal">&times;</button>
       <div class="modal-pass-header">
-        <span class="modal-pass-pill">⚡ OFFICIAL CLAN PASS ACTIVATED</span>
+        <span class="modal-pass-pill">OFFICIAL CLAN PASS ACTIVATED</span>
         <h3 class="modal-pass-title">YOUR HIGHLANDAH PASS</h3>
       </div>
 
@@ -741,8 +905,8 @@ if ($pdo) {
     </div>
   </div>
 
-  <script src="js/highlandah-alert.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/highlandah-alert.js?v=<?= filemtime(__DIR__ . '/js/highlandah-alert.js') ?>"></script>
+  <script src="js/main.js?v=<?= filemtime(__DIR__ . '/js/main.js') ?>"></script>
   <script>
     lucide.createIcons();
   </script>

@@ -73,6 +73,9 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   background-color: var(--bg-canvas);
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 body {
@@ -81,7 +84,10 @@ body {
   color: var(--text-secondary);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   min-height: 100vh;
+  position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -222,6 +228,36 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1px;
 }
 
+.brand-logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 72px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: transform 0.2s ease;
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: scale(1.05);
+}
+
+.footer-brand-logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 72px;
+  display: block;
+  object-fit: contain;
+}
+
+.age-gate-logo {
+  height: 48px;
+  width: auto;
+  max-width: 80px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
 .brand-text-wrap {
   display: flex;
   flex-direction: column;
@@ -263,8 +299,26 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.35rem 0;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.active {
   color: var(--wl-green);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--wl-green);
+}
+
+.mobile-link.active {
+  color: var(--wl-green) !important;
+  font-weight: 700;
+  background: rgba(0, 200, 83, 0.08);
+  border-left: 3px solid var(--wl-green);
 }
 
 .nav-actions {
@@ -291,6 +345,8 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   transition: var(--transition);
   white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-primary, .btn-amber {
@@ -362,12 +418,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .mobile-nav-drawer .nav-link {
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: block;
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+.mobile-nav-drawer .nav-link:hover,
+.mobile-nav-drawer .nav-link.active {
+  color: var(--wl-green);
+}
+
+.mobile-nav-drawer .nav-link i,
+.mobile-nav-drawer .nav-link svg {
+  display: none !important;
 }
 
 .mobile-nav-actions {
@@ -511,7 +578,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--border-subtle);
 }
 
-/* Hero Ticket Component */
+/* Hero Ticket Component (Compact Near-Square Clan Pass) */
 .hero-visual {
   display: flex;
   justify-content: center;
@@ -519,82 +586,55 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-ticket-frame {
   width: 100%;
-  max-width: 440px;
+  max-width: 360px; /* Compact near-square proportions */
   background: var(--bg-card);
   border: 1px solid var(--border-prominent);
-  border-radius: 12px;
-  padding: 1.75rem;
+  border-radius: 14px;
+  padding: 1.25rem 1.35rem 1.15rem;
   position: relative;
-  box-shadow: var(--shadow-lg), 0 0 30px var(--wl-green-glow);
+  overflow: hidden; /* Clips background warrior cleanly inside card bounds */
+  box-shadow: var(--shadow-lg), 0 0 35px var(--wl-green-glow);
+}
+
+/* Highlandah Warrior Artwork positioned as Card Background */
+.ticket-bg-art {
+  position: absolute;
+  right: -2px;
+  bottom: -10px;
+  width: 185px;
+  height: 295px;
+  background-image: url('../images/earn-it.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right bottom;
+  opacity: 0.38;
+  filter: drop-shadow(0 0 20px rgba(0, 200, 83, 0.4));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Card content layers sitting above background artwork */
+.ticket-header-strip,
+.ticket-details-block,
+.ticket-meter-box {
+  position: relative;
+  z-index: 2;
 }
 
 .ticket-header-strip {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1rem;
+  padding-bottom: 0.65rem;
   border-bottom: 1px dashed var(--border-subtle);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
-.ticket-logo-mark {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-heading);
-  font-size: 0.78rem;
-  letter-spacing: 1px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.ticket-logo-mark span {
-  background: var(--wl-green);
-  color: #000;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-}
-
-.ticket-status-stamp {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  background: rgba(0, 200, 83, 0.15);
-  color: var(--wl-green);
-  border: 1px solid var(--wl-green);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-weight: 700;
-}
-
-.ticket-art-row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 1.25rem;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.ticket-mascot-container {
-  height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-inset);
-  border-radius: 8px;
-  border: 1px solid var(--border-subtle);
-  overflow: hidden;
-}
-
-.ticket-warrior-img {
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-}
-
-.ticket-details-col {
+.ticket-details-block {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
+  margin-bottom: 1.15rem;
 }
 
 .ticket-label {
@@ -603,41 +643,48 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1px;
   color: var(--text-dim);
   display: block;
+  margin-bottom: 0.2rem;
 }
 
 .ticket-id-display .pass-id {
   font-family: var(--font-mono);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--wl-green);
   letter-spacing: 2px;
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(0, 200, 83, 0.4);
 }
 
 .ticket-holder-info h4 {
-  font-size: 1.15rem;
-  line-height: 1.1;
-  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  margin: 0;
 }
 
 .ticket-holder-info p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  display: none; /* Location removed as requested */
 }
 
 .ticket-meter-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  padding: 1rem;
+  background: rgba(10, 16, 12, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 200, 83, 0.25);
+  border-radius: 9px;
+  padding: 0.8rem 0.95rem;
 }
 
 .meter-labels {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: var(--text-muted);
 }
 
@@ -647,12 +694,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .progress-track {
-  height: 8px;
+  height: 7px;
   background: var(--bg-inset);
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid var(--border-subtle);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .progress-fill {
@@ -666,7 +713,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
 }
 
 .ticket-badge-qualified {
@@ -680,7 +727,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .ticket-notches {
   position: absolute;
-  top: 52px;
+  top: 38px;
   left: 0;
   right: 0;
   pointer-events: none;
@@ -1293,7 +1340,7 @@ select.form-control {
 
 .outlets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 1.5rem;
 }
 
@@ -1385,6 +1432,10 @@ select.form-control {
   gap: 3rem;
   align-items: center;
   box-shadow: var(--shadow-lg), 0 0 30px var(--wl-green-glow);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .vip-badge {
@@ -1407,6 +1458,7 @@ select.form-control {
   line-height: 0.95;
   letter-spacing: 1.5px;
   margin-bottom: 1.25rem;
+  word-break: break-word;
 }
 
 .vip-lead {
@@ -1432,11 +1484,16 @@ select.form-control {
   border-radius: 10px;
   padding: 1rem;
   overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .vip-poster-img {
   max-height: 380px;
+  max-width: 100%;
   width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: 6px;
 }
@@ -1653,6 +1710,84 @@ select.form-control {
   font-size: 0.72rem;
   color: var(--text-dim);
   margin-top: 1.25rem;
+}
+
+/* Age Gate Year Input (4-dash format) */
+.age-year-group {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.age-year-group .form-label {
+  text-align: center;
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+
+.age-year-input-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.age-year-input {
+  width: 220px !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  font-family: var(--font-mono, 'Courier New', monospace) !important;
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.42em !important;
+  padding: 0.65rem 0.5rem 0.65rem 0.9em !important;
+  color: #ffffff !important;
+  background: var(--bg-inset, #080808) !important;
+  border: 2px solid var(--border-prominent, #2c3238) !important;
+  border-radius: 8px !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.2s ease !important;
+}
+
+.age-year-input::placeholder {
+  color: #666666 !important;
+  letter-spacing: 0.42em !important;
+  opacity: 1 !important;
+}
+
+.age-year-input:focus {
+  border-color: var(--wl-green, #00c853) !important;
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.25), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  outline: none !important;
+}
+
+.age-year-hint {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .age-gate-card {
+    grid-template-columns: 1fr !important;
+    max-width: 480px !important;
+  }
+  .age-gate-poster {
+    display: none !important;
+  }
+  .age-gate-content {
+    padding: 2rem 1.5rem !important;
+  }
+  .age-year-input {
+    font-size: 1.9rem !important;
+    width: 200px !important;
+  }
 }
 
 /* Digital Ticket Modal */
@@ -1910,14 +2045,34 @@ select.form-control {
   }
   .vip-card {
     grid-template-columns: 1fr;
-    text-align: center;
-    padding: 2.5rem;
+    text-align: left;
+    padding: 2.75rem 2rem;
+    background-image: linear-gradient(rgba(5, 8, 6, 0.86), rgba(5, 8, 6, 0.94)), url('../images/image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border-color: rgba(0, 200, 83, 0.35);
+  }
+  .vip-poster-container {
+    display: none !important;
+  }
+  .vip-content {
+    position: relative;
+    z-index: 2;
+  }
+  .vip-heading {
+    font-size: 2.6rem;
+    line-height: 1.05;
   }
   .vip-lead {
-    margin: 0 auto 2rem;
+    font-size: 0.98rem;
+    color: #e2e8f0;
+    max-width: 100%;
+    margin-bottom: 2rem;
   }
   .vip-cta-row {
-    justify-content: center;
+    justify-content: flex-start;
   }
   .ticker-container {
     grid-template-columns: 1fr;
@@ -1990,6 +2145,61 @@ select.form-control {
   .playbook-step:last-child {
     grid-column: span 1;
   }
+  .vip-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2.25rem 1.25rem;
+    gap: 1.75rem;
+  }
+  .vip-heading {
+    font-size: 2.2rem;
+    line-height: 1.05;
+  }
+  .vip-lead {
+    font-size: 0.92rem;
+    margin: 0 auto 1.5rem;
+  }
+  .vip-cta-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .vip-cta-row .btn {
+    width: 100%;
+    max-width: 100%;
+  }
+  .vip-poster-container {
+    width: 100%;
+    max-height: 260px;
+    padding: 0.75rem;
+  }
+  .vip-poster-img {
+    max-height: 220px;
+  }
+  .btn {
+    white-space: normal !important;
+    text-align: center;
+    max-width: 100%;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-height: 1.35;
+  }
+  .btn-lg {
+    padding: 0.85rem 1.25rem;
+    font-size: 0.88rem;
+    width: 100%;
+  }
+  .view-all-cta-box .btn,
+  .hero-cta-group .btn {
+    width: 100%;
+    max-width: 100%;
+  }
+  .leaderboard-filters,
+  .search-filter-wrap,
+  .outlet-filter-wrap {
+    width: 100%;
+    min-width: 0;
+  }
   .age-gate-card {
     grid-template-columns: 1fr !important;
     max-width: 94vw !important;
@@ -2032,7 +2242,1392 @@ select.form-control {
   .kpi-sep {
     display: none;
   }
+  .vip-card {
+    padding: 1.75rem 1.15rem;
+    gap: 1.25rem;
+  }
   .vip-heading {
+    font-size: 1.85rem;
+    line-height: 1.12;
+  }
+  .vip-poster-container {
+    display: none !important;
+  }
+  .vip-cta-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .vip-cta-row .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   SECTION SEPARATORS (TORN / DISTRESSED EDGES)
+   ========================================================================== */
+.section-separator {
+  width: 100%;
+  height: 28px;
+  background-repeat: repeat-x;
+  background-size: auto 28px;
+  display: block;
+  line-height: 0;
+  position: relative;
+  z-index: 10;
+  margin: 0;
+}
+
+.sep-top-green {
+  background-image: url('../images/separator-top-green.png');
+}
+
+.sep-top-black {
+  background-image: url('../images/separator-top.png');
+}
+
+.sep-bottom-green {
+  background-image: url('../images/separator-bottom-green.png');
+}
+
+.sep-bottom-black {
+  background-image: url('../images/separator-bottom-black.png');
+}
+
+/* ==========================================================================
+   HERO PRODUCT COMBO (BOTTLES + CLAN TICKET)
+   ========================================================================== */
+.hero-product-combo {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 660px;
+}
+
+.hero-bottles-pod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-bottles-img {
+  max-height: 380px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.95));
+  transition: transform 0.3s ease;
+}
+
+.hero-bottles-img:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.hero-bottles-tag {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  color: var(--wl-green);
+  letter-spacing: 1px;
+  margin-top: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 1101px) {
+  .hero-container {
+    grid-template-columns: 1fr 1.15fr;
+  }
+}
+
+/* ==========================================================================
+   BRAND SHOWCASE: THE HIGHLANDAH RANGE & SIGNATURE SERVES
+   (FEATURING SECTION_BG.JPG TARTAN & WARRIOR WITH LIGHT OVERLAY)
+   ========================================================================== */
+.section-brand-range {
+  background: url('../images/section_bg.jpg') center center / cover no-repeat;
+  position: relative;
+  padding: 6rem 0;
+}
+
+.section-brand-range::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28); /* Light overlay so the green tartan cross and warrior art are clearly visible */
+  z-index: 1;
+}
+
+.section-brand-range .container {
+  position: relative;
+  z-index: 2;
+}
+
+.brand-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: stretch;
+  margin-bottom: 3.5rem;
+}
+
+.brand-showcase-card {
+  background: rgba(10, 14, 12, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.brand-showcase-card:hover {
+  border-color: var(--border-prominent);
+  transform: translateY(-2px);
+}
+
+.brand-card-img-wrap {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.brand-card-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.8));
+}
+
+.brand-card-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.brand-card-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.brand-pills-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.brand-mini-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(0, 200, 83, 0.12);
+  color: var(--wl-green);
+  border: 1px solid var(--border-medium);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.serves-banner {
+  background: rgba(10, 14, 12, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.serves-content h3 {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.serves-content p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.serves-badges {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.serves-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.serves-img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.serves-img {
+  max-height: 240px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.85));
+}
+
+/* ==========================================================================
+   REGISTRATION WITH SECTION_BG.JPG TARTAN WALLPAPER
+   ========================================================================== */
+.section-registration {
+  background: url('../images/section_bg.jpg') center center / cover no-repeat;
+  position: relative;
+  padding: 6.5rem 0;
+}
+
+.section-registration::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 7, 5, 0.88);
+  z-index: 1;
+}
+
+.registration-container {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+}
+
+/* ==========================================================================
+   OUTLETS LIFESTYLE BANNER (CAN TOWER KEY VISUAL)
+   ========================================================================== */
+.outlets-lifestyle-card {
+  margin-bottom: 3.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  background: var(--bg-card);
+}
+
+.outlets-lifestyle-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.outlets-lifestyle-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 1.5rem 2.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.lifestyle-copy h3 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.lifestyle-copy p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .hero-product-combo {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .hero-bottles-pod {
+    margin-bottom: 1.5rem;
+  }
+  .hero-bottles-img {
+    max-height: 260px;
+  }
+  .brand-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+  .serves-banner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  .serves-img {
+    max-height: 180px;
+  }
+  .serves-badges {
+    justify-content: center;
+  }
+  .outlets-lifestyle-img {
+    height: 240px;
+  }
+  .outlets-lifestyle-overlay {
+    position: relative;
+    padding: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   DEDICATED PAGES: HERO, BREADCRUMBS & PODIUM
+   ========================================================================== */
+.page-hero {
+  background: var(--bg-surface);
+  padding: 3.5rem 0 3rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.page-hero .container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.breadcrumb-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.breadcrumb-link:hover {
+  color: var(--wl-green);
+}
+
+.breadcrumb-sep {
+  color: var(--border-subtle);
+}
+
+.breadcrumb-current {
+  color: var(--wl-green);
+  font-weight: 600;
+}
+
+.page-hero-title {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: #ffffff;
+  margin: 0;
+}
+
+.page-hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 760px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Page Stats Bar */
+.page-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.page-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.page-stat-card:hover {
+  border-color: var(--border-medium);
+}
+
+.page-stat-val {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--wl-green);
+  line-height: 1;
+}
+
+.page-stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+/* Podium Grid (Top 3 Warriors) */
+.podium-section {
+  margin-bottom: 3rem;
+}
+
+.podium-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.08fr 1fr;
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.podium-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.podium-card:hover {
+  transform: translateY(-4px);
+}
+
+.podium-rank-crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-base);
+  border: 2px solid var(--border-subtle);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.podium-card.rank-gold {
+  border-color: var(--wl-green);
+  background: var(--bg-surface-elevated);
+  box-shadow: 0 0 24px var(--wl-green-glow);
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.podium-card.rank-gold .podium-rank-crown {
+  border-color: var(--wl-green);
+  background: var(--wl-green);
+  color: #000000;
+  width: 44px;
+  height: 44px;
+  top: -20px;
+  font-size: 1.4rem;
+}
+
+.podium-card.rank-silver {
+  border-color: var(--wl-green-dark);
+}
+
+.podium-card.rank-silver .podium-rank-crown {
+  border-color: var(--wl-green-dark);
+  background: var(--wl-green-dark);
+  color: #ffffff;
+}
+
+.podium-card.rank-bronze .podium-rank-crown {
+  border-color: var(--border-medium);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.podium-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--wl-green);
+  margin-bottom: 1rem;
+}
+
+.podium-card.rank-gold .podium-avatar {
+  width: 76px;
+  height: 76px;
+  border-color: var(--wl-green);
+  font-size: 1.6rem;
+}
+
+.podium-clan-id {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--wl-green);
+  letter-spacing: 1px;
+}
+
+.podium-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.35rem 0;
+}
+
+.podium-outlet {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 1.25rem;
+}
+
+.podium-score-box {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.podium-score-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--wl-green);
+  line-height: 1;
+}
+
+.podium-score-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Filter Pills Navigation */
+.filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.filter-pill-btn {
+  padding: 0.55rem 1.25rem;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.filter-pill-btn:hover {
+  color: #ffffff;
+  border-color: var(--border-medium);
+}
+
+.filter-pill-btn.active {
+  background: var(--wl-green);
+  color: #000000;
+  border-color: var(--wl-green);
+  box-shadow: 0 2px 10px var(--wl-green-glow);
+}
+
+/* View All CTA Box */
+.view-all-cta-box {
+  text-align: center;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+@media (max-width: 900px) {
+  .page-stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .podium-grid {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+  .podium-card.rank-gold {
+    order: -1;
+  }
+  .page-hero-title {
     font-size: 2.4rem;
   }
 }
+
+@media (max-width: 540px) {
+  .page-stats-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   PORTAL LOGIN: SPLIT CARD (IMAGE LEFT / FORM RIGHT)
+   ========================================================================== */
+.auth-split-card {
+  max-width: 920px;
+  margin: 3.5rem auto;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.auth-split-media {
+  position: relative;
+  min-height: 480px;
+  background: #06080a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.25rem 2rem;
+  overflow: hidden;
+}
+
+.auth-split-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+.auth-split-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.auth-split-badge-wrap {
+  position: relative;
+  z-index: 3;
+}
+
+.auth-split-badge-wrap .ambassador-badge {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--wl-green);
+  color: var(--wl-green);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.auth-split-caption {
+  position: relative;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-split-caption h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: #ffffff;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+
+.auth-split-caption p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.auth-split-form-wrap {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg-surface);
+}
+
+.auth-form-header {
+  margin-bottom: 1.75rem;
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  color: #ffffff;
+  margin: 0.35rem 0;
+}
+
+.auth-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.auth-hint-box {
+  background: rgba(0, 200, 83, 0.08);
+  border: 1px solid rgba(0, 200, 83, 0.2);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .auth-split-card {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 2rem auto;
+  }
+  .auth-split-media {
+    min-height: 200px;
+    padding: 1.5rem;
+  }
+  .auth-split-form-wrap {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   PORTAL & ADMIN TABS SYSTEM (AMBASSADOR PORTAL & SUPERVISOR CONSOLE)
+   ========================================================================== */
+.filter-tabs,
+.admin-nav-tabs {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.filter-tab,
+.admin-nav-item {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.2px;
+  border-radius: 6px;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  padding: 0.48rem 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filter-tab:hover,
+.admin-nav-item:hover {
+  background: var(--bg-surface-elevated);
+  border-color: var(--wl-green);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.filter-tab.active-tab,
+.filter-tab.active,
+.admin-nav-item.active-tab,
+.admin-nav-item.active {
+  background: var(--wl-green) !important;
+  color: #000000 !important;
+  border-color: var(--wl-green) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px var(--wl-green-glow);
+}
+
+.filter-tab.active-tab i,
+.filter-tab.active i,
+.admin-nav-item.active-tab i,
+.admin-nav-item.active i,
+.filter-tab.active-tab svg,
+.filter-tab.active svg,
+.admin-nav-item.active-tab svg,
+.admin-nav-item.active svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+.filter-tab i,
+.admin-nav-item i,
+.filter-tab svg,
+.admin-nav-item svg {
+  width: 14px;
+  height: 14px;
+  color: inherit;
+  transition: var(--transition);
+}
+
+/* ==========================================================================
+   ADMIN / SUPERVISOR KPI CARDS
+   ========================================================================== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-card:hover {
+  border-color: var(--wl-green);
+  transform: translateY(-2px);
+}
+
+.kpi-title {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.kpi-title i,
+.kpi-title svg {
+  color: var(--wl-green);
+}
+
+.kpi-val {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  color: #ffffff;
+  line-height: 1;
+  margin: 0.25rem 0;
+}
+
+@media (max-width: 960px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   ADMIN OUTLETS DIRECTORY & CARDS
+   ========================================================================== */
+.outlets-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.outlet-admin-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+  transition: var(--transition);
+}
+
+.outlet-admin-card:hover {
+  border-color: var(--wl-green);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   KINETIC TYPOGRAPHY & OPPOSING SCROLL PARALLAX
+   ========================================================================== */
+.kinetic-text-strip {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 2.5rem 0;
+  background: #020402;
+  user-select: none;
+  pointer-events: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8);
+}
+
+.kinetic-strip-compact {
+  padding: 1.75rem 0;
+  gap: 0.4rem;
+}
+
+.kinetic-track {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.08s ease-out;
+}
+
+.kinetic-track-left {
+  transform: translate3d(0, 0, 0);
+}
+
+.kinetic-track-right {
+  transform: translate3d(-120px, 0, 0);
+}
+
+.kinetic-text {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6.8vw, 6.5rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: rgba(255, 255, 255, 0.12);
+  padding: 0 1.5rem;
+  display: inline-block;
+}
+
+.kinetic-text.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(0, 200, 83, 0.45);
+  text-shadow: 0 0 25px rgba(0, 200, 83, 0.15);
+}
+
+.kinetic-dot {
+  display: inline-block;
+  color: var(--wl-green);
+  font-size: 0.6em;
+  vertical-align: middle;
+  margin: 0 0.4rem;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic-track,
+  .hero-bottles-img,
+  .brand-card-img,
+  .serves-img,
+  .ticket-warrior-img,
+  .tilt-card {
+    transform: none !important;
+    animation: none !important;
+  }
+  .sheen-glow::after {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   AMBIENT BOTTLE PHYSICS, SPECULAR SHEEN & 3D CARD DEPTH
+   ========================================================================== */
+@keyframes scotchBottleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
+  }
+  50% {
+    transform: translateY(-9px) rotate(0.9deg);
+    filter: drop-shadow(0 22px 32px rgba(0, 200, 83, 0.22));
+  }
+}
+
+@keyframes scotchBottleFloatAlt {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-0.8deg);
+  }
+}
+
+@keyframes specularGlint {
+  0% {
+    transform: rotate(25deg) translateY(-160%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  50%, 100% {
+    transform: rotate(25deg) translateY(160%);
+    opacity: 0;
+  }
+}
+
+/* Floating animation on bottles & signature drinks */
+.hero-bottles-img {
+  animation: scotchBottleFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.brand-card-img {
+  animation: scotchBottleFloatAlt 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.serves-img {
+  animation: scotchBottleFloat 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ticket-warrior-img {
+  animation: scotchBottleFloatAlt 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Interactive 3D Tilt container styling */
+.tilt-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt-card:hover {
+  border-color: rgba(0, 200, 83, 0.6);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 200, 83, 0.25);
+}
+
+/* Specular Shimmer Sheen */
+.sheen-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.sheen-glow::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    65deg,
+    transparent 42%,
+    rgba(0, 200, 83, 0.08) 48%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(0, 200, 83, 0.08) 52%,
+    transparent 58%
+  );
+  transform: rotate(25deg) translateY(-160%);
+  animation: specularGlint 7.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Scroll-Driven Focal Step Pulse */
+.playbook-step {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.playbook-step.focal-step {
+  border-color: var(--wl-green) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 200, 83, 0.3) !important;
+  transform: translateY(-3px);
+}
+
+.playbook-step.focal-step .step-num-box {
+  background: var(--wl-green) !important;
+  color: #000000 !important;
+  box-shadow: 0 0 18px var(--wl-green-glow);
+}
+
+/* Scorecard Item Hover Animation */
+.scorecard-item {
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.scorecard-item:hover {
+  transform: translateX(6px);
+  border-color: var(--wl-green);
+  background: var(--bg-surface-elevated);
+}
+
+.scorecard-item:hover .scorecard-points-badge,
+.scorecard-item:hover .scorecard-points-tag {
+  color: var(--wl-green);
+  transform: scale(1.08);
+  transition: transform 0.2s ease;
+}
+
+/* Image Parallax Container */
+.parallax-viewport {
+  overflow: hidden;
+}
+
+.parallax-img {
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+}
+
+/* ==========================================================================
+   PROMOTER ON-SITE SPIN THE WHEEL & CHALLENGE EVALUATION PANEL
+   ========================================================================== */
+.wheel-section {
+  margin-top: 2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+.wheel-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 460px) 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .wheel-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wheel-canvas-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.wheel-canvas-wrap {
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.wheel-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 440px;
+  max-height: 440px;
+  display: block;
+}
+
+.wheel-spin-cta {
+  margin-top: 1.25rem;
+  width: 100%;
+  max-width: 320px;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+}
+
+.wheel-result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 1.75rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition);
+}
+
+.wheel-result-card.active-challenge {
+  border-color: var(--wl-green);
+  box-shadow: 0 0 25px var(--wl-green-glow);
+}
+
+.timer-box {
+  background: #000000;
+  border: 2px solid var(--wl-green);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.timer-digits {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--wl-green);
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.timer-digits.time-up {
+  color: #ff3d00;
+  animation: pulseWarning 0.5s infinite alternate;
+}
+
+@keyframes pulseWarning {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.08); opacity: 0.8; }
+}
+
+.verdict-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.btn-verdict-pass {
+  background: var(--wl-green);
+  color: #000000;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  border: none;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.btn-verdict-pass:hover:not(:disabled) {
+  background: #00e676;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+}
+
+.btn-verdict-fail {
+  background: rgba(220, 38, 38, 0.12);
+  color: #ef4444;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.btn-verdict-fail:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.25);
+  border-color: #ef4444;
+  transform: translateY(-2px);
+}
+
+
+
