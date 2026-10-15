@@ -273,10 +273,31 @@ HTML;
         $mail->Body    = $htmlBody;
         $mail->AltBody = "Welcome to The Clan, {$participant['full_name']}!\n\nYour Clan ID: {$participant['clan_id']}\nPhone: {$participant['phone']}\nStarting Balance: 0 PTS\n\nVisit any William Lawson's tour outlet to play and bank points toward the 100 PTS Grand Finale threshold!\nTrack live at https://tnhng.com\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
 
-        $mail->send();
-        return true;
+        try {
+            $mail->send();
+            return true;
+        } catch (Exception $smtpEx) {
+            error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
+            try {
+                $fallback = new PHPMailer(true);
+                $fallback->isMail();
+                $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
+                $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
+                $fallback->addAddress($participant['email'], $participant['full_name']);
+                $fallback->Subject = $mail->Subject;
+                $fallback->isHTML(true);
+                $fallback->Body    = $htmlBody;
+                $fallback->AltBody = $mail->AltBody;
+                $fallback->CharSet = 'UTF-8';
+                $fallback->send();
+                return true;
+            } catch (Exception $e2) {
+                error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
+                return false;
+            }
+        }
     } catch (Exception $e) {
-        error_log("PHPMailer error (Welcome Email to {$participant['email']}): " . $mail->ErrorInfo);
+        error_log("PHPMailer error (Welcome Email to {$participant['email']}): " . $e->getMessage());
         return false;
     }
 }
@@ -469,10 +490,31 @@ HTML;
         $mail->Body    = $htmlBody;
         $mail->AltBody = "+{$awardedPoints} PTS Banked at {$outletName}!\n\nHighlandah: {$fullName} [{$clanId}]\nChallenge: {$challengeName}\nTotal Points Now: {$totalPoints} PTS\nTarget: 100 PTS to Grand Finale\n\nTrack live rankings: https://tnhng.com/leaderboard\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
 
-        $mail->send();
-        return true;
+        try {
+            $mail->send();
+            return true;
+        } catch (Exception $smtpEx) {
+            error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
+            try {
+                $fallback = new PHPMailer(true);
+                $fallback->isMail();
+                $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
+                $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
+                $fallback->addAddress($participant['email'], $fullName);
+                $fallback->Subject = $mail->Subject;
+                $fallback->isHTML(true);
+                $fallback->Body    = $htmlBody;
+                $fallback->AltBody = $mail->AltBody;
+                $fallback->CharSet = 'UTF-8';
+                $fallback->send();
+                return true;
+            } catch (Exception $e2) {
+                error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
+                return false;
+            }
+        }
     } catch (Exception $e) {
-        error_log("PHPMailer error (Points Email to {$participant['email']}): " . $mail->ErrorInfo);
+        error_log("PHPMailer error (Points Email to {$participant['email']}): " . $e->getMessage());
         return false;
     }
 }
