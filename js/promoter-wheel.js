@@ -76,17 +76,6 @@
       rule: "Lucky Highlandah Re-Spin! No points added or lost; spin the wheel again immediately!"
     },
     {
-      id: 9,
-      label: "SPELL WL BACKWARDS",
-      shortTitle: "Spell WL Backwards",
-      points: 2,
-      category: "Good humored",
-      color: "#00c853", // Vibrant Green
-      textColor: "#ffffff",
-      timeLimit: 0,
-      rule: "Spell out 'WILLIAM LAWSON'S' in reverse order (S-N-O-S-W-A-L M-A-I-L-L-I-W) accurately."
-    },
-    {
       id: 1,
       label: "ANSWER 5 FOOTBALL QUESTIONS",
       shortTitle: "Football trivia",

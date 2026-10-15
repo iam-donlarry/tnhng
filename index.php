@@ -513,9 +513,9 @@ function getInitials($fullName) {
 
           <div class="playbook-card">
             <div class="playbook-num">02</div>
-            <div class="playbook-icon-wrap"><i data-lucide="sparkles"></i></div>
-            <h3>Spin & Conquer</h3>
-            <p>Visit any scheduled activation bar. Our ambassador spins the wheel to assign your physical challenge: Bold, Unconventional, or Good-Humored.</p>
+            <div class="playbook-icon-wrap"><i data-lucide="dices"></i></div>
+            <h3>Pick a Number & Play</h3>
+            <p>Visit any scheduled activation bar. Pick a number (1–7) to take on physical challenges, or unlock the live Spin the Wheel to win bonus points.</p>
           </div>
 
           <div class="playbook-card highlight-step">

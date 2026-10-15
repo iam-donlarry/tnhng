@@ -218,15 +218,162 @@ if ($pdo) {
                 </div>
               </div>
 
-              <!-- ================= 2. ON-SITE SPIN THE WHEEL GAME ================= -->
-              <div id="promoter-wheel-section" class="wheel-section">
-                <div class="wheel-section-header">
+              <!-- ================= 2. PICK A NUMBER (1 – 7) CHALLENGE SELECTOR ================= -->
+              <div class="number-picker-section" id="challenge-picker-section">
+                <div class="wheel-section-header" style="margin-bottom: 0.75rem;">
                   <div class="wheel-section-title-wrap">
                     <span class="ambassador-badge" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                      <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> On-Site Wheel Spin Challenge
+                      <i data-lucide="dices" style="width: 13px; height: 13px;"></i> Official Challenge Matrix
                     </span>
                     <h3 class="wheel-section-title">
-                      <i data-lucide="disc-3" style="color: var(--wl-green);"></i> 2. SPIN THE WHEEL
+                      <i data-lucide="hash" style="color: var(--wl-green);"></i> 2. PICK A NUMBER (1 – 7)
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
+                      Ask <strong id="picker-participant-name" style="color: var(--wl-green);">Participant</strong> to pick a mystery number from 1 to 7 to reveal their challenge!
+                    </p>
+                  </div>
+                </div>
+
+                <div class="number-picker-grid">
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="1" onclick="selectChallengeNumber(1)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">1</span>
+                    <span class="number-tile-label">NUMBER 1</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="2" onclick="selectChallengeNumber(2)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">2</span>
+                    <span class="number-tile-label">NUMBER 2</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="3" onclick="selectChallengeNumber(3)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">3</span>
+                    <span class="number-tile-label">NUMBER 3</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="4" onclick="selectChallengeNumber(4)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">4</span>
+                    <span class="number-tile-label">NUMBER 4</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="5" onclick="selectChallengeNumber(5)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">5</span>
+                    <span class="number-tile-label">NUMBER 5</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="6" onclick="selectChallengeNumber(6)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">6</span>
+                    <span class="number-tile-label">NUMBER 6</span>
+                  </button>
+
+                  <button type="button" class="number-tile-btn mystery-tile" data-number="7" onclick="selectChallengeNumber(7)">
+                    <span class="number-mystery-icon"><i data-lucide="help-circle"></i></span>
+                    <span class="number-tile-digit">7</span>
+                    <span class="number-tile-label">NUMBER 7</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- ================= DIRECT CHALLENGE EVALUATION (FOR NUMBERS 2 – 7) ================= -->
+              <div id="direct-challenge-card" class="direct-challenge-card" style="display: none;">
+                <!-- Top Reset / Back Bar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+                  <button type="button" class="btn btn-outline btn-sm reset-number-btn" onclick="resetNumberPicker()">
+                    <i data-lucide="arrow-left"></i> Pick Another Number
+                  </button>
+                  <span id="direct-number-tag" style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Challenge #5</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span id="direct-category-badge" class="ambassador-badge">BOLD</span>
+                  </div>
+                  <div style="font-family: var(--font-display); font-size: 2.2rem; color: var(--wl-green); line-height: 1;" id="direct-points-badge">+5 PTS</div>
+                </div>
+
+                <h3 id="direct-title" style="font-size: 1.6rem; color: #fff; margin: 0.65rem 0 0.35rem; line-height: 1.2;">
+                  CHALLENGE TITLE
+                </h3>
+
+                <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.95rem; margin: 0.95rem 0;">
+                  <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">
+                    Official Challenge Rule & Expectation:
+                  </div>
+                  <p id="direct-rule" style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
+                    Rule description
+                  </p>
+                </div>
+
+                <!-- Interactive Countdown Timer (for 15s push-up or 60s planking) -->
+                <div id="direct-timer-wrap" style="display: none; margin-bottom: 1.25rem;">
+                  <div class="timer-box">
+                    <div class="timer-display-wrap">
+                      <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Challenge Countdown</div>
+                      <div class="timer-digits" id="direct-timer-display">00:15</div>
+                    </div>
+                    <div class="timer-controls">
+                      <button type="button" id="direct-timer-start-btn" class="btn btn-outline btn-sm">
+                        <i data-lucide="play"></i> Start
+                      </button>
+                      <button type="button" id="direct-timer-pause-btn" class="btn btn-outline btn-sm" style="display: none;">
+                        <i data-lucide="pause"></i> Pause
+                      </button>
+                      <button type="button" id="direct-timer-reset-btn" class="btn btn-outline btn-sm">
+                        <i data-lucide="rotate-ccw"></i> Reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Referee Verdict Section -->
+                <div style="border-top: 1px dashed var(--border-subtle); padding-top: 1.25rem;">
+                  <label style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.35rem;">
+                    Referee Evaluation Verdict *
+                  </label>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    Did the participant complete the challenge according to official rules?
+                  </p>
+
+                  <div class="form-group" style="margin-bottom: 1rem;">
+                    <input type="text" id="direct-verdict-notes" class="form-control" style="font-size: 0.85rem; padding: 0.6rem 0.85rem;" placeholder="Optional referee notes (e.g. 25 pushups completed cleanly)">
+                  </div>
+
+                  <div class="verdict-actions">
+                    <button type="button" id="btn-direct-pass" class="btn-verdict-pass">
+                      <i data-lucide="check-circle-2"></i> PASS — AWARD POINTS
+                    </button>
+                    <button type="button" id="btn-direct-fail" class="btn-verdict-fail">
+                      <i data-lucide="x-circle"></i> FAIL — INCOMPLETE (0 PTS)
+                    </button>
+                  </div>
+
+                  <div style="text-align: center; margin-top: 0.85rem;">
+                    <button type="button" onclick="resetNumberPicker()" style="background: none; border: none; color: var(--text-dim); font-size: 0.82rem; cursor: pointer; text-decoration: underline; display: inline-flex; align-items: center; gap: 0.35rem;">
+                      <i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i> Cancel & choose a different number
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= 3. ON-SITE SPIN THE WHEEL GAME (UNLOCKED BY NUMBER 1) ================= -->
+              <div id="promoter-wheel-section" class="wheel-section" style="display: none;">
+                <div class="wheel-section-header">
+                  <div class="wheel-section-title-wrap">
+                    <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                      <button type="button" class="btn btn-outline btn-sm reset-number-btn" onclick="resetNumberPicker()">
+                        <i data-lucide="arrow-left"></i> Pick Another Number
+                      </button>
+                      <span class="ambassador-badge" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                        <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> Unlocked by Challenge #1
+                      </span>
+                    </div>
+                    <h3 class="wheel-section-title">
+                      <i data-lucide="disc-3" style="color: var(--wl-green);"></i> SPIN THE WHEEL
                     </h3>
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
                       Random challenge draw for <strong id="wheel-participant-name" style="color: var(--wl-green);">Participant</strong>. Maintain Highlandah fair play!
@@ -326,6 +473,12 @@ if ($pdo) {
                             <i data-lucide="x-circle"></i> FAIL — INCOMPLETE (0 PTS)
                           </button>
                         </div>
+
+                        <div style="text-align: center; margin-top: 0.85rem;">
+                          <button type="button" onclick="resetNumberPicker()" style="background: none; border: none; color: var(--text-dim); font-size: 0.82rem; cursor: pointer; text-decoration: underline; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i> Cancel & choose a different number
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -347,67 +500,8 @@ if ($pdo) {
                 </div>
               </div>
 
-              <!-- ================= 3. MANUAL OVERRIDE / POINTS ALLOCATOR FORM ================= -->
-              <div class="manual-override-card">
-                <h3 class="manual-override-title">
-                  <i data-lucide="award" style="color: var(--wl-green);"></i> 3. MANUAL CHALLENGE SELECTION & OVERRIDE
-                </h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
-                  Points will be accurately credited to this participant, tagging <strong><?= htmlspecialchars($user['outlet_name']) ?></strong> as the location and you as the referee.
-                </p>
-
-                <form id="allocate-points-form">
-                  <input type="hidden" id="alloc-participant-id" name="participant_id">
-
-                  <div class="form-group">
-                    <label class="form-label">Select Challenge Completed *</label>
-                    <select id="alloc-challenge" name="challenge_id" class="form-control" required>
-                      <option value="">-- Choose Challenge From Scorecard --</option>
-                      <?php foreach ($challenges as $c): ?>
-                        <option value="<?= $c['id'] ?>" data-points="<?= $c['points'] ?>" data-cat="<?= $c['category'] ?>">
-                          [<?= $c['category'] ?>] <?= htmlspecialchars($c['title']) ?> (+<?= $c['points'] ?> pts)
-                        </option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-
-                  <div class="form-grid-2col">
-                    <div class="form-group">
-                      <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
-                        <span>Scorecard Points *</span>
-                        <span style="font-size: 0.7rem; color: var(--wl-green); text-transform: uppercase;">
-                          <i data-lucide="lock" style="width: 12px; height: 12px; display: inline;"></i> Fixed (Non-Editable)
-                        </span>
-                      </label>
-                      <div style="position: relative;">
-                        <input type="number" id="alloc-points" name="points" class="form-control alloc-points-input" readonly required 
-                                placeholder="Select challenge above...">
-                        <span class="alloc-points-suffix">PTS</span>
-                      </div>
-                      <small style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem; display: block;">
-                        Points are locked strictly to official scorecard value.
-                      </small>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label">Location (Auto-Tagged Outlet)</label>
-                      <input type="text" class="form-control" value="<?= htmlspecialchars($user['outlet_name']) ?>" readonly style="background: rgba(0,0,0,0.45); color: var(--wl-green); font-weight: 600; cursor: not-allowed; border: 1px solid var(--border-glass);">
-                      <small style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem; display: block;">
-                        Points are automatically attributed to this outlet.
-                      </small>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label">Referee Notes / Proof (Optional)</label>
-                    <input type="text" name="notes" class="form-control" placeholder="e.g. Completed 35 squats cleanly within 15 seconds.">
-                  </div>
-
-                  <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
-                    <i data-lucide="check-circle-2"></i> Confirm & Award Points
-                  </button>
-                </form>
-              </div>
+              <!-- Hidden form inputs for fallback -->
+              <input type="hidden" id="alloc-participant-id" name="participant_id">
 
               <!-- History at this outlet -->
               <div class="history-section-wrap">
@@ -622,6 +716,265 @@ if ($pdo) {
       });
     }
 
+    // Numbered Challenges Configuration (1 to 7)
+    const NUMBERED_CHALLENGES = {
+      1: {
+        number: 1,
+        id: 8,
+        category: 'Good humored',
+        title: 'Spin the Bottle / Wheel',
+        rule: 'Spin the wheel and answer a question or do a challenge drawn by the wheel!',
+        points: 2,
+        timeLimit: 0,
+        isWheel: true
+      },
+      2: {
+        number: 2,
+        id: 9,
+        category: 'Good humored',
+        title: 'Spell WL Backwards',
+        rule: 'Spell William Lawson backward without misspelling (S-N-O-S-W-A-L M-A-I-L-L-I-W).',
+        points: 2,
+        timeLimit: 0,
+        isWheel: false
+      },
+      3: {
+        number: 3,
+        id: 10,
+        category: 'Good humored',
+        title: 'Imitate a Celebrity',
+        rule: 'Do an impression of a celebrity boldly in front of the crowd.',
+        points: 3,
+        timeLimit: 0,
+        isWheel: false
+      },
+      4: {
+        number: 4,
+        id: 11,
+        category: 'Unconventional',
+        title: 'Spin Around and Walk on a Straight Line',
+        rule: 'Spin around 5 times and walk in a straight line without tripping.',
+        points: 3,
+        timeLimit: 0,
+        isWheel: false
+      },
+      5: {
+        number: 5,
+        id: 12,
+        category: 'Bold',
+        title: 'Push-Up',
+        rule: 'Highest number of push ups within 15 seconds.',
+        points: 5,
+        timeLimit: 15,
+        isWheel: false
+      },
+      6: {
+        number: 6,
+        id: 13,
+        category: 'Bold',
+        title: 'Planking',
+        rule: 'Participants to maintain their body in a straight line for 60 seconds.',
+        points: 5,
+        timeLimit: 60,
+        isWheel: false
+      },
+      7: {
+        number: 7,
+        id: 14,
+        category: 'Bold',
+        title: 'Foot Ball Leg Juggling',
+        rule: 'Juggle a football 50 times with your legs.',
+        points: 5,
+        timeLimit: 0,
+        isWheel: false
+      }
+    };
+
+    let directTimerInterval = null;
+    let directTimerSeconds = 0;
+
+    window.resetNumberPicker = function() {
+      // Clear all timers
+      clearInterval(timerInterval);
+      clearInterval(directTimerInterval);
+
+      // Hide challenge views
+      const directCard = document.getElementById('direct-challenge-card');
+      if (directCard) directCard.style.display = 'none';
+
+      const wheelSection = document.getElementById('promoter-wheel-section');
+      if (wheelSection) wheelSection.style.display = 'none';
+
+      // Unhide number picker section
+      const pickerSection = document.getElementById('challenge-picker-section');
+      if (pickerSection) {
+        pickerSection.style.display = 'block';
+        pickerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // Remove active highlight from tiles
+      document.querySelectorAll('.number-tile-btn').forEach(btn => {
+        btn.classList.remove('active-number');
+      });
+
+      // Clear active drawn challenge & verdict inputs
+      activeDrawnChallenge = null;
+      resetWheelResultState();
+
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.selectChallengeNumber = function(num) {
+      if (!activeParticipantData) {
+        highlandahAlert({ title: 'LOOKUP REQUIRED', message: 'Please search and select a participant first.', type: 'warning' });
+        return;
+      }
+
+      // Highlight active button
+      document.querySelectorAll('.number-tile-btn').forEach(btn => {
+        btn.classList.toggle('active-number', btn.dataset.number == num);
+      });
+
+      const ch = NUMBERED_CHALLENGES[num];
+      if (!ch) return;
+
+      const pickerSection = document.getElementById('challenge-picker-section');
+      const wheelSection = document.getElementById('promoter-wheel-section');
+      const directCard = document.getElementById('direct-challenge-card');
+
+      // Hide the number picker so the challenge takes the space
+      if (pickerSection) {
+        pickerSection.style.display = 'none';
+      }
+
+      if (ch.isWheel) {
+        // Number 1 selected: Unhide wheel section, hide direct challenge card
+        if (directCard) directCard.style.display = 'none';
+        if (wheelSection) {
+          wheelSection.style.display = 'block';
+          resetWheelResultState();
+          setTimeout(() => {
+            initOrResetWheel();
+          }, 50);
+          wheelSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        showToast("Challenge #1 selected: Spin the Wheel is unlocked!", "success");
+      } else {
+        // Numbers 2 to 7 selected: Hide wheel section, show direct challenge card
+        if (wheelSection) wheelSection.style.display = 'none';
+        activeDrawnChallenge = {
+          id: ch.id,
+          label: ch.title,
+          shortTitle: ch.title,
+          points: ch.points,
+          category: ch.category,
+          timeLimit: ch.timeLimit,
+          rule: ch.rule
+        };
+        displayDirectChallenge(ch);
+      }
+      if (window.lucide) lucide.createIcons();
+    };
+
+    function displayDirectChallenge(ch) {
+      const directCard = document.getElementById('direct-challenge-card');
+      if (!directCard) return;
+
+      document.getElementById('direct-category-badge').textContent = ch.category.toUpperCase();
+      document.getElementById('direct-number-tag').textContent = `Challenge #${ch.number}`;
+      document.getElementById('direct-points-badge').textContent = `+${ch.points} PTS`;
+      document.getElementById('direct-title').textContent = ch.title;
+      document.getElementById('direct-rule').textContent = ch.rule;
+      document.getElementById('direct-verdict-notes').value = '';
+
+      setupDirectTimer(ch.timeLimit);
+
+      directCard.style.display = 'block';
+      directCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function setupDirectTimer(seconds) {
+      clearInterval(directTimerInterval);
+      const wrap = document.getElementById('direct-timer-wrap');
+      const display = document.getElementById('direct-timer-display');
+      const startBtn = document.getElementById('direct-timer-start-btn');
+      const pauseBtn = document.getElementById('direct-timer-pause-btn');
+
+      if (!seconds || seconds <= 0) {
+        if (wrap) wrap.style.display = 'none';
+        return;
+      }
+
+      if (wrap) wrap.style.display = 'block';
+      directTimerSeconds = seconds;
+      updateDirectTimerDisplay(directTimerSeconds);
+      if (display) display.classList.remove('time-up');
+      if (startBtn) startBtn.style.display = 'inline-flex';
+      if (pauseBtn) pauseBtn.style.display = 'none';
+    }
+
+    function updateDirectTimerDisplay(secs) {
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      const el = document.getElementById('direct-timer-display');
+      if (el) {
+        el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+    }
+
+    const directTimerStart = document.getElementById('direct-timer-start-btn');
+    if (directTimerStart) {
+      directTimerStart.addEventListener('click', () => {
+        const startBtn = document.getElementById('direct-timer-start-btn');
+        const pauseBtn = document.getElementById('direct-timer-pause-btn');
+        if (startBtn) startBtn.style.display = 'none';
+        if (pauseBtn) pauseBtn.style.display = 'inline-flex';
+
+        clearInterval(directTimerInterval);
+        directTimerInterval = setInterval(() => {
+          directTimerSeconds--;
+          updateDirectTimerDisplay(directTimerSeconds);
+          if (directTimerSeconds <= 0) {
+            clearInterval(directTimerInterval);
+            if (pauseBtn) pauseBtn.style.display = 'none';
+            if (startBtn) startBtn.style.display = 'inline-flex';
+            const el = document.getElementById('direct-timer-display');
+            if (el) el.classList.add('time-up');
+            showToast("TIME'S UP! Evaluate if participant completed the challenge.", 'warning');
+          }
+        }, 1000);
+      });
+    }
+
+    const directTimerPause = document.getElementById('direct-timer-pause-btn');
+    if (directTimerPause) {
+      directTimerPause.addEventListener('click', () => {
+        clearInterval(directTimerInterval);
+        const startBtn = document.getElementById('direct-timer-start-btn');
+        const pauseBtn = document.getElementById('direct-timer-pause-btn');
+        if (pauseBtn) pauseBtn.style.display = 'none';
+        if (startBtn) startBtn.style.display = 'inline-flex';
+      });
+    }
+
+    const directTimerReset = document.getElementById('direct-timer-reset-btn');
+    if (directTimerReset) {
+      directTimerReset.addEventListener('click', () => {
+        clearInterval(directTimerInterval);
+        if (activeDrawnChallenge && activeDrawnChallenge.timeLimit) {
+          directTimerSeconds = activeDrawnChallenge.timeLimit;
+          updateDirectTimerDisplay(directTimerSeconds);
+          const el = document.getElementById('direct-timer-display');
+          if (el) el.classList.remove('time-up');
+        }
+        const startBtn = document.getElementById('direct-timer-start-btn');
+        const pauseBtn = document.getElementById('direct-timer-pause-btn');
+        if (pauseBtn) pauseBtn.style.display = 'none';
+        if (startBtn) startBtn.style.display = 'inline-flex';
+      });
+    }
+
     function initOrResetWheel() {
       if (!wheelInstance) {
         wheelInstance = new HighlandahWheel('highlandah-wheel-canvas');
@@ -633,6 +986,7 @@ if ($pdo) {
 
     function resetWheelResultState() {
       clearInterval(timerInterval);
+      clearInterval(directTimerInterval);
       activeDrawnChallenge = null;
       document.getElementById('wheel-empty-state').style.display = 'block';
       document.getElementById('wheel-challenge-state').style.display = 'none';
@@ -640,6 +994,8 @@ if ($pdo) {
       document.getElementById('wheel-result-card').classList.remove('active-challenge');
       document.getElementById('wheel-status-pill').textContent = 'Ready to Spin';
       document.getElementById('verdict-notes-input').value = '';
+      const directNotes = document.getElementById('direct-verdict-notes');
+      if (directNotes) directNotes.value = '';
     }
 
     function displayFoundParticipant(data) {
@@ -656,7 +1012,9 @@ if ($pdo) {
       document.getElementById('card-progress').style.width = `${s.progress_percent}%`;
       document.getElementById('card-needed').textContent = s.is_qualified ? 'QUALIFIED!' : `${s.points_needed} pts needed`;
 
-      // Update name on wheel title
+      // Update name on picker & wheel titles
+      const pickerPartName = document.getElementById('picker-participant-name');
+      if (pickerPartName) pickerPartName.textContent = p.full_name;
       const wheelPartName = document.getElementById('wheel-participant-name');
       if (wheelPartName) wheelPartName.textContent = p.full_name;
 
@@ -668,7 +1026,8 @@ if ($pdo) {
       }
 
       // Hidden form input
-      document.getElementById('alloc-participant-id').value = p.id;
+      const allocIdInput = document.getElementById('alloc-participant-id');
+      if (allocIdInput) allocIdInput.value = p.id;
 
       // Render mini history
       const tbody = document.getElementById('participant-mini-history');
@@ -686,11 +1045,16 @@ if ($pdo) {
         `).join('');
       }
 
-      // Initialize wheel and reset result panel
+      // Reset number selection and challenge cards initially
+      document.querySelectorAll('.number-tile-btn').forEach(btn => btn.classList.remove('active-number'));
+      const pickerSec = document.getElementById('challenge-picker-section');
+      if (pickerSec) pickerSec.style.display = 'block';
+      const directCard = document.getElementById('direct-challenge-card');
+      if (directCard) directCard.style.display = 'none';
+      const wheelSec = document.getElementById('promoter-wheel-section');
+      if (wheelSec) wheelSec.style.display = 'none';
+
       resetWheelResultState();
-      setTimeout(() => {
-        initOrResetWheel();
-      }, 50);
     }
 
     // Spin Wheel Button Trigger
@@ -754,13 +1118,6 @@ if ($pdo) {
       document.getElementById('drawn-rule').textContent = slice.rule;
       document.getElementById('verdict-notes-input').value = '';
 
-      // Auto-fill fallback form below
-      const chSelect = document.getElementById('alloc-challenge');
-      if (chSelect) {
-        chSelect.value = slice.id;
-        document.getElementById('alloc-points').value = slice.points;
-      }
-
       // Configure timer if time-bound (e.g. 15s or 60s)
       setupChallengeTimer(slice.timeLimit);
       lucide.createIcons();
@@ -769,7 +1126,7 @@ if ($pdo) {
       document.getElementById('wheel-result-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Countdown Timer Functions
+    // Countdown Timer Functions (for Wheel Drawn Challenges)
     function setupChallengeTimer(seconds) {
       clearInterval(timerInterval);
       const timerWrap = document.getElementById('drawn-timer-wrap');
@@ -848,18 +1205,44 @@ if ($pdo) {
       });
     }
 
-    // Submit Pass / Fail Verdict
+    // In-flight guard to prevent double-awarding / multiple rapid clicks
+    let isSubmittingVerdict = false;
+
+    // Submit Pass / Fail Verdict (Unified for both Direct and Wheel challenges)
     async function submitChallengeVerdict(outcome) {
-      if (!activeParticipantData || !activeDrawnChallenge) {
-        highlandahAlert({ title: 'NO CHALLENGE ACTIVE', message: 'Please spin the wheel first to draw a challenge.', type: 'warning' });
+      if (isSubmittingVerdict) {
+        console.warn('Point submission verdict already in flight. Blocking duplicate click.');
         return;
       }
 
-      const notes = document.getElementById('verdict-notes-input').value.trim();
-      const passBtn = document.getElementById('btn-verdict-pass');
-      const failBtn = document.getElementById('btn-verdict-fail');
-      passBtn.disabled = true;
-      failBtn.disabled = true;
+      if (!activeParticipantData || !activeDrawnChallenge) {
+        highlandahAlert({ title: 'NO CHALLENGE ACTIVE', message: 'Please select a number (1–7) first to pick a challenge.', type: 'warning' });
+        return;
+      }
+
+      const directCard = document.getElementById('direct-challenge-card');
+      const isDirect = directCard && directCard.style.display !== 'none';
+      const notesInput = isDirect ? document.getElementById('direct-verdict-notes') : document.getElementById('verdict-notes-input');
+      const notes = notesInput ? notesInput.value.trim() : '';
+
+      // Immediately lock and disable all verdict buttons to eliminate double-clicks
+      isSubmittingVerdict = true;
+      const allVerdictBtns = document.querySelectorAll('.btn-verdict-pass, .btn-verdict-fail');
+      allVerdictBtns.forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+        b.style.opacity = '0.65';
+        if (!b.dataset.origHtml) b.dataset.origHtml = b.innerHTML;
+      });
+
+      const activeBtn = outcome === 'passed' 
+        ? (isDirect ? document.getElementById('btn-direct-pass') : document.getElementById('btn-verdict-pass'))
+        : (isDirect ? document.getElementById('btn-direct-fail') : document.getElementById('btn-verdict-fail'));
+
+      if (activeBtn) {
+        activeBtn.innerHTML = '<i data-lucide="loader-2" class="spin-icon"></i> Awarding Points...';
+        if (window.lucide) lucide.createIcons();
+      }
 
       const fd = new FormData();
       fd.append('participant_id', activeParticipantData.participant.id);
@@ -886,7 +1269,7 @@ if ($pdo) {
             showToast("Challenge recorded as Incomplete (0 points).", 'warning');
             await highlandahAlert({
               title: 'CHALLENGE INCOMPLETE',
-              message: `Challenge '${activeDrawnChallenge.label}' marked as Incomplete (0 points awarded).\n\nParticipant can spin again or attempt another challenge at this outlet!`,
+              message: `Challenge '${activeDrawnChallenge.label}' marked as Incomplete (0 points awarded).\n\nParticipant can pick another number or spin again!`,
               type: 'info',
               btnText: 'CONTINUE ACTIVATION'
             });
@@ -897,19 +1280,28 @@ if ($pdo) {
           const refreshed = await relookup.json();
           displayFoundParticipant(refreshed);
 
-          // Reset drawn card state
-          resetWheelResultState();
+          // Reset views and return to number picker for the next challenge
+          resetNumberPicker();
         } else {
           highlandahAlert({ title: 'ALLOCATION NOTICE', message: data.message || 'Failed to submit challenge verdict.', type: 'error' });
         }
       } catch (err) {
         highlandahAlert({ title: 'NETWORK ERROR', message: 'Network error while submitting challenge verdict.', type: 'error' });
       } finally {
-        passBtn.disabled = false;
-        failBtn.disabled = false;
+        allVerdictBtns.forEach(b => {
+          b.disabled = false;
+          b.style.pointerEvents = '';
+          b.style.opacity = '';
+          if (b.dataset.origHtml) {
+            b.innerHTML = b.dataset.origHtml;
+          }
+        });
+        isSubmittingVerdict = false;
+        if (window.lucide) lucide.createIcons();
       }
     }
 
+    // Verdict event listeners
     const btnVerdictPass = document.getElementById('btn-verdict-pass');
     if (btnVerdictPass) {
       btnVerdictPass.addEventListener('click', () => submitChallengeVerdict('passed'));
@@ -920,61 +1312,17 @@ if ($pdo) {
       btnVerdictFail.addEventListener('click', () => submitChallengeVerdict('failed'));
     }
 
-    // Auto-fill challenge points on select (strictly locked from scorecard)
-    const chSelect = document.getElementById('alloc-challenge');
-    if (chSelect) {
-      chSelect.addEventListener('change', () => {
-        const opt = chSelect.selectedOptions[0];
-        if (opt && opt.dataset.points !== undefined && opt.value !== '') {
-          document.getElementById('alloc-points').value = opt.dataset.points;
-        } else {
-          document.getElementById('alloc-points').value = '';
-        }
-      });
+    const btnDirectPass = document.getElementById('btn-direct-pass');
+    if (btnDirectPass) {
+      btnDirectPass.addEventListener('click', () => submitChallengeVerdict('passed'));
     }
 
-    // Allocate Points Submit
-    const allocForm = document.getElementById('allocate-points-form');
-    if (allocForm) {
-      allocForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = allocForm.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.innerHTML = 'Logging Points to Outlet & Participant...';
-
-        const fd = new FormData(allocForm);
-
-        try {
-          const res = await fetch('api/allocate_points.php', { method: 'POST', body: fd });
-          const data = await res.json();
-
-          if (data.success) {
-            showToast(data.message, 'success');
-            if (data.participant.just_qualified) {
-              await highlandahAlert({
-                title: 'GRAND FINALE QUALIFIED!',
-                message: `CONGRATULATIONS!\n\nParticipant ${data.participant.full_name} has just reached ${data.participant.total_points} points and officially QUALIFIED for the William Lawson's TNH Grand Finale!`,
-                type: 'finale',
-                btnText: 'SALUTE HIGHLANDAH'
-              });
-            }
-            // Refresh participant details
-            const relookup = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(data.participant.clan_id)}`);
-            const refreshed = await relookup.json();
-            displayFoundParticipant(refreshed);
-            allocForm.reset();
-          } else {
-            highlandahAlert({ title: 'ALLOCATION NOTICE', message: data.message || 'Failed to allocate points.', type: 'error' });
-          }
-        } catch (err) {
-          highlandahAlert({ title: 'NETWORK ERROR', message: 'Network error while allocating points.', type: 'error' });
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = '<i data-lucide="check-circle-2"></i> Confirm & Award Points';
-          lucide.createIcons();
-        }
-      });
+    const btnDirectFail = document.getElementById('btn-direct-fail');
+    if (btnDirectFail) {
+      btnDirectFail.addEventListener('click', () => submitChallengeVerdict('failed'));
     }
+
+
 
     // On-site Registration Form
     const onsiteForm = document.getElementById('promoter-onsite-register-form');

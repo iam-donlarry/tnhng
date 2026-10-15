@@ -83,6 +83,17 @@ if (empty($outletName)) {
     $outletName = 'Highland Arena';
 }
 
+// Prevent rapid accidental double-clicks / repeated submissions (within 5 seconds for same participant + challenge + promoter)
+$dupCheck = $pdo->prepare("SELECT id FROM points_log WHERE participant_id = ? AND promoter_id = ? AND challenge_id = ? AND created_at >= (NOW() - INTERVAL 5 SECOND) LIMIT 1");
+$dupCheck->execute([$participantId, $promoterId, $challengeId]);
+if ($dupCheck->fetch()) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Duplicate submission detected: Points for this challenge were already submitted a moment ago.'
+    ]);
+    exit;
+}
+
 try {
     $pdo->beginTransaction();
 
