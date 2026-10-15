@@ -575,17 +575,49 @@ if ($pdo) {
     if (searchForm) {
       searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const query = document.getElementById('promoter-search-input').value.trim();
+        const input = document.getElementById('promoter-search-input');
+        const query = input ? input.value.trim() : '';
         if (!query) return;
 
-        const res = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(query)}`);
-        const data = await res.json();
+        const btn = searchForm.querySelector('button[type="submit"]');
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<i data-lucide="loader" style="animation: spin 1s linear infinite;"></i> Searching...';
+          lucide.createIcons();
+        }
 
-        if (data.success) {
-          displayFoundParticipant(data);
-        } else {
-          highlandahAlert({ title: 'PARTICIPANT NOT FOUND', message: data.message || 'No Clan member found with that Clan ID or Email. Please verify or use the On-Site Registration tab to enroll them.', type: 'warning' });
-          document.getElementById('participant-card-wrap').style.display = 'none';
+        try {
+          const res = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(query)}`);
+          if (!res.ok) {
+            throw new Error(`Server returned HTTP ${res.status}`);
+          }
+          const data = await res.json();
+
+          if (data.success && data.participant) {
+            displayFoundParticipant(data);
+            showToast(`Found Clan member ${data.participant.full_name}!`, 'success');
+          } else {
+            highlandahAlert({ 
+              title: 'PARTICIPANT NOT FOUND', 
+              message: data.message || `No participant found matching "${query}". Please check the ID or Email, or enroll them under the Fast On-Site Registration tab.`, 
+              type: 'warning' 
+            });
+            const wrap = document.getElementById('participant-card-wrap');
+            if (wrap) wrap.style.display = 'none';
+          }
+        } catch (err) {
+          console.error("Lookup error:", err);
+          highlandahAlert({ 
+            title: 'SEARCH ERROR', 
+            message: 'Unable to complete participant lookup. Please check internet connection and try again.', 
+            type: 'error' 
+          });
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="search"></i> Lookup';
+            lucide.createIcons();
+          }
         }
       });
     }
@@ -959,7 +991,7 @@ if ($pdo) {
           const res = await fetch('api/register_participant.php', { method: 'POST', body: fd });
           const data = await res.json();
 
-          if (data.success) {
+          if (data.success && data.participant) {
             showToast(`Registered successfully! Clan ID: ${data.participant.clan_id}`);
             await highlandahAlert({
               title: 'HIGHLANDAH PASS ISSUED',
@@ -969,17 +1001,54 @@ if ($pdo) {
             });
             onsiteForm.reset();
 
-            // Switch to lookup tab and load them automatically
-            document.querySelectorAll('.filter-tab')[0].click();
-            document.getElementById('promoter-search-input').value = data.participant.clan_id;
-            const relookup = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(data.participant.clan_id)}`);
-            const refreshed = await relookup.json();
-            displayFoundParticipant(refreshed);
+            // Switch to lookup tab and load participant card immediately
+            const lookupTabBtn = document.querySelectorAll('.filter-tab')[0];
+            switchTab('tab-lookup', lookupTabBtn);
+
+            const searchInput = document.getElementById('promoter-search-input');
+            if (searchInput) searchInput.value = data.participant.clan_id;
+
+            // Immediately display participant card from registration response
+            const initialPayload = {
+              success: true,
+              participant: {
+                ...data.participant,
+                registered_outlet_name: data.participant.outlet_name || data.participant.registered_outlet_name || 'Activation Outlet',
+                registered_by_name: data.participant.registered_by_name || 'Ambassador'
+              },
+              stats: {
+                total_points: parseInt(data.participant.total_points || 0),
+                rank: '-',
+                is_qualified: parseInt(data.participant.is_qualified || 0),
+                progress_percent: Math.min(100, parseInt(data.participant.total_points || 0)),
+                points_needed: Math.max(0, 100 - parseInt(data.participant.total_points || 0)),
+                outlets_visited_count: 1,
+                outlets_visited: [data.participant.outlet_name || 'Activation Outlet'],
+                total_challenges_played: 0
+              },
+              history: []
+            };
+            displayFoundParticipant(initialPayload);
+
+            // Background refresh to pull complete stats asynchronously without blocking
+            try {
+              const bgRes = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(data.participant.clan_id)}`);
+              if (bgRes.ok) {
+                const refreshed = await bgRes.json();
+                if (refreshed.success) {
+                  displayFoundParticipant(refreshed);
+                }
+              }
+            } catch (bgErr) {
+              // Non-blocking background sync failure
+              console.warn("Background lookup sync notice:", bgErr);
+            }
           } else {
             highlandahAlert({ title: 'ENROLLMENT FAILED', message: data.message || 'Registration failed.', type: 'error' });
           }
         } catch (err) {
-          highlandahAlert({ title: 'ERROR', message: 'Error registering participant.', type: 'error' });
+          console.error("Enrollment error:", err);
+          highlandahAlert({ title: 'ERROR', message: 'Error registering participant. Please check the network and form details.', type: 'error' });
         } finally {
           btn.disabled = false;
           btn.innerHTML = '<i data-lucide="sparkles"></i> Enroll & Issue Clan Pass';
