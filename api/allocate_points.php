@@ -104,7 +104,7 @@ try {
     $logId = $pdo->lastInsertId();
 
     // 2. Fetch current points and update
-    $selPart = $pdo->prepare("SELECT total_points, is_qualified, full_name, clan_id FROM participants WHERE id = ? FOR UPDATE");
+    $selPart = $pdo->prepare("SELECT total_points, is_qualified, full_name, clan_id, email, phone FROM participants WHERE id = ? FOR UPDATE");
     $selPart->execute([$participantId]);
     $currentPart = $selPart->fetch();
 
@@ -124,6 +124,29 @@ try {
     $updStmt->execute([$newPoints, $isQualifiedNow, $participantId]);
 
     $pdo->commit();
+
+    // Send Points Notification Email via PHPMailer (for successful point allocations)
+    if ($isPassed && $points > 0 && !empty($currentPart['email'])) {
+        try {
+            require_once __DIR__ . '/../config/mail.php';
+            $participantEmailData = [
+                'full_name'    => $currentPart['full_name'],
+                'clan_id'      => $currentPart['clan_id'],
+                'email'        => $currentPart['email'],
+                'total_points' => $newPoints
+            ];
+            $allocationEmailData = [
+                'points'        => $points,
+                'challenge'     => $challengeName,
+                'category'      => $category,
+                'outlet_name'   => $outletName,
+                'promoter_name' => $_SESSION['user']['name'] ?? 'Brand Ambassador'
+            ];
+            sendClanPointsEmail($participantEmailData, $allocationEmailData);
+        } catch (Throwable $mailEx) {
+            error_log("Failed to send points email to " . $currentPart['email'] . ": " . $mailEx->getMessage());
+        }
+    }
 
     $respMsg = $isPassed 
         ? "+{$points} points allocated successfully at {$outletName}!" 

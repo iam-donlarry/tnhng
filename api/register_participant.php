@@ -103,6 +103,16 @@ try {
     $fetchStmt->execute([$newId]);
     $participant = $fetchStmt->fetch();
 
+    // Send Welcome Email Notification via PHPMailer
+    if (!empty($participant['email'])) {
+        try {
+            require_once __DIR__ . '/../config/mail.php';
+            sendClanWelcomeEmail($participant);
+        } catch (Throwable $mailEx) {
+            error_log("Failed to send welcome email to " . $participant['email'] . ": " . $mailEx->getMessage());
+        }
+    }
+
     echo json_encode([
         'success' => true,
         'is_existing' => false,
