@@ -1,6 +1,8 @@
 <?php
 // config/mail.php - William Lawson's "The Next Highlandah" Email Service
-// Powered by PHPMailer with custom brand styling and SMTPS
+// Branded typography: Bebas Neue, Syne, Outfit, JetBrains Mono
+// Official brand logo: images/logo.svg embedded via CID with fallback
+// No emojis in email body contents (emojis retained in subjects only)
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -11,7 +13,7 @@ require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';
 require_once __DIR__ . '/../PHPMailer/src/SMTP.php';
 
 /**
- * Returns a preconfigured PHPMailer instance.
+ * Returns a preconfigured PHPMailer instance for SMTP.
  *
  * @param bool $debug
  * @return PHPMailer
@@ -27,7 +29,7 @@ function createMailerInstance($debug = false) {
     $mail->Password   = '@Niyilemo35';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
-    $mail->Timeout    = 15;
+    $mail->Timeout    = 10;
 
     // SSL options for hosting environments
     $mail->SMTPOptions = [
@@ -44,7 +46,6 @@ function createMailerInstance($debug = false) {
         $mail->SMTPDebug = SMTP::DEBUG_OFF;
     }
 
-    // Default sender
     $mail->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
     $mail->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
     $mail->CharSet = 'UTF-8';
@@ -53,8 +54,62 @@ function createMailerInstance($debug = false) {
 }
 
 /**
+ * Attaches the official William Lawson's logo.svg to a PHPMailer instance.
+ *
+ * @param PHPMailer $mailerInstance
+ */
+function attachBrandLogo(&$mailerInstance) {
+    $svgPath = __DIR__ . '/../images/logo.svg';
+    if (file_exists($svgPath)) {
+        try {
+            $mailerInstance->addEmbeddedImage($svgPath, 'wl_brand_logo', 'logo.svg', 'base64', 'image/svg+xml');
+        } catch (Exception $e) {
+            error_log("Failed to embed logo.svg: " . $e->getMessage());
+        }
+    }
+}
+
+/**
+ * Standardized William Lawson's email typography head block with Google Fonts.
+ *
+ * @return string
+ */
+function getEmailFontStylesHtml() {
+    return '
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!--[if !mso]><!-->
+    <style>
+      @import url(\'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap\');
+      
+      body, table, td, p, a, li, span {
+        font-family: \'Outfit\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif !important;
+      }
+      .font-display {
+        font-family: \'Bebas Neue\', \'Arial Black\', Impact, sans-serif !important;
+        letter-spacing: 1.5px !important;
+      }
+      .font-heading {
+        font-family: \'Syne\', Arial, Helvetica, sans-serif !important;
+        font-weight: 800 !important;
+      }
+      .font-body {
+        font-family: \'Outfit\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif !important;
+      }
+      .font-mono {
+        font-family: \'JetBrains Mono\', \'Courier New\', Courier, monospace !important;
+        letter-spacing: 3px !important;
+      }
+    </style>
+    <!--<![endif]-->
+    ';
+}
+
+/**
  * Generates the standardized William Lawson's email footer.
- * Matches user's exact specification: Logo centered flanked by lines on both left and right sides.
+ * Logo centered flanked by green lines on both left and right sides.
+ * No emojis in footer text.
  *
  * @return string
  */
@@ -62,32 +117,32 @@ function getEmailBrandFooterHtml() {
     $siteUrl = 'https://tnhng.com';
     return '
     <!-- FOOTER SECTION -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 30px; background-color: #050d08; border-top: 2px solid #005c30;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 30px; background-color: #050d08; border-top: 2px solid #004d13;">
       <tr>
-        <td style="padding: 24px 20px 20px 20px; text-align: center;">
+        <td style="padding: 26px 20px 22px 20px; text-align: center;">
 
           <!-- Centered Logo Flanked by Horizontal Lines on Both Left & Right -->
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto 18px auto; max-width: 520px;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto 16px auto; max-width: 500px;">
             <tr>
-              <td style="width: 36%; border-bottom: 2px solid #005c30; font-size: 0; line-height: 0;">&nbsp;</td>
-              <td align="center" style="width: 28%; padding: 0 12px; white-space: nowrap;">
-                <img src="cid:wl_logo_badge" alt="William Lawson\'s" width="96" height="64" style="display: block; margin: 0 auto; max-width: 96px; height: auto; border: 0;" />
+              <td style="width: 36%; border-bottom: 2px solid #00c853; font-size: 0; line-height: 0;">&nbsp;</td>
+              <td align="center" style="width: 28%; padding: 0 14px; white-space: nowrap;">
+                <img src="cid:wl_brand_logo" alt="William Lawson\'s" width="95" height="58" style="display: block; margin: 0 auto; max-width: 95px; height: auto; border: 0;" />
               </td>
-              <td style="width: 36%; border-bottom: 2px solid #005c30; font-size: 0; line-height: 0;">&nbsp;</td>
+              <td style="width: 36%; border-bottom: 2px solid #00c853; font-size: 0; line-height: 0;">&nbsp;</td>
             </tr>
           </table>
 
-          <p style="margin: 0 0 8px 0; font-family: \'Arial Black\', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; color: #22c55e; text-transform: uppercase;">
+          <p style="margin: 0 0 8px 0; font-family: \'Bebas Neue\', \'Syne\', \'Arial Black\', Impact, sans-serif; font-size: 16px; letter-spacing: 2px; color: #00c853; text-transform: uppercase;">
             NO RULES. GREAT SCOTCH.
           </p>
 
-          <p style="margin: 0 0 12px 0; font-family: Arial, sans-serif; font-size: 11px; line-height: 16px; color: #718096;">
-            The Next Highlandah is an official activation by William Lawson\'s Blended Scotch Whisky.<br />
-            Track live standings & find tour venues at <a href="' . $siteUrl . '" style="color: #22c55e; text-decoration: underline;">tnhng.com</a>.
+          <p style="margin: 0 0 14px 0; font-family: \'Outfit\', Arial, sans-serif; font-size: 11px; line-height: 16px; color: #9ca3af;">
+            The Next Highlandah is an official national activation by William Lawson\'s Blended Scotch Whisky.<br />
+            Track live standings and tour dates at <a href="' . $siteUrl . '" style="color: #00c853; text-decoration: underline; font-weight: 600;">tnhng.com</a>.
           </p>
 
           <!-- 18+ Drink Responsibly Tag -->
-          <div style="display: inline-block; padding: 4px 10px; border: 1px solid #2d3748; border-radius: 4px; font-family: Arial, sans-serif; font-size: 10px; color: #a0aec0; letter-spacing: 1px; text-transform: uppercase;">
+          <div style="display: inline-block; padding: 4px 12px; border: 1px solid #1f2937; border-radius: 4px; font-family: \'Outfit\', Arial, sans-serif; font-size: 10px; color: #6b7280; letter-spacing: 1px; text-transform: uppercase;">
             Strictly 18+ &bull; Drink Responsibly &bull; &copy; ' . date('Y') . ' William Lawson\'s
           </div>
 
@@ -108,49 +163,53 @@ function sendClanWelcomeEmail($participant) {
         return false;
     }
 
-    try {
-        $mail = createMailerInstance();
-        $mail->addAddress($participant['email'], $participant['full_name']);
-        $mail->Subject = '🔥 Welcome to The Clan! Your Highlandah Pass is Ready [' . $participant['clan_id'] . ']';
+    $fullName = htmlspecialchars($participant['full_name'], ENT_QUOTES, 'UTF-8');
+    $clanId   = htmlspecialchars($participant['clan_id'], ENT_QUOTES, 'UTF-8');
+    $phone    = htmlspecialchars($participant['phone'] ?? '', ENT_QUOTES, 'UTF-8');
 
-        // Embed badge logo as CID
-        $logoPath = __DIR__ . '/../images/wl-logo-badge.png';
-        if (file_exists($logoPath)) {
-            $mail->addEmbeddedImage($logoPath, 'wl_logo_badge', 'wl-logo-badge.png', 'base64', 'image/png');
-        }
+    $subject  = '🔥 Welcome to The Clan! Your Highlandah Pass is Ready [' . $participant['clan_id'] . ']';
 
-        $fullName = htmlspecialchars($participant['full_name'], ENT_QUOTES, 'UTF-8');
-        $clanId   = htmlspecialchars($participant['clan_id'], ENT_QUOTES, 'UTF-8');
-        $phone    = htmlspecialchars($participant['phone'] ?? '', ENT_QUOTES, 'UTF-8');
-        $footerHtml = getEmailBrandFooterHtml();
+    $fontStylesHtml = getEmailFontStylesHtml();
+    $footerHtml     = getEmailBrandFooterHtml();
 
-        $htmlBody = <<<HTML
+    $htmlBody = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to The Clan</title>
+  {$fontStylesHtml}
 </head>
-<body style="margin: 0; padding: 0; background-color: #07100a; font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;">
+<body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #07100a; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 20px 10px;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0b1a10; border: 1px solid #164326; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BRAND BANNER HEADER -->
           <tr>
-            <td style="background: linear-gradient(135deg, #003822 0%, #001f13 100%); padding: 30px 24px 20px 24px; text-align: center; border-bottom: 2px solid #22c55e;">
-              <span style="display: inline-block; background-color: #22c55e; color: #002818; font-weight: bold; font-size: 11px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">
+            <td style="background-color: #003822; padding: 32px 24px 24px 24px; text-align: center; border-bottom: 3px solid #00c853;">
+              
+              <!-- Brand Logo in Header -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
+                <tr>
+                  <td align="center">
+                    <img src="cid:wl_brand_logo" alt="William Lawson's" width="120" height="73" style="display: block; margin: 0 auto; max-width: 120px; height: auto; border: 0;" />
+                  </td>
+                </tr>
+              </table>
+
+              <span style="display: inline-block; background-color: #00c853; color: #000000; font-family: 'Syne', 'Outfit', Arial, sans-serif; font-weight: 800; font-size: 11px; padding: 4px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">
                 Official Highlandah Pass
               </span>
-              <h1 style="margin: 0 0 6px 0; color: #ffffff; font-family: 'Arial Black', Arial, sans-serif; font-size: 26px; text-transform: uppercase; letter-spacing: 1px;">
+              <h1 class="font-display" style="margin: 0 0 6px 0; color: #ffffff; font-family: 'Bebas Neue', 'Syne', 'Arial Black', Impact, sans-serif; font-size: 30px; line-height: 34px; text-transform: uppercase; letter-spacing: 2px;">
                 WELCOME TO THE CLAN
               </h1>
-              <p style="margin: 0; color: #a7f3d0; font-size: 14px;">
-                You are now officially registered for <strong>The Next Highlandah</strong>.
+              <p style="margin: 0; color: #a7f3d0; font-family: 'Outfit', Arial, sans-serif; font-size: 14px; letter-spacing: 0.5px;">
+                You are now officially enrolled in <strong>The Next Highlandah</strong>.
               </p>
             </td>
           </tr>
@@ -158,80 +217,80 @@ function sendClanWelcomeEmail($participant) {
           <!-- MAIN CONTENT BODY -->
           <tr>
             <td style="padding: 28px 24px 10px 24px;">
-              <p style="margin: 0 0 18px 0; color: #e5e7eb; font-size: 15px; line-height: 22px;">
-                Salute, <strong>{$fullName}</strong>! You've taken the first step toward Scottish greatness. Your Clan Pass is active and ready to use at any participating bar, club, or lounge across Nigeria.
+              <p style="margin: 0 0 18px 0; color: #d1d5db; font-family: 'Outfit', Arial, sans-serif; font-size: 15px; line-height: 22px;">
+                Salute, <strong style="color: #ffffff;">{$fullName}</strong>. You have taken the oath. Your unique Clan Pass is now active and ready to use at any participating tour bar, club, or lounge across Nigeria.
               </p>
 
               <!-- HIGHLANDAH PASS CARD -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #06150c; border: 2px dashed #22c55e; border-radius: 6px; margin: 20px 0; padding: 18px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #060907; border: 2px dashed #00c853; border-radius: 6px; margin: 20px 0; padding: 18px;">
                 <tr>
-                  <td align="center" style="padding: 10px 0;">
-                    <div style="font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
+                  <td align="center" style="padding: 12px 8px;">
+                    <div style="font-family: 'Syne', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px;">
                       Your Unique Clan Pass ID
                     </div>
-                    <div style="font-family: 'Courier New', Courier, monospace; font-size: 32px; font-weight: bold; color: #facc15; letter-spacing: 3px; background: #020904; display: inline-block; padding: 8px 20px; border-radius: 4px; border: 1px solid #facc15;">
+                    <div class="font-mono" style="font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 32px; font-weight: 800; color: #facc15; letter-spacing: 4px; background-color: #000000; display: inline-block; padding: 8px 24px; border-radius: 4px; border: 1px solid #facc15;">
                       {$clanId}
                     </div>
-                    <div style="font-size: 12px; color: #34d399; margin-top: 8px;">
-                      Phone: {$phone} &bull; Starting Balance: <strong>0 PTS</strong>
+                    <div style="font-family: 'Outfit', Arial, sans-serif; font-size: 12px; color: #00c853; margin-top: 10px; font-weight: 500;">
+                      Phone: {$phone} &bull; Opening Balance: <strong>0 PTS</strong>
                     </div>
                   </td>
                 </tr>
               </table>
 
               <!-- GRAND FINALE TARGET BOX -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #14281a; border-left: 4px solid #facc15; border-radius: 4px; margin-bottom: 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #111714; border-left: 4px solid #facc15; border-radius: 4px; margin-bottom: 24px;">
                 <tr>
-                  <td style="padding: 14px 16px;">
-                    <div style="color: #facc15; font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
-                      🎯 The 100-Point Target
+                  <td style="padding: 14px 18px;">
+                    <div class="font-heading" style="color: #facc15; font-family: 'Syne', Arial, sans-serif; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
+                      THE 100-POINT TARGET
                     </div>
-                    <div style="color: #d1d5db; font-size: 13px; line-height: 18px;">
-                      Accumulate <strong>100 points</strong> across any of our tour outlets to qualify for the Grand Finale draw and earn a VIP celebrity table experience!
+                    <div style="color: #d1d5db; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; line-height: 19px;">
+                      Accumulate <strong>100 points</strong> across any of our activation outlets to qualify for the Grand Finale draw and earn an exclusive VIP celebrity table experience.
                     </div>
                   </td>
                 </tr>
               </table>
 
               <!-- HOW IT WORKS (3 STEPS) -->
-              <h2 style="margin: 24px 0 14px 0; color: #ffffff; font-size: 17px; font-family: 'Arial Black', Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.5px;">
-                HOW TO BANK POINTS:
+              <h2 class="font-display" style="margin: 24px 0 14px 0; color: #ffffff; font-size: 20px; font-family: 'Bebas Neue', 'Syne', Arial, sans-serif; text-transform: uppercase; letter-spacing: 1.5px;">
+                HOW TO BANK POINTS
               </h2>
 
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 24px;">
                 <!-- Step 1 -->
                 <tr>
                   <td width="36" valign="top" style="padding-bottom: 14px;">
-                    <div style="width: 28px; height: 28px; background-color: #22c55e; color: #002818; font-weight: bold; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">1</div>
+                    <div style="width: 28px; height: 28px; background-color: #00c853; color: #000000; font-family: 'Syne', Arial, sans-serif; font-weight: 800; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">1</div>
                   </td>
                   <td valign="top" style="padding-bottom: 14px; padding-left: 10px;">
-                    <strong style="color: #ffffff; font-size: 14px;">Visit Participating Outlets</strong>
-                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-size: 13px; line-height: 18px;">
-                      Head to any William Lawson's tour outlet across Nigeria during activation dates.
+                    <strong style="color: #ffffff; font-family: 'Syne', Arial, sans-serif; font-size: 14px;">Visit Participating Outlets</strong>
+                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; line-height: 18px;">
+                      Walk into any William Lawson\'s partner outlet during tour dates nationwide.
                     </p>
                   </td>
                 </tr>
                 <!-- Step 2 -->
                 <tr>
                   <td width="36" valign="top" style="padding-bottom: 14px;">
-                    <div style="width: 28px; height: 28px; background-color: #22c55e; color: #002818; font-weight: bold; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">2</div>
+                    <div style="width: 28px; height: 28px; background-color: #00c853; color: #000000; font-family: 'Syne', Arial, sans-serif; font-weight: 800; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">2</div>
                   </td>
                   <td valign="top" style="padding-bottom: 14px; padding-left: 10px;">
-                    <strong style="color: #ffffff; font-size: 14px;">Show Your Clan ID to the Ambassador</strong>
-                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-size: 13px; line-height: 18px;">
-                      Call out <code style="color: #facc15; font-weight: bold;">{$clanId}</code> or show this email. No new registration needed!
+                    <strong style="color: #ffffff; font-family: 'Syne', Arial, sans-serif; font-size: 14px;">Call Out Your Clan ID</strong>
+                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; line-height: 18px;">
+                      Show this email or tell the on-site Brand Ambassador your Clan ID: <code style="color: #facc15; font-family: 'JetBrains Mono', monospace; font-weight: 700;">{$clanId}</code>. No duplicate registration required.
                     </p>
                   </td>
                 </tr>
                 <!-- Step 3 -->
                 <tr>
                   <td width="36" valign="top" style="padding-bottom: 14px;">
-                    <div style="width: 28px; height: 28px; background-color: #22c55e; color: #002818; font-weight: bold; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">3</div>
+                    <div style="width: 28px; height: 28px; background-color: #00c853; color: #000000; font-family: 'Syne', Arial, sans-serif; font-weight: 800; border-radius: 50%; text-align: center; line-height: 28px; font-size: 13px;">3</div>
                   </td>
                   <td valign="top" style="padding-bottom: 14px; padding-left: 10px;">
-                    <strong style="color: #ffffff; font-size: 14px;">Spin the Bottle & Conquer Challenges</strong>
-                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-size: 13px; line-height: 18px;">
-                      Take on high-energy Scottish challenges to lock in instant official scorecard points synced live.
+                    <strong style="color: #ffffff; font-family: 'Syne', Arial, sans-serif; font-size: 14px;">Spin the Bottle & Conquer Challenges</strong>
+                    <p style="margin: 4px 0 0 0; color: #9ca3af; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; line-height: 18px;">
+                      Complete official bold challenges to earn instant verified scorecard points synced immediately to the national leaderboard.
                     </p>
                   </td>
                 </tr>
@@ -241,10 +300,10 @@ function sendClanWelcomeEmail($participant) {
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 10px 0 20px 0;">
                 <tr>
                   <td align="center">
-                    <a href="https://tnhng.com/leaderboard" style="display: inline-block; background-color: #22c55e; color: #002818; font-family: 'Arial Black', Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; margin: 6px;">
+                    <a href="https://tnhng.com/leaderboard" class="font-display" style="display: inline-block; background-color: #00c853; color: #000000; font-family: 'Bebas Neue', 'Syne', 'Arial Black', sans-serif; font-size: 16px; font-weight: 700; text-decoration: none; padding: 12px 28px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1.5px; margin: 6px;">
                       View Live Leaderboard
                     </a>
-                    <a href="https://tnhng.com/outlets" style="display: inline-block; background-color: transparent; border: 2px solid #22c55e; color: #22c55e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; text-decoration: none; padding: 12px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; margin: 6px;">
+                    <a href="https://tnhng.com/outlets" class="font-display" style="display: inline-block; background-color: transparent; border: 2px solid #00c853; color: #00c853; font-family: 'Bebas Neue', 'Syne', 'Arial Black', sans-serif; font-size: 16px; font-weight: 700; text-decoration: none; padding: 10px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1.5px; margin: 6px;">
                       Find Outlets to Play
                     </a>
                   </td>
@@ -269,36 +328,41 @@ function sendClanWelcomeEmail($participant) {
 </html>
 HTML;
 
+    $altBody = "Welcome to The Clan, {$participant['full_name']}!\n\nYour Clan Pass ID: {$participant['clan_id']}\nPhone: {$participant['phone']}\nOpening Balance: 0 PTS\nTarget: 100 PTS to Grand Finale Table Draw\n\nVisit any William Lawson's tour outlet to play and bank points!\nLive standings: https://tnhng.com/leaderboard\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
+
+    // Primary delivery attempt via SMTP
+    try {
+        $mail = createMailerInstance();
+        $mail->addAddress($participant['email'], $participant['full_name']);
+        $mail->Subject = $subject;
         $mail->isHTML(true);
         $mail->Body    = $htmlBody;
-        $mail->AltBody = "Welcome to The Clan, {$participant['full_name']}!\n\nYour Clan ID: {$participant['clan_id']}\nPhone: {$participant['phone']}\nStarting Balance: 0 PTS\n\nVisit any William Lawson's tour outlet to play and bank points toward the 100 PTS Grand Finale threshold!\nTrack live at https://tnhng.com\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
+        $mail->AltBody = $altBody;
+        attachBrandLogo($mail);
 
+        $mail->send();
+        return true;
+    } catch (Exception $smtpEx) {
+        error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
         try {
-            $mail->send();
+            $fallback = new PHPMailer(true);
+            $fallback->isMail();
+            $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
+            $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
+            $fallback->addAddress($participant['email'], $participant['full_name']);
+            $fallback->Subject = $subject;
+            $fallback->isHTML(true);
+            $fallback->Body    = $htmlBody;
+            $fallback->AltBody = $altBody;
+            $fallback->CharSet = 'UTF-8';
+            attachBrandLogo($fallback);
+
+            $fallback->send();
             return true;
-        } catch (Exception $smtpEx) {
-            error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
-            try {
-                $fallback = new PHPMailer(true);
-                $fallback->isMail();
-                $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
-                $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
-                $fallback->addAddress($participant['email'], $participant['full_name']);
-                $fallback->Subject = $mail->Subject;
-                $fallback->isHTML(true);
-                $fallback->Body    = $htmlBody;
-                $fallback->AltBody = $mail->AltBody;
-                $fallback->CharSet = 'UTF-8';
-                $fallback->send();
-                return true;
-            } catch (Exception $e2) {
-                error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
-                return false;
-            }
+        } catch (Exception $e2) {
+            error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
+            return false;
         }
-    } catch (Exception $e) {
-        error_log("PHPMailer error (Welcome Email to {$participant['email']}): " . $e->getMessage());
-        return false;
     }
 }
 
@@ -314,85 +378,87 @@ function sendClanPointsEmail($participant, $allocation) {
         return false;
     }
 
-    try {
-        $mail = createMailerInstance();
-        $mail->addAddress($participant['email'], $participant['full_name']);
+    $awardedPoints = intval($allocation['points'] ?? 0);
+    $outletName    = htmlspecialchars($allocation['outlet_name'] ?? 'Partner Outlet', ENT_QUOTES, 'UTF-8');
+    $challengeName = htmlspecialchars($allocation['challenge'] ?? 'Highlandah Challenge', ENT_QUOTES, 'UTF-8');
+    $category      = htmlspecialchars($allocation['category'] ?? 'General', ENT_QUOTES, 'UTF-8');
+    $promoterName  = htmlspecialchars($allocation['promoter_name'] ?? 'Brand Ambassador', ENT_QUOTES, 'UTF-8');
 
-        $awardedPoints = intval($allocation['points'] ?? 0);
-        $outletName    = htmlspecialchars($allocation['outlet_name'] ?? 'Partner Outlet', ENT_QUOTES, 'UTF-8');
-        $challengeName = htmlspecialchars($allocation['challenge'] ?? 'Highlandah Challenge', ENT_QUOTES, 'UTF-8');
-        $category      = htmlspecialchars($allocation['category'] ?? 'General', ENT_QUOTES, 'UTF-8');
-        $promoterName  = htmlspecialchars($allocation['promoter_name'] ?? 'Brand Ambassador', ENT_QUOTES, 'UTF-8');
+    $fullName      = htmlspecialchars($participant['full_name'], ENT_QUOTES, 'UTF-8');
+    $clanId        = htmlspecialchars($participant['clan_id'], ENT_QUOTES, 'UTF-8');
+    $totalPoints   = intval($participant['total_points'] ?? 0);
 
-        $fullName      = htmlspecialchars($participant['full_name'], ENT_QUOTES, 'UTF-8');
-        $clanId        = htmlspecialchars($participant['clan_id'], ENT_QUOTES, 'UTF-8');
-        $totalPoints   = intval($participant['total_points'] ?? 0);
+    // Subject retains emoji per instructions
+    $subject       = "⚡ +{$awardedPoints} PTS Banked at {$outletName}! [{$clanId}]";
 
-        $mail->Subject = "⚡ +{$awardedPoints} PTS Banked at {$outletName}! [{$clanId}]";
+    $progressPct  = min(100, max(0, round(($totalPoints / 100) * 100)));
+    $pointsNeeded = max(0, 100 - $totalPoints);
+    $isQualified  = ($totalPoints >= 100);
 
-        // Embed badge logo as CID
-        $logoPath = __DIR__ . '/../images/wl-logo-badge.png';
-        if (file_exists($logoPath)) {
-            $mail->addEmbeddedImage($logoPath, 'wl_logo_badge', 'wl-logo-badge.png', 'base64', 'image/png');
-        }
+    $fontStylesHtml = getEmailFontStylesHtml();
+    $footerHtml     = getEmailBrandFooterHtml();
 
-        // Calculate progress toward 100 PTS threshold
-        $progressPct = min(100, max(0, round(($totalPoints / 100) * 100)));
-        $pointsNeeded = max(0, 100 - $totalPoints);
-        $isQualified = ($totalPoints >= 100);
+    // Milestone notice (strictly no emojis in email body)
+    if ($isQualified) {
+        $milestoneHtml = '
+        <div style="background-color: #064e3b; border: 2px solid #00c853; border-radius: 6px; padding: 18px; margin: 20px 0; text-align: center;">
+          <div class="font-display" style="font-size: 22px; font-weight: bold; color: #facc15; font-family: \'Bebas Neue\', \'Syne\', Arial, sans-serif; text-transform: uppercase; letter-spacing: 2px;">
+            GRAND FINALE QUALIFIED
+          </div>
+          <p style="margin: 6px 0 0 0; color: #ecfdf5; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px; line-height: 18px;">
+            You have officially reached the <strong>100 PTS milestone</strong>. Your entry has been locked in for the celebrity VIP Table Grand Finale draw!
+          </p>
+        </div>';
+    } else {
+        $milestoneHtml = '
+        <div style="background-color: #111714; border-left: 4px solid #facc15; border-radius: 4px; padding: 14px 18px; margin: 20px 0;">
+          <div class="font-heading" style="color: #facc15; font-family: \'Syne\', Arial, sans-serif; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
+            TARGET REMAINING:
+          </div>
+          <div style="color: #d1d5db; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px;">
+            Only <strong>' . $pointsNeeded . ' more points</strong> needed to unlock the 100 PTS Grand Finale VIP Table Draw.
+          </div>
+        </div>';
+    }
 
-        $footerHtml = getEmailBrandFooterHtml();
-
-        // Milestone message
-        if ($isQualified) {
-            $milestoneHtml = '
-            <div style="background-color: #064e3b; border: 2px solid #34d399; border-radius: 6px; padding: 16px; margin: 20px 0; text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; color: #facc15; font-family: \'Arial Black\', Arial, sans-serif; text-transform: uppercase;">
-                🏆 GRAND FINALE QUALIFIED!
-              </div>
-              <p style="margin: 6px 0 0 0; color: #ecfdf5; font-size: 13px; line-height: 18px;">
-                You have reached the <strong>100 PTS milestone</strong>! Your entry has been locked in for the celebrity VIP Table Grand Finale draw!
-              </p>
-            </div>';
-        } else {
-            $milestoneHtml = '
-            <div style="background-color: #14281a; border-left: 4px solid #facc15; border-radius: 4px; padding: 12px 16px; margin: 20px 0;">
-              <span style="color: #facc15; font-weight: bold; font-size: 13px; text-transform: uppercase;">
-                🎯 Target Remaining:
-              </span>
-              <span style="color: #e5e7eb; font-size: 13px;">
-                Only <strong>' . $pointsNeeded . ' more points</strong> needed to unlock the 100 PTS Grand Finale VIP Table Draw!
-              </span>
-            </div>';
-        }
-
-        $htmlBody = <<<HTML
+    $htmlBody = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Points Banked Notification</title>
+  {$fontStylesHtml}
 </head>
-<body style="margin: 0; padding: 0; background-color: #07100a; font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;">
+<body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #07100a; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 20px 10px;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0b1a10; border: 1px solid #164326; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BANNER HEADER -->
           <tr>
-            <td style="background: linear-gradient(135deg, #003822 0%, #001f13 100%); padding: 28px 24px 20px 24px; text-align: center; border-bottom: 2px solid #22c55e;">
-              <span style="display: inline-block; background-color: #facc15; color: #002818; font-weight: bold; font-size: 11px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">
+            <td style="background-color: #003822; padding: 32px 24px 22px 24px; text-align: center; border-bottom: 3px solid #00c853;">
+              
+              <!-- Brand Logo in Header -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
+                <tr>
+                  <td align="center">
+                    <img src="cid:wl_brand_logo" alt="William Lawson's" width="120" height="73" style="display: block; margin: 0 auto; max-width: 120px; height: auto; border: 0;" />
+                  </td>
+                </tr>
+              </table>
+
+              <span style="display: inline-block; background-color: #facc15; color: #000000; font-family: 'Syne', Arial, sans-serif; font-weight: 800; font-size: 11px; padding: 4px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">
                 Live Scorecard Sync
               </span>
-              <h1 style="margin: 0 0 6px 0; color: #ffffff; font-family: 'Arial Black', Arial, sans-serif; font-size: 26px; text-transform: uppercase; letter-spacing: 1px;">
-                POINTS BANKED!
+              <h1 class="font-display" style="margin: 0 0 6px 0; color: #ffffff; font-family: 'Bebas Neue', 'Syne', 'Arial Black', Impact, sans-serif; font-size: 32px; line-height: 36px; text-transform: uppercase; letter-spacing: 2px;">
+                POINTS BANKED
               </h1>
-              <p style="margin: 0; color: #a7f3d0; font-size: 14px;">
-                Your scorecard was updated at <strong>{$outletName}</strong>
+              <p style="margin: 0; color: #a7f3d0; font-family: 'Outfit', Arial, sans-serif; font-size: 14px;">
+                Scorecard successfully verified at <strong>{$outletName}</strong>
               </p>
             </td>
           </tr>
@@ -400,35 +466,35 @@ function sendClanPointsEmail($participant, $allocation) {
           <!-- MAIN BODY -->
           <tr>
             <td style="padding: 26px 24px 10px 24px;">
-              <p style="margin: 0 0 18px 0; color: #e5e7eb; font-size: 15px; line-height: 22px;">
-                Highlandah <strong>{$fullName}</strong> (<code>{$clanId}</code>), your challenge results were verified by Ambassador <strong>{$promoterName}</strong>!
+              <p style="margin: 0 0 18px 0; color: #d1d5db; font-family: 'Outfit', Arial, sans-serif; font-size: 15px; line-height: 22px;">
+                Highlandah <strong style="color: #ffffff;">{$fullName}</strong> (<code style="font-family: 'JetBrains Mono', monospace; color: #facc15; font-weight: 700;">{$clanId}</code>), your challenge results were verified and locked in by Brand Ambassador <strong>{$promoterName}</strong>.
               </p>
 
               <!-- SCORECARD SUMMARY CARD -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #05140b; border: 1px solid #1e3a27; border-radius: 6px; margin-bottom: 20px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #060907; border: 1px solid #004d13; border-radius: 6px; margin-bottom: 20px;">
                 <tr>
-                  <td style="padding: 18px 20px; text-align: center; border-bottom: 1px solid #164326;">
-                    <div style="font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
+                  <td style="padding: 20px; text-align: center; border-bottom: 1px solid #111714;">
+                    <div style="font-family: 'Syne', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
                       Points Awarded
                     </div>
-                    <div style="font-family: 'Arial Black', Arial, sans-serif; font-size: 38px; color: #22c55e; line-height: 42px;">
-                      +{$awardedPoints} <span style="font-size: 18px; color: #facc15;">PTS</span>
+                    <div class="font-display" style="font-family: 'Bebas Neue', 'Arial Black', Impact, sans-serif; font-size: 44px; color: #00c853; line-height: 48px; letter-spacing: 2px;">
+                      +{$awardedPoints} <span style="font-size: 20px; color: #facc15;">PTS</span>
                     </div>
-                    <div style="font-size: 13px; color: #e5e7eb; margin-top: 4px;">
+                    <div style="font-family: 'Outfit', Arial, sans-serif; font-size: 13px; color: #e5e7eb; margin-top: 4px;">
                       Challenge: <strong>{$challengeName}</strong> ({$category})
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding: 16px 20px; background-color: #081a10;">
+                  <td style="padding: 16px 20px; background-color: #0a0e0c;">
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="color: #9ca3af; font-size: 13px;">Activation Outlet:</td>
-                        <td align="right" style="color: #22c55e; font-size: 14px; font-weight: bold;">📍 {$outletName}</td>
+                        <td style="color: #9ca3af; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px;">Activation Outlet:</td>
+                        <td align="right" style="color: #00c853; font-family: \'Outfit\', Arial, sans-serif; font-size: 14px; font-weight: 700;">{$outletName}</td>
                       </tr>
                       <tr>
-                        <td style="color: #9ca3af; font-size: 13px; padding-top: 8px;">Total Points Now:</td>
-                        <td align="right" style="color: #facc15; font-size: 18px; font-weight: bold; padding-top: 8px;">{$totalPoints} PTS</td>
+                        <td style="color: #9ca3af; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px; padding-top: 8px;">Total Points Now:</td>
+                        <td align="right" style="color: #facc15; font-family: \'Bebas Neue\', \'Syne\', Arial, sans-serif; font-size: 20px; font-weight: 700; padding-top: 8px; letter-spacing: 1px;">{$totalPoints} PTS</td>
                       </tr>
                     </table>
                   </td>
@@ -439,16 +505,16 @@ function sendClanPointsEmail($participant, $allocation) {
               <div style="margin: 22px 0 10px 0;">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0">
                   <tr>
-                    <td style="color: #d1d5db; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">
+                    <td class="font-heading" style="color: #d1d5db; font-family: 'Syne', Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
                       Progress to Grand Finale:
                     </td>
-                    <td align="right" style="color: #22c55e; font-size: 12px; font-weight: bold;">
+                    <td align="right" class="font-display" style="color: #00c853; font-family: 'Bebas Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px;">
                       {$totalPoints} / 100 PTS ({$progressPct}%)
                     </td>
                   </tr>
                 </table>
-                <div style="width: 100%; height: 12px; background-color: #1f2937; border-radius: 6px; overflow: hidden; margin-top: 6px;">
-                  <div style="width: {$progressPct}%; height: 100%; background: linear-gradient(90deg, #22c55e 0%, #facc15 100%);"></div>
+                <div style="width: 100%; height: 12px; background-color: #111714; border: 1px solid #1f2937; border-radius: 6px; overflow: hidden; margin-top: 6px;">
+                  <div style="width: {$progressPct}%; height: 100%; background: linear-gradient(90deg, #00c853 0%, #facc15 100%);"></div>
                 </div>
               </div>
 
@@ -458,10 +524,10 @@ function sendClanPointsEmail($participant, $allocation) {
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0 14px 0;">
                 <tr>
                   <td align="center">
-                    <a href="https://tnhng.com/leaderboard" style="display: inline-block; background-color: #22c55e; color: #002818; font-family: 'Arial Black', Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; margin: 6px;">
-                      Check My Leaderboard Rank
+                    <a href="https://tnhng.com/leaderboard" class="font-display" style="display: inline-block; background-color: #00c853; color: #000000; font-family: 'Bebas Neue', 'Syne', 'Arial Black', sans-serif; font-size: 16px; font-weight: 700; text-decoration: none; padding: 12px 28px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1.5px; margin: 6px;">
+                      Check Live Clan Rank
                     </a>
-                    <a href="https://tnhng.com/outlets" style="display: inline-block; background-color: transparent; border: 2px solid #22c55e; color: #22c55e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; text-decoration: none; padding: 12px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; margin: 6px;">
+                    <a href="https://tnhng.com/outlets" class="font-display" style="display: inline-block; background-color: transparent; border: 2px solid #00c853; color: #00c853; font-family: 'Bebas Neue', 'Syne', 'Arial Black', sans-serif; font-size: 16px; font-weight: 700; text-decoration: none; padding: 10px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1.5px; margin: 6px;">
                       Play at Next Outlet
                     </a>
                   </td>
@@ -486,35 +552,40 @@ function sendClanPointsEmail($participant, $allocation) {
 </html>
 HTML;
 
+    $altBody = "+{$awardedPoints} PTS Banked at {$outletName}!\n\nHighlandah: {$fullName} [{$clanId}]\nChallenge: {$challengeName}\nTotal Points Now: {$totalPoints} PTS\nTarget: 100 PTS to Grand Finale Table Draw\n\nTrack live rankings: https://tnhng.com/leaderboard\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
+
+    // Primary delivery attempt via SMTP
+    try {
+        $mail = createMailerInstance();
+        $mail->addAddress($participant['email'], $participant['full_name']);
+        $mail->Subject = $subject;
         $mail->isHTML(true);
         $mail->Body    = $htmlBody;
-        $mail->AltBody = "+{$awardedPoints} PTS Banked at {$outletName}!\n\nHighlandah: {$fullName} [{$clanId}]\nChallenge: {$challengeName}\nTotal Points Now: {$totalPoints} PTS\nTarget: 100 PTS to Grand Finale\n\nTrack live rankings: https://tnhng.com/leaderboard\n\nNO RULES. GREAT SCOTCH.\nStrictly 18+ Drink Responsibly";
+        $mail->AltBody = $altBody;
+        attachBrandLogo($mail);
 
+        $mail->send();
+        return true;
+    } catch (Exception $smtpEx) {
+        error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
         try {
-            $mail->send();
+            $fallback = new PHPMailer(true);
+            $fallback->isMail();
+            $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
+            $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
+            $fallback->addAddress($participant['email'], $participant['full_name']);
+            $fallback->Subject = $subject;
+            $fallback->isHTML(true);
+            $fallback->Body    = $htmlBody;
+            $fallback->AltBody = $altBody;
+            $fallback->CharSet = 'UTF-8';
+            attachBrandLogo($fallback);
+
+            $fallback->send();
             return true;
-        } catch (Exception $smtpEx) {
-            error_log("PHPMailer SMTP failed ({$mail->ErrorInfo}), attempting native mail() fallback...");
-            try {
-                $fallback = new PHPMailer(true);
-                $fallback->isMail();
-                $fallback->setFrom('noreply@bayeapp.com', "William Lawson's Nigeria");
-                $fallback->addReplyTo('noreply@bayeapp.com', "William Lawson's Nigeria");
-                $fallback->addAddress($participant['email'], $fullName);
-                $fallback->Subject = $mail->Subject;
-                $fallback->isHTML(true);
-                $fallback->Body    = $htmlBody;
-                $fallback->AltBody = $mail->AltBody;
-                $fallback->CharSet = 'UTF-8';
-                $fallback->send();
-                return true;
-            } catch (Exception $e2) {
-                error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
-                return false;
-            }
+        } catch (Exception $e2) {
+            error_log("Both SMTP and native mail() failed for {$participant['email']}: " . $e2->getMessage());
+            return false;
         }
-    } catch (Exception $e) {
-        error_log("PHPMailer error (Points Email to {$participant['email']}): " . $e->getMessage());
-        return false;
     }
 }
