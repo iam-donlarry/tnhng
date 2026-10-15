@@ -360,6 +360,57 @@ function renderLeaderboard(filterText = '', outletId = '') {
 /* ==========================================================================
    5. CHECK MY CLAN POINTS & MULTI-OUTLET ACTIVITY DRAWER
    ========================================================================== */
+window.quickLookup = function(id) {
+  const queryInput = document.getElementById('lookup-query');
+  const form = document.getElementById('points-lookup-form');
+  if (queryInput && form) {
+    queryInput.value = id;
+    form.dispatchEvent(new Event('submit'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+function updateHeroClanCard(data) {
+  const p = data.participant;
+  const s = data.stats;
+
+  const passId = document.getElementById('hero-pass-id');
+  const passName = document.getElementById('hero-pass-name');
+  const passRankLabel = document.getElementById('hero-pass-rank-label');
+  const passPoints = document.getElementById('hero-pass-points');
+  const passProgress = document.getElementById('hero-pass-progress');
+  const passStatusBadge = document.getElementById('hero-pass-status-badge');
+  const heroCard = document.getElementById('hero-clan-pass');
+  const viewHistoryBtn = document.getElementById('hero-pass-view-history');
+
+  if (passId) passId.textContent = p.clan_id;
+  if (passName) passName.textContent = p.full_name;
+  if (passRankLabel) passRankLabel.textContent = `NATIONAL RANK #${s.rank}`;
+  if (passPoints) passPoints.textContent = `${s.total_points} / 100 PTS`;
+  if (passProgress) passProgress.style.width = `${s.progress_percent}%`;
+  
+  if (passStatusBadge) {
+    if (s.is_qualified) {
+      passStatusBadge.textContent = 'GRAND FINALE QUALIFIED';
+      passStatusBadge.className = 'ticket-badge-qualified';
+    } else {
+      passStatusBadge.textContent = `${s.points_needed} PTS TO GRAND FINALE`;
+      passStatusBadge.className = 'ticket-badge-pending';
+    }
+  }
+
+  if (viewHistoryBtn) {
+    viewHistoryBtn.style.display = 'inline-block';
+    viewHistoryBtn.onclick = () => openParticipantDetailsModal(data);
+  }
+
+  if (heroCard) {
+    heroCard.classList.remove('hero-card-pulse');
+    void heroCard.offsetWidth; // Trigger reflow
+    heroCard.classList.add('hero-card-pulse');
+  }
+}
+
 function initPointsLookup() {
   const form = document.getElementById('points-lookup-form');
   if (!form) return;
@@ -371,14 +422,18 @@ function initPointsLookup() {
 
     const query = queryInput.value.trim();
     const btn = form.querySelector('button');
-    btn.disabled = true;
-    btn.innerHTML = 'Searching Clan Archives...';
+    const originalBtnHtml = btn ? btn.innerHTML : 'Check Standings';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = 'Checking Standings...';
+    }
 
     try {
       const res = await fetch(`api/lookup_participant.php?query=${encodeURIComponent(query)}`);
       const data = await res.json();
 
       if (data.success) {
+        updateHeroClanCard(data);
         openParticipantDetailsModal(data);
       } else {
         highlandahAlert({
@@ -395,8 +450,11 @@ function initPointsLookup() {
         type: 'error'
       });
     } finally {
-      btn.disabled = false;
-      btn.innerHTML = 'Check Points';
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHtml;
+        if (window.lucide) lucide.createIcons();
+      }
     }
   });
 }

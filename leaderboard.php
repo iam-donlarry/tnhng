@@ -277,26 +277,6 @@ function getInitials($fullName) {
             Live multi-outlet score audit across Nigeria. Every bottle challenge conquered at partner bars adds to your verified tally. Reach 100 points to secure your entry into the Grand Finale VIP Creator Table pool.
           </p>
         </div>
-
-        <!-- Real-Time Metrics Strip -->
-        <div class="page-stats-bar">
-          <div class="page-stat-card">
-            <span class="page-stat-val" id="stat-total-participants"><?= number_format($stats['total_participants']) ?></span>
-            <span class="page-stat-label">Registered Warriors</span>
-          </div>
-          <div class="page-stat-card">
-            <span class="page-stat-val" id="stat-total-points"><?= number_format($stats['total_points_distributed']) ?></span>
-            <span class="page-stat-label">Points Conquered</span>
-          </div>
-          <div class="page-stat-card">
-            <span class="page-stat-val" id="stat-total-qualified"><?= number_format($stats['total_qualified_finalists']) ?></span>
-            <span class="page-stat-label">Grand Finale Finalists</span>
-          </div>
-          <div class="page-stat-card">
-            <span class="page-stat-val"><?= number_format($stats['highest_score']) ?> <span style="font-size: 1rem; color: var(--text-dim);">PTS</span></span>
-            <span class="page-stat-label">National High Score</span>
-          </div>
-        </div>
       </div>
     </section>
 

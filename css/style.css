@@ -4344,6 +4344,370 @@ select#alloc-challenge {
   .participant-name {
     font-size: 1.2rem;
   }
+}/* ==========================================================================
+   STREAMLINED LANDING PAGE (HERO CLAN LOOKUP & FOCUSED SECTIONS)
+   ========================================================================== */
+.hero-lookup-box {
+  background: var(--bg-surface-elevated, #161c22);
+  border: 1px solid var(--border-prominent, #263238);
+  border-left: 4px solid var(--wl-green, #00c853);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 620px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
+.hero-lookup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
 
+.hero-lookup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--wl-green, #00c853);
+}
+
+.hero-lookup-hint {
+  font-size: 0.75rem;
+  color: var(--text-dim, #78909c);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.hero-lookup-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.hero-lookup-input-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.hero-lookup-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--wl-green, #00c853);
+  pointer-events: none;
+}
+
+.hero-lookup-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: var(--bg-base, #0a0d10);
+  border: 1px solid var(--border-medium, #263238);
+  border-radius: 6px;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.hero-lookup-input:focus {
+  outline: none;
+  border-color: var(--wl-green, #00c853);
+  box-shadow: 0 0 16px rgba(0, 200, 83, 0.35);
+  background: #0f1418;
+}
+
+.hero-lookup-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-lookup-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted, #90a4ae);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hero-meta-link {
+  color: var(--wl-green, #00c853);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.2s;
+}
+
+.hero-meta-link:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.hero-quick-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.quick-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary, #b0bec5);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-chip:hover {
+  background: var(--wl-green, #00c853);
+  color: #000;
+  border-color: var(--wl-green, #00c853);
+}
+
+.hero-card-pulse {
+  animation: cardFlash 0.9s ease-in-out;
+}
+
+@keyframes cardFlash {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 200, 83, 0); }
+  50% { transform: scale(1.03); box-shadow: 0 0 40px rgba(0, 200, 83, 0.7); border-color: var(--wl-green); }
+  100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 200, 83, 0.2); }
+}
+
+.hero-pass-action-btn {
+  background: transparent;
+  border: 1px solid var(--wl-green, #00c853);
+  color: var(--wl-green, #00c853);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.hero-pass-action-btn:hover {
+  background: var(--wl-green, #00c853);
+  color: #000;
+}
+
+/* 3-Step Playbook Grid */
+.playbook-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.playbook-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  padding: 2.25rem 1.75rem;
+  position: relative;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.playbook-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--wl-green);
+  box-shadow: 0 10px 24px rgba(0, 200, 83, 0.15);
+}
+
+.playbook-card.highlight-step {
+  border-color: var(--wl-green);
+  background: var(--bg-surface-elevated);
+  box-shadow: 0 0 20px var(--wl-green-glow);
+}
+
+.playbook-num {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.08);
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  pointer-events: none;
+}
+
+.playbook-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid rgba(0, 200, 83, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wl-green);
+  margin-bottom: 1.25rem;
+}
+
+.playbook-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.playbook-card p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Tour Teaser Banner */
+.tour-banner-card {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-prominent);
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.tour-banner-content {
+  padding: 3.5rem 3rem;
+}
+
+.tour-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 200, 83, 0.12);
+  border: 1px solid var(--wl-green);
+  color: var(--wl-green);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.tour-heading {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 0.98;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.tour-subheading {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 520px;
+}
+
+.tour-cities-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2.25rem;
+}
+
+.tour-city-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.95rem;
+  border-radius: 50px;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tour-banner-img-wrap {
+  height: 100%;
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tour-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .playbook-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .tour-banner-card {
+    grid-template-columns: 1fr;
+  }
+  .tour-banner-content {
+    padding: 2.25rem 1.75rem;
+  }
+  .tour-banner-img-wrap {
+    min-height: 240px;
+  }
+  .tour-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .tour-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-lookup-bar {
+    flex-direction: column;
+  }
+  .hero-lookup-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-lookup-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .hero-lookup-box {
+    padding: 1rem;
+  }
+}

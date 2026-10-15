@@ -3,12 +3,51 @@
 require_once __DIR__ . '/config/db.php';
 $pdo = getDBConnection();
 
-// Fetch outlets & challenges for display
-$outlets = [];
-$challenges = [];
+$stats = [
+    'total_participants' => 0,
+    'total_points_distributed' => 0,
+    'total_qualified_finalists' => 0,
+];
+$topThree = [];
+
 if ($pdo) {
-    $outlets = $pdo->query("SELECT * FROM outlets WHERE status = 'active' ORDER BY id ASC")->fetchAll();
-    $challenges = $pdo->query("SELECT * FROM challenges WHERE is_active = 1 ORDER BY points DESC")->fetchAll();
+    $statsRow = $pdo->query("SELECT 
+        COUNT(*) AS total_participants,
+        COALESCE(SUM(total_points), 0) AS total_points,
+        COALESCE(SUM(CASE WHEN total_points >= 100 THEN 1 ELSE 0 END), 0) AS total_qualified
+    FROM participants")->fetch();
+    
+    if ($statsRow) {
+        $stats['total_participants'] = intval($statsRow['total_participants']);
+        $stats['total_points_distributed'] = intval($statsRow['total_points']);
+        $stats['total_qualified_finalists'] = intval($statsRow['total_qualified']);
+    }
+
+    $topThree = $pdo->query("SELECT p.id, p.clan_id, p.full_name, p.total_points, o.name AS outlet_name, o.city AS outlet_city
+        FROM participants p
+        LEFT JOIN outlets o ON p.outlet_id = o.id
+        ORDER BY p.total_points DESC, p.created_at ASC
+        LIMIT 3")->fetchAll();
+}
+
+function maskName($fullName) {
+    $parts = explode(' ', trim($fullName));
+    $first = $parts[0] ?? 'Highlandah';
+    if (count($parts) > 1) {
+        $last = end($parts);
+        return $first . ' ' . substr($last, 0, 1) . '***';
+    }
+    return $first;
+}
+
+function getInitials($fullName) {
+    $clean = preg_replace('/["\'\(\)]+/', '', $fullName);
+    $parts = preg_split('/\s+/', trim($clean));
+    $initials = '';
+    foreach ($parts as $p) {
+        if (!empty($p)) $initials .= strtoupper($p[0]);
+    }
+    return substr($initials, 0, 2) ?: 'WL';
 }
 ?>
 <!DOCTYPE html>
@@ -20,8 +59,8 @@ if ($pdo) {
   <!-- Primary SEO Meta Tags -->
   <title>The Next Highlandah Season 3 | William Lawson's Official Campaign</title>
   <meta name="title" content="The Next Highlandah Season 3 | William Lawson's Official Campaign">
-  <meta name="description" content="TNH Season 3 is live in Nigeria. Register your official Clan Pass, conquer wheel spin challenges at participating bars, and bank 100 points to enter the Grand Finale VIP draw.">
-  <meta name="keywords" content="The Next Highlandah, William Lawson's Nigeria, TNH Season 3, Scotch Whisky, Highlandah Clan Pass, wheel spin challenge, earn points, Lagos nightlife, Abuja bars, Port Harcourt lounges, Earn It">
+  <meta name="description" content="TNH Season 3 is live in Nigeria. Check your official Clan standing, conquer wheel spin challenges at participating bars, and bank 100 points to enter the Grand Finale VIP draw.">
+  <meta name="keywords" content="The Next Highlandah, William Lawson's Nigeria, TNH Season 3, Scotch Whisky, Highlandah Clan Pass, check points, clan standings, wheel spin challenge, earn points, Lagos nightlife, Abuja bars, Port Harcourt lounges, Earn It">
   <meta name="author" content="William Lawson's Blended Scotch Whisky">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://tnhng.com/">
@@ -31,7 +70,7 @@ if ($pdo) {
   <meta property="og:url" content="https://tnhng.com/">
   <meta property="og:site_name" content="The Next Highlandah | William Lawson's">
   <meta property="og:title" content="The Next Highlandah Season 3 | Don't Ask For It. Earn It!">
-  <meta property="og:description" content="Register your Clan ID once. Conquer wheel spin challenges at participating bars nationwide and bank points toward the 100-point Grand Finale threshold.">
+  <meta property="og:description" content="Enter your Clan ID to check your live points, verified national ranking, and road to the Grand Finale 100-point VIP draw.">
   <meta property="og:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
   <meta property="og:image:secure_url" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
   <meta property="og:image:type" content="image/jpeg">
@@ -44,7 +83,7 @@ if ($pdo) {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://tnhng.com/">
   <meta name="twitter:title" content="The Next Highlandah Season 3 | William Lawson's">
-  <meta name="twitter:description" content="Don't ask for it. Earn it! Register your Clan Pass, hit partner outlets across Nigeria, and bank 100 points for the Grand Finale draw.">
+  <meta name="twitter:description" content="Don't ask for it. Earn it! Check your Clan standings, hit partner outlets across Nigeria, and bank 100 points for the Grand Finale draw.">
   <meta name="twitter:image" content="https://tnhng.com/images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg">
 
   <!-- Favicon & Mobile Meta -->
@@ -212,7 +251,7 @@ if ($pdo) {
       </nav>
 
       <div class="nav-actions">
-        <a href="#check-points-anchor" class="btn btn-primary btn-sm">
+        <a href="#hero-anchor" class="btn btn-primary btn-sm" onclick="document.getElementById('lookup-query').focus()">
           <i data-lucide="award"></i> Check Points
         </a>
       </div>
@@ -229,16 +268,10 @@ if ($pdo) {
         <li><a href="./" class="nav-link mobile-link active">Home</a></li>
         <li><a href="leaderboard" class="nav-link mobile-link">Full Leaderboard</a></li>
         <li><a href="outlets" class="nav-link mobile-link">Outlet Tour & Dates</a></li>
-        <li style="border-top: 1px solid var(--border-subtle); margin: 0.5rem 0; padding-top: 0.5rem;">
-          <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 0 0.5rem;">On This Page</span>
-        </li>
-        <li><a href="#playbook" class="nav-link mobile-link">How It Works</a></li>
-        <li><a href="#brand-range" class="nav-link mobile-link">The Highlandah Range</a></li>
-        <li><a href="#scorecard" class="nav-link mobile-link">Challenges & Scorecard</a></li>
-        <li><a href="#vip-table" class="nav-link mobile-link">VIP Finale Table</a></li>
+        <li><a href="#how-it-works" class="nav-link mobile-link">How It Works</a></li>
       </ul>
       <div class="mobile-nav-actions">
-        <a href="#check-points-anchor" class="btn btn-primary mobile-link" style="width: 100%;">
+        <a href="#hero-anchor" class="btn btn-primary mobile-link" style="width: 100%;" onclick="document.getElementById('lookup-query').focus()">
           <i data-lucide="award"></i> Check My Clan Points
         </a>
         <div class="mobile-portal-grid">
@@ -254,13 +287,13 @@ if ($pdo) {
   </header>
 
   <main>
-    <!-- ================= HERO SECTION (COMMERCIAL EDITORIAL) ================= -->
-    <section class="hero-section">
+    <!-- ================= HERO SECTION (PRIMARY CLAN UTILITY & LOOKUP) ================= -->
+    <section class="hero-section" id="hero-anchor">
       <div class="container hero-container">
         <div class="hero-content">
           <div class="campaign-pill">
             <span class="status-indicator"></span>
-            <span>WILLIAM LAWSON'S PROMOTIONAL CAMPAIGN</span>
+            <span>WILLIAM LAWSON'S OFFICIAL PROMOTION</span>
           </div>
 
           <h1 class="hero-title">
@@ -269,91 +302,100 @@ if ($pdo) {
           </h1>
 
           <p class="hero-lead">
-            Register your unique Clan ID once. Walk into any participating bar or lounge across Nigeria, let our Brand Ambassador spin the wheel, conquer physical challenges, and bank locked points.
+            Enter your Clan ID to check your live points, verified national ranking, and road to the Grand Finale 100-point VIP draw.
           </p>
 
-          <div class="hero-target-banner">
-            <div class="target-flag">100 PTS</div>
-            <div class="target-text">
-              <strong>Grand Finale Threshold</strong>
-              <span>Hit 100 points across any outlets to enter the draw for the celebrity VIP table.</span>
+          <!-- High-Impact Hero Clan Lookup Box -->
+          <div class="hero-lookup-box">
+            <div class="hero-lookup-header">
+              <span class="hero-lookup-badge"><i data-lucide="shield"></i> CHECK YOUR CLAN STANDINGS</span>
+              <span class="hero-lookup-hint">Live National Sync</span>
             </div>
-          </div>
-
-          <div class="hero-cta-group">
-            <a href="leaderboard" class="btn btn-primary btn-lg">
-              <i data-lucide="trophy"></i> Live Clan Standings
-            </a>
-            <a href="outlets" class="btn btn-outline btn-lg">
-              <i data-lucide="map-pin"></i> Find Outlets to Play
-            </a>
-          </div>
-
-          <!-- Official Campaign KPIs -->
-          <div class="hero-kpi-strip">
-            <div class="kpi-item">
-              <span class="kpi-number" id="stat-total-participants">2,410</span>
-              <span class="kpi-label">Registered Highlandahs</span>
-            </div>
-            <div class="kpi-sep"></div>
-            <div class="kpi-item">
-              <span class="kpi-number" id="stat-total-points">18,920</span>
-              <span class="kpi-label">Points Awarded</span>
-            </div>
-            <div class="kpi-sep"></div>
-            <div class="kpi-item">
-              <span class="kpi-number" id="stat-total-qualified">48</span>
-              <span class="kpi-label">Finalists Qualified</span>
-            </div>
+            <form id="points-lookup-form" class="hero-lookup-form">
+              <div class="hero-lookup-bar">
+                <div class="hero-lookup-input-wrap">
+                  <i data-lucide="search" class="hero-lookup-icon"></i>
+                  <input 
+                    type="text" 
+                    id="lookup-query" 
+                    class="form-control hero-lookup-input" 
+                    placeholder="Enter Clan ID (e.g. TNH-7701 or 7701), Phone or Email..." 
+                    autocomplete="off"
+                    required
+                  >
+                </div>
+                <button type="submit" class="btn btn-primary hero-lookup-btn" id="hero-lookup-btn">
+                  <i data-lucide="award"></i> Check Standings
+                </button>
+              </div>
+              <div class="hero-lookup-meta">
+                <div class="hero-quick-chips">
+                  <span>Quick:</span>
+                  <?php if (!empty($topThree[0])): ?>
+                    <button type="button" class="quick-chip" onclick="quickLookup('<?= htmlspecialchars($topThree[0]['clan_id']) ?>')"><?= htmlspecialchars($topThree[0]['clan_id']) ?></button>
+                  <?php else: ?>
+                    <button type="button" class="quick-chip" onclick="quickLookup('TNH-7701')">TNH-7701</button>
+                  <?php endif; ?>
+                  <?php if (!empty($topThree[1])): ?>
+                    <button type="button" class="quick-chip" onclick="quickLookup('<?= htmlspecialchars($topThree[1]['clan_id']) ?>')"><?= htmlspecialchars($topThree[1]['clan_id']) ?></button>
+                  <?php endif; ?>
+                </div>
+                <a href="leaderboard" class="hero-meta-link">
+                  <i data-lucide="trophy" style="width: 13px; height: 13px;"></i> Full Top 50 Leaderboard &rarr;
+                </a>
+              </div>
+            </form>
           </div>
         </div>
 
-        <!-- Hero Combo: William Lawson's Bottles & Official Clan Ticket -->
+        <!-- Hero Visual: Bottles + Live Reactive Clan Pass Card -->
         <div class="hero-visual">
           <div class="hero-product-combo">
-            <!-- Brand Bottle Lineup -->
             <div class="hero-bottles-pod">
-              <img src="images/whiskey_bottles.png" alt="William Lawson's Blended Scotch Whisky & Spirit Drink" class="hero-bottles-img">
+              <img src="images/whiskey_bottles.png" alt="William Lawson's Blended Scotch Whisky" class="hero-bottles-img">
               <div class="hero-bottles-tag">
                 <span>NO RULES. GREAT SCOTCH.</span>
               </div>
             </div>
 
-            <!-- Digital Clan Ticket (Redesigned Compact Near-Square Clan Pass) -->
+            <!-- Live Reactive Clan Pass Card -->
             <div class="hero-ticket-frame tilt-card sheen-glow" id="hero-clan-pass">
-              <!-- Warrior Artwork as Card Background -->
               <div class="ticket-bg-art" aria-hidden="true"></div>
 
               <div class="ticket-header-strip">
                 <div class="ticket-logo-mark">
                   <span>WL</span> OFFICIAL CLAN PASS
                 </div>
-                <span class="ticket-status-stamp">UNIVERSAL PASS</span>
+                <span class="ticket-status-stamp" id="hero-pass-stamp">ACTIVE PASS</span>
               </div>
 
               <div class="ticket-details-block">
                 <div class="ticket-id-display">
                   <span class="ticket-label">OFFICIAL CLAN ID</span>
-                  <span class="pass-id">TNH-7701</span>
+                  <span class="pass-id" id="hero-pass-id"><?= !empty($topThree[0]) ? htmlspecialchars($topThree[0]['clan_id']) : 'TNH-7701' ?></span>
                 </div>
                 <div class="ticket-holder-info pass-info">
                   <span class="ticket-label">PARTICIPANT</span>
-                  <h4>Tu**** B*****</h4>
+                  <h4 id="hero-pass-name"><?= !empty($topThree[0]) ? htmlspecialchars(maskName($topThree[0]['full_name'])) : 'Clan Warrior' ?></h4>
                 </div>
               </div>
 
               <!-- Road to Finale Progress Meter -->
               <div class="ticket-meter-box">
                 <div class="meter-labels">
-                  <span>ROAD TO 100 PTS FINALE</span>
-                  <span class="points-val">105 / 100 PTS</span>
+                  <span id="hero-pass-rank-label">NATIONAL RANK #1</span>
+                  <span class="points-val" id="hero-pass-points"><?= !empty($topThree[0]) ? intval($topThree[0]['total_points']) : 105 ?> / 100 PTS</span>
                 </div>
                 <div class="progress-track">
-                  <div class="progress-fill" style="width: 100%;"></div>
+                  <div class="progress-fill" id="hero-pass-progress" style="width: <?= !empty($topThree[0]) ? min(100, intval($topThree[0]['total_points'])) : 100 ?>%;"></div>
                 </div>
                 <div class="ticket-meter-footer">
-                  <span class="ticket-badge-qualified">GRAND FINALE QUALIFIED</span>
-                  <span class="ticket-outlet-note">Active Clan Pass</span>
+                  <span class="ticket-badge-qualified" id="hero-pass-status-badge">
+                    <?= (!empty($topThree[0]) && intval($topThree[0]['total_points']) >= 100) ? 'GRAND FINALE QUALIFIED' : 'ON ROAD TO 100 PTS' ?>
+                  </span>
+                  <button type="button" class="hero-pass-action-btn" id="hero-pass-view-history" style="display: none;">
+                    View History &rarr;
+                  </button>
                 </div>
               </div>
 
@@ -365,517 +407,157 @@ if ($pdo) {
           </div>
         </div>
       </div>
-
-      <!-- Ticker Strip -->
-      <div class="campaign-ticker-bar">
-        <div class="container ticker-container">
-          <div class="ticker-col">
-            <span class="ticker-num">01</span>
-            <div>
-              <strong>Single Clan Pass</strong>
-              <p>Register once, play at any partner outlet nationwide</p>
-            </div>
-          </div>
-          <div class="ticker-divider"></div>
-          <div class="ticker-col">
-            <span class="ticker-num">02</span>
-            <div>
-              <strong>Physical Bottle Spin</strong>
-              <p>Challenges completed in-person with on-site ambassadors</p>
-            </div>
-          </div>
-          <div class="ticker-divider"></div>
-          <div class="ticker-col">
-            <span class="ticker-num">03</span>
-            <div>
-              <strong>Locked Point Allocation</strong>
-              <p>Fixed scorecard scoring, immediate live syncing</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- SECTION SEPARATOR (GREEN BOTTOM DISTRESSED EDGE - TOP OF SCROLLING TEXT) -->
-    <div class="section-separator sep-bottom-green"></div>
-
-    <!-- ================= KINETIC OPPOSING PARALLAX STRIP 1 ================= -->
-    <div class="kinetic-text-strip" aria-hidden="true">
-      <div class="kinetic-track kinetic-track-left">
-        <span class="kinetic-text">NO RULES<span class="kinetic-dot">&bull;</span>GREAT SCOTCH<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT<span class="kinetic-dot">&bull;</span>NO RULES<span class="kinetic-dot">&bull;</span>GREAT SCOTCH<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT</span>
-      </div>
-      <div class="kinetic-track kinetic-track-right">
-        <span class="kinetic-text outline-text">THE NEXT HIGHLANDAH<span class="kinetic-dot">&bull;</span>SEASON 3<span class="kinetic-dot">&bull;</span>100 POINTS TO FINALE<span class="kinetic-dot">&bull;</span>HIGHLANDAHS ONLY<span class="kinetic-dot">&bull;</span>THE NEXT HIGHLANDAH<span class="kinetic-dot">&bull;</span>SEASON 3</span>
-      </div>
-    </div>
-
-    <!-- SECTION SEPARATOR (GREEN TOP DISTRESSED EDGE - BOTTOM OF SCROLLING TEXT) -->
-    <div class="section-separator sep-top-green"></div>
-
-    <!-- ================= THE ACTIVATION PLAYBOOK (STEP BY STEP) ================= -->
-    <section class="section section-playbook" id="playbook">
+    <!-- ================= TOP 3 PODIUM CHAMPIONS SHOWCASE ================= -->
+    <?php if (!empty($topThree)): ?>
+    <section class="section section-standings" style="padding: 4rem 0 3.5rem; background: var(--bg-surface);">
       <div class="container">
-        <div class="section-header">
-          <span class="section-kicker">Campaign Architecture</span>
-          <h2 class="section-heading">HOW THE PROMOTION WORKS</h2>
-          <p class="section-subheading">
-            No games are played online. The microsite is your official pass and broadcast tracker; the real action happens in-person at our partner bars and lounges.
+        <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+          <span class="section-kicker">Live National Contenders</span>
+          <h2 class="section-heading" style="margin-bottom: 0.35rem;">CLAN CHAMPIONS PODIUM</h2>
+          <p class="section-subheading" style="margin: 0 auto; max-width: 600px;">
+            Warriors currently holding the top three positions in Nigeria. Earn 100 points at partner outlets to secure your Grand Finale draw entry.
           </p>
         </div>
 
-        <div class="playbook-flow">
-          <!-- Step 1 -->
-          <div class="playbook-step">
-            <div class="step-num-box">01</div>
-            <div class="step-content">
-              <h3 class="step-title">Register Once Online or On-Site</h3>
-              <p class="step-desc">
-                Fill out the 1PD registration form to generate your official Clan Pass and permanent Clan ID (e.g. <code>TNH-7701</code>). Take a screenshot or save it to your phone.
-              </p>
-              <div class="step-note">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> One-time 18+ registration
-              </div>
+        <div class="podium-grid">
+          <!-- Rank #2 (Silver) -->
+          <?php if (isset($topThree[1])): $p2 = $topThree[1]; ?>
+          <div class="podium-card rank-silver" style="cursor: pointer;" onclick="quickLookup('<?= htmlspecialchars($p2['clan_id']) ?>')">
+            <div class="podium-rank-crown">2</div>
+            <div class="podium-avatar"><?= getInitials($p2['full_name']) ?></div>
+            <span class="podium-clan-id"><?= htmlspecialchars($p2['clan_id']) ?></span>
+            <h3 class="podium-name"><?= htmlspecialchars(maskName($p2['full_name'])) ?></h3>
+            <div class="podium-outlet">Origin: <?= htmlspecialchars($p2['outlet_name'] ?? 'Web Activation') ?></div>
+            <div class="podium-score-box">
+              <span class="podium-score-num"><?= intval($p2['total_points']) ?></span>
+              <span class="podium-score-label">Verified Clan Points</span>
             </div>
+            <?php if (intval($p2['total_points']) >= 100): ?>
+              <span class="qualified-tag">GRAND FINALE QUALIFIED</span>
+            <?php else: ?>
+              <span style="font-size: 0.78rem; color: var(--text-dim);"><?= 100 - intval($p2['total_points']) ?> pts to Grand Finale</span>
+            <?php endif; ?>
           </div>
+          <?php endif; ?>
 
-          <!-- Step 2 -->
-          <div class="playbook-step">
-            <div class="step-num-box">02</div>
-            <div class="step-content">
-              <h3 class="step-title">Visit Any Scheduled Outlet</h3>
-              <p class="step-desc">
-                Check our activation calendar and head to any participating outlet in Lagos, Abuja, or Port Harcourt. Walk up to the William Lawson's Brand Ambassador and present your Clan ID.
-              </p>
-              <div class="step-note">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Nationwide multi-outlet validity
-              </div>
+          <!-- Rank #1 (Gold Leader) -->
+          <?php if (isset($topThree[0])): $p1 = $topThree[0]; ?>
+          <div class="podium-card rank-gold" style="cursor: pointer;" onclick="quickLookup('<?= htmlspecialchars($p1['clan_id']) ?>')">
+            <div class="podium-rank-crown">1</div>
+            <div class="podium-avatar"><?= getInitials($p1['full_name']) ?></div>
+            <span class="podium-clan-id"><?= htmlspecialchars($p1['clan_id']) ?></span>
+            <h3 class="podium-name"><?= htmlspecialchars(maskName($p1['full_name'])) ?></h3>
+            <div class="podium-outlet">Origin: <?= htmlspecialchars($p1['outlet_name'] ?? 'Web Activation') ?></div>
+            <div class="podium-score-box">
+              <span class="podium-score-num"><?= intval($p1['total_points']) ?></span>
+              <span class="podium-score-label">Verified Clan Points</span>
             </div>
+            <?php if (intval($p1['total_points']) >= 100): ?>
+              <span class="qualified-tag">GRAND FINALE QUALIFIED</span>
+            <?php else: ?>
+              <span style="font-size: 0.78rem; color: var(--text-dim);"><?= 100 - intval($p1['total_points']) ?> pts to Grand Finale</span>
+            <?php endif; ?>
           </div>
+          <?php endif; ?>
 
-          <!-- Step 3 -->
-          <div class="playbook-step">
-            <div class="step-num-box">03</div>
-            <div class="step-content">
-              <h3 class="step-title">The Physical Wheel Spin</h3>
-              <p class="step-desc">
-                Our ambassador spins the official William Lawson's wheel at the activation bar. The wheel selects your challenge category: <strong>Bold</strong>, <strong>Unconventional</strong>, or <strong>Good-Humored</strong>.
-              </p>
-              <div class="step-note">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Physical, live challenge
-              </div>
+          <!-- Rank #3 (Bronze) -->
+          <?php if (isset($topThree[2])): $p3 = $topThree[2]; ?>
+          <div class="podium-card rank-bronze" style="cursor: pointer;" onclick="quickLookup('<?= htmlspecialchars($p3['clan_id']) ?>')">
+            <div class="podium-rank-crown">3</div>
+            <div class="podium-avatar"><?= getInitials($p3['full_name']) ?></div>
+            <span class="podium-clan-id"><?= htmlspecialchars($p3['clan_id']) ?></span>
+            <h3 class="podium-name"><?= htmlspecialchars(maskName($p3['full_name'])) ?></h3>
+            <div class="podium-outlet">Origin: <?= htmlspecialchars($p3['outlet_name'] ?? 'Web Activation') ?></div>
+            <div class="podium-score-box">
+              <span class="podium-score-num"><?= intval($p3['total_points']) ?></span>
+              <span class="podium-score-label">Verified Clan Points</span>
             </div>
+            <?php if (intval($p3['total_points']) >= 100): ?>
+              <span class="qualified-tag">GRAND FINALE QUALIFIED</span>
+            <?php else: ?>
+              <span style="font-size: 0.78rem; color: var(--text-dim);"><?= 100 - intval($p3['total_points']) ?> pts to Grand Finale</span>
+            <?php endif; ?>
           </div>
-
-          <!-- Step 4 -->
-          <div class="playbook-step">
-            <div class="step-num-box">04</div>
-            <div class="step-content">
-              <h3 class="step-title">Locked Point Allocation</h3>
-              <p class="step-desc">
-                Upon completing your challenge, the ambassador selects the challenge on their console. Points are <strong>strictly fixed and non-editable</strong> from the official scorecard, instantly crediting your profile.
-              </p>
-              <div class="step-note">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Transparent, immutable audit trail
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 5 -->
-          <div class="playbook-step step-highlight">
-            <div class="step-num-box">05</div>
-            <div class="step-content">
-              <h3 class="step-title">Reach 100 Points & Qualify</h3>
-              <p class="step-desc">
-                Accumulate 100 points across any combination of partner outlets to secure your Grand Finale qualification badge and enter the draw for the VIP celebrity creator table.
-              </p>
-              <div class="step-note step-note-accent">
-                <i data-lucide="crown" style="width: 14px; height: 14px;"></i> Grand Finale draw seat secured
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION SEPARATOR (BLACK BOTTOM DISTRESSED EDGE) -->
-    <div class="section-separator sep-bottom-black"></div>
-
-    <!-- ================= BRAND AWARENESS: THE HIGHLANDAH RANGE & SIGNATURE SERVES ================= -->
-    <section class="section section-brand-range" id="brand-range">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-kicker">Brand Awareness & Spirits Portfolio</span>
-          <h2 class="section-heading">NO RULES. GREAT SCOTCH.</h2>
-          <p class="section-subheading">
-            William Lawson's doesn't follow traditional scotch whisky rules. Crafted with big, bold malts and unpeated scotch character, discover our signature bottles and refreshing on-premise serves.
-          </p>
+          <?php endif; ?>
         </div>
 
-        <div class="brand-showcase-grid">
-          <!-- Card 1: Product Lineup -->
-          <div class="brand-showcase-card tilt-card sheen-glow">
-            <div class="brand-card-img-wrap">
-              <img src="images/whiskey_bottles.png" alt="William Lawson's Bottle Lineup" class="brand-card-img">
-            </div>
-            <h3 class="brand-card-title">THE HIGHLANDAH RANGE</h3>
-            <p class="brand-card-desc">
-              From our flagship Blended Scotch Whisky aged in Scotland, to our smooth Vanilla Spiced spirit drink and premixed ready-to-drink Whisky & Cola cans—crafted for bold individuals who dare to stand out.
-            </p>
-            <div class="brand-pills-row">
-              <span class="brand-mini-pill">Blended Scotch Whisky</span>
-              <span class="brand-mini-pill">Vanilla Spiced Drink</span>
-              <span class="brand-mini-pill">Whisky & Cola Can</span>
-            </div>
-          </div>
-
-          <!-- Card 2: Signature Bar Serves -->
-          <div class="brand-showcase-card tilt-card sheen-glow">
-            <div class="brand-card-img-wrap">
-              <img src="images/drinks.png" alt="William Lawson's Signature Chilled Serves" class="brand-card-img">
-            </div>
-            <h3 class="brand-card-title">SERVED BOLD ON-PREMISE</h3>
-            <p class="brand-card-desc">
-              Hit our partner bars and lounges during live activations to experience our signature chilled serves over ice. Taste the bold, sweet character with cola, soda, or spiced ginger.
-            </p>
-            <div class="brand-pills-row">
-              <span class="brand-mini-pill">On The Rocks</span>
-              <span class="brand-mini-pill">Highball & Cola</span>
-              <span class="brand-mini-pill">Spiced & Ginger</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Serves Ritual Callout -->
-        <div class="serves-banner">
-          <div class="serves-content">
-            <span class="section-kicker" style="margin-bottom: 0.25rem;">Activation Bar Experience</span>
-            <h3>SPIN. PLAY. ENJOY GREAT SCOTCH.</h3>
-            <p>
-              Every challenge you conquer at our activation tour is paired with great whisky. Head to the bar, order your favorite William Lawson's serve, and let our ambassador spin the wheel for your next points challenge!
-            </p>
-            <div class="serves-badges">
-              <div class="serves-badge-item">
-                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
-                <span>Bold, sweet, unpeated profile</span>
-              </div>
-              <div class="serves-badge-item">
-                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
-                <span>Served ice-cold at partner outlets</span>
-              </div>
-              <div class="serves-badge-item">
-                <i data-lucide="check-circle" style="color: var(--wl-green); width: 16px; height: 16px;"></i>
-                <span>Strictly 18+ Drink Responsibly</span>
-              </div>
-            </div>
-          </div>
-          <div class="serves-img-wrap">
-            <img src="images/drinks.png" alt="Chilled William Lawson's Serves" class="serves-img">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= CHALLENGES & OFFICIAL SCORECARD ================= 
-    <section class="section section-scorecard" id="scorecard">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-kicker">Official Rules & Scorecard</span>
-          <h2 class="section-heading">CHALLENGES & POINT VALUES</h2>
-          <p class="section-subheading">
-            Every challenge carries a predetermined, locked point allocation. Review the challenges you could be assigned during a wheel spin.
-          </p>
-        </div>
-
-        <div class="scorecard-table-wrap">
-          <div class="scorecard-header-row">
-            <div>Challenge Name & Description</div>
-            <div style="text-align: center;">Category</div>
-            <div style="text-align: right;">Points Awarded</div>
-          </div>
-
-          <div class="scorecard-list">
-            <?php foreach ($challenges as $ch): 
-              $isBold = ($ch['category'] === 'Bold');
-              $isUncov = ($ch['category'] === 'Unconventional');
-            ?>
-              <div class="scorecard-item">
-                <div class="scorecard-info">
-                  <h3 class="scorecard-title"><?= htmlspecialchars($ch['title']) ?></h3>
-                  <p class="scorecard-desc"><?= htmlspecialchars($ch['description']) ?></p>
-                  <span class="scorecard-outlet-tag"><i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> Available at All Activation Outlets</span>
-                </div>
-                <div class="scorecard-category-col">
-                  <span class="category-badge <?= $isBold ? 'cat-bold' : ($isUncov ? 'cat-unconventional' : 'cat-good-humored') ?>">
-                    <?= htmlspecialchars($ch['category']) ?>
-                  </span>
-                </div>
-                <div class="scorecard-points-col">
-                  <span class="scorecard-points-value">+<?= htmlspecialchars($ch['points']) ?></span>
-                  <span class="scorecard-points-unit">LOCKED PTS</span>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- SECTION SEPARATOR (DISTRESSED EDGE) -->
-    <div class="section-separator sep-bottom-black"></div>
-
-    <!-- ================= 1PD REGISTRATION: JOIN THE CLAN (TEMPORARILY COMMENTED OUT) =================
-    <section class="section section-registration" id="join-clan">
-      <div class="container registration-container">
-        <div class="registration-card">
-          <div class="registration-header">
-            <span class="section-kicker">1PD Participant Registration</span>
-            <h2 class="registration-title">FORGE YOUR CLAN PASS</h2>
-            <p class="registration-subtitle">
-              Register once to receive your permanent Clan ID. Present your ID at any activation outlet across Nigeria to accumulate points toward the Grand Finale.
-            </p>
-          </div>
-
-          <form id="clan-register-form" class="registration-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Full Legal Name *</label>
-                <input type="text" name="full_name" class="form-control" placeholder="e.g. Tunde Bakare" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Phone Number (WhatsApp) *</label>
-                <input type="tel" name="phone" class="form-control" placeholder="e.g. 08012345678" required>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Email Address *</label>
-                <input type="email" name="email" class="form-control" placeholder="e.g. tunde@example.com" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Date of Birth (Must be 18+) *</label>
-                <input type="date" name="dob" class="form-control" required>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Primary Activation Outlet *</label>
-                <select name="outlet_id" class="form-control" required>
-                  <option value="">-- Select Nearest Outlet --</option>
-                  <?php foreach ($outlets as $o): ?>
-                    <option value="<?= $o['id'] ?>"><?= htmlspecialchars($o['name']) ?> (<?= htmlspecialchars($o['city']) ?>)</option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Instagram or TikTok Handle (Optional)</label>
-                <input type="text" name="instagram" class="form-control" placeholder="e.g. @tundetitan">
-              </div>
-            </div>
-
-            <div class="terms-group">
-              <input type="checkbox" id="terms" required>
-              <label for="terms" class="terms-label">
-                I confirm that I am at least 18 years of age. I agree to the campaign terms and consent to receiving points updates and promotional notices from William Lawson's (TNH Season 3).
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
-              <i data-lucide="sparkles"></i> Forge My Clan Pass
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-    ================= END 1PD REGISTRATION ================= -->
-
-    <!-- ================= STANDINGS & CHECK POINTS COMMAND CENTER ================= -->
-    <section class="section section-standings" id="leaderboard-hub">
-      <div class="container">
-        <!-- Integrated Points Checker Banner -->
-        <div class="lookup-banner" id="check-points-anchor">
-          <div class="lookup-banner-content">
-            <span class="lookup-pill"><i data-lucide="search" style="width: 13px; height: 13px;"></i> PARTICIPANT ARCHIVE</span>
-            <h3 class="lookup-heading">CHECK YOUR CLAN STANDINGS & ACTIVITY</h3>
-            <p class="lookup-desc">
-              Enter your Clan ID (e.g. <code>TNH-7701</code>) or registered Email Address to inspect your verified scores, road-to-100 meter, and outlet history.
-            </p>
-          </div>
-
-          <form id="points-lookup-form" class="lookup-form">
-            <div class="lookup-input-wrap">
-              <input type="text" id="lookup-query" class="form-control lookup-input" placeholder="Enter Clan ID (TNH-XXXX) or Email Address..." required>
-            </div>
-            <button type="submit" class="btn btn-primary lookup-btn">
-              <i data-lucide="search"></i> Check Points
-            </button>
-          </form>
-        </div>
-
-        <!-- Live Leaderboard -->
-        <div class="leaderboard-wrapper">
-          <div class="leaderboard-header">
-            <div>
-              <span class="section-kicker">Live National Rankings</span>
-              <h2 class="section-heading" style="margin-bottom: 0.25rem;">NATIONAL CLAN LEADERBOARD</h2>
-              <p class="section-subheading" style="margin: 0;">Live audit of all participants across every outlet. 100+ points earns Grand Finale qualification.</p>
-            </div>
-
-            <div class="leaderboard-filters">
-              <div class="search-filter-wrap">
-                <i data-lucide="search" class="search-icon"></i>
-                <input type="text" id="leaderboard-search" class="form-control filter-input" placeholder="Filter by ID, Name, or Email...">
-              </div>
-
-              <div class="outlet-filter-wrap">
-                <select id="leaderboard-outlet-filter" class="form-control filter-select">
-                  <option value="">All Outlets Nationwide</option>
-                  <?php foreach ($outlets as $o): ?>
-                    <option value="<?= $o['id'] ?>"><?= htmlspecialchars($o['name']) ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="leaderboard-table-container">
-            <table class="leaderboard-table">
-              <thead>
-                <tr>
-                  <th style="width: 80px;">Rank</th>
-                  <th>Clan ID</th>
-                  <th>Participant</th>
-                  <th>Total Points</th>
-                  <th>Outlets Visited</th>
-                  <th>Qualification Status</th>
-                </tr>
-              </thead>
-              <tbody id="leaderboard-tbody">
-                <tr>
-                  <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">
-                    Loading verified Clan standings...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="view-all-cta-box">
-            <a href="leaderboard.php" class="btn btn-primary btn-lg">
-              <i data-lucide="trophy"></i> View Full National Standings & Clan Podium &rarr;
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= OUTLET TOUR DATES & LIFESTYLE CAN TOWER ================= -->
-    <section class="section section-outlets" id="outlets-tour">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-kicker">Activation Calendar</span>
-          <h2 class="section-heading">ACTIVATION OUTLETS & TOUR DATES</h2>
-          <p class="section-subheading">
-            Visit our scheduled activation venues to meet our Brand Ambassadors, spin the wheel, and rack up points toward the 100-point threshold.
-          </p>
-        </div>
-
-        <!-- Lifestyle KV Card: Can Tower & Highlandah Energy -->
-        <div class="outlets-lifestyle-card parallax-viewport">
-          <img src="images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg" alt="William Lawson's - Top Up Anyone? No Rules. Great Scotch." class="outlets-lifestyle-img parallax-img">
-          <div class="outlets-lifestyle-overlay">
-            <div class="lifestyle-copy">
-              <h3>TOP UP ANYONE? NO RULES. GREAT SCOTCH.</h3>
-              <p>Experience live Highlandah energy at partner bars and lounges across Lagos, Abuja, and Port Harcourt.</p>
-            </div>
-            <a href="#outlets-tour" class="btn btn-primary">
-              <i data-lucide="map-pin"></i> Find Your Activation Night
-            </a>
-          </div>
-        </div>
-
-        <div class="outlets-grid">
-          <?php foreach ($outlets as $out): ?>
-            <div class="outlet-card">
-              <div class="outlet-top">
-                <span class="outlet-date-badge">
-                  <i data-lucide="calendar" style="width: 13px; height: 13px;"></i> <?= htmlspecialchars($out['event_date']) ?>
-                </span>
-                <span class="outlet-status-pill">Active Tour Outlet</span>
-              </div>
-              <h3 class="outlet-name"><?= htmlspecialchars($out['name']) ?></h3>
-              <p class="outlet-location">
-                <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
-                <?= htmlspecialchars($out['address']) ?>, <?= htmlspecialchars($out['city']) ?>
-              </p>
-              <div class="outlet-footer">
-                <span class="outlet-action-note">Wheel Spin on Site</span>
-                <a href="#check-points-anchor" class="btn btn-outline btn-sm">Check Points</a>
-              </div>
-            </div>
-          <?php endforeach; ?>
-        </div>
-
-        <div class="view-all-cta-box">
-          <a href="outlets.php" class="btn btn-primary btn-lg">
-            <i data-lucide="map-pin"></i> View Full Tour Calendar & Venue Directory &rarr;
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="leaderboard" class="btn btn-primary btn-lg">
+            <i data-lucide="trophy"></i> View Full National Leaderboard &rarr;
           </a>
         </div>
       </div>
     </section>
+    <?php endif; ?>
 
-    <!-- SECTION SEPARATOR (GREEN BOTTOM DISTRESSED EDGE - TOP OF SCROLLING TEXT) -->
-    <div class="section-separator sep-bottom-green"></div>
-
-    <!-- ================= KINETIC OPPOSING PARALLAX STRIP 2 ================= -->
-    <div class="kinetic-text-strip kinetic-strip-compact" aria-hidden="true">
-      <div class="kinetic-track kinetic-track-left">
-        <span class="kinetic-text outline-text">DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT<span class="kinetic-dot">&bull;</span>GRAND FINALE VIP TABLE<span class="kinetic-dot">&bull;</span>HANG OUT WITH THE CREATOR<span class="kinetic-dot">&bull;</span>DON'T ASK FOR IT<span class="kinetic-dot">&bull;</span>EARN IT</span>
-      </div>
-      <div class="kinetic-track kinetic-track-right">
-        <span class="kinetic-text">WILLIAM LAWSON'S<span class="kinetic-dot">&bull;</span>TOUR DATES<span class="kinetic-dot">&bull;</span>LAGOS<span class="kinetic-dot">&bull;</span>ABUJA<span class="kinetic-dot">&bull;</span>PORT HARCOURT<span class="kinetic-dot">&bull;</span>WILLIAM LAWSON'S</span>
-      </div>
-    </div>
-
-    <!-- SECTION SEPARATOR (GREEN TOP DISTRESSED EDGE - BOTTOM OF SCROLLING TEXT) -->
-    <div class="section-separator sep-top-green"></div>
-
-    <!-- ================= VIP CREATOR TABLE SPOTLIGHT ================= -->
-    <section class="section section-vip" id="vip-table">
+    <!-- ================= HOW THE PROMOTION WORKS (COMPACT 3-STEP PLAYBOOK) ================= -->
+    <section class="section section-playbook" id="how-it-works" style="padding: 4.5rem 0;">
       <div class="container">
-        <div class="vip-card sheen-glow">
-          <div class="vip-content">
-            <span class="vip-badge">GRAND FINALE SPOTLIGHT</span>
-            <h2 class="vip-heading">
-              HANGOUT WITH A HIGHLANDAH:<br>
-              <span class="text-accent">SHARE A TABLE WITH THE CREATOR</span>
-            </h2>
-            <p class="vip-lead">
-              Everyone wants to hangout with a celebrity and flex the Highlandah lifestyle. But you don't ask for it — you earn it. 
-              Top contenders who cross the 100-point threshold will be entered into the final selection to share the exclusive VIP table with our celebrity creator at the Grand Finale.
-            </p>
-            <div class="vip-cta-row">
-              <a href="outlets.php" class="btn btn-primary btn-lg">
-                <i data-lucide="map-pin"></i> Find Activation Outlets
-              </a>
-              <a href="leaderboard.php" class="btn btn-outline btn-lg">
-                <i data-lucide="trophy"></i> View Current Top Contenders
-              </a>
-            </div>
+        <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+          <span class="section-kicker">Simple 3-Step Playbook</span>
+          <h2 class="section-heading" style="margin-bottom: 0.35rem;">HOW THE PROMOTION WORKS</h2>
+          <p class="section-subheading" style="margin: 0 auto; max-width: 600px;">
+            No online games are played. Your Clan Pass tracks your points; the real action happens in-person at partner bars across Nigeria.
+          </p>
+        </div>
+
+        <div class="playbook-cards-grid">
+          <div class="playbook-card">
+            <div class="playbook-num">01</div>
+            <div class="playbook-icon-wrap"><i data-lucide="shield-check"></i></div>
+            <h3>One Universal Pass</h3>
+            <p>Your unique Clan ID works across every partner lounge nationwide. Use it to check your live points and standing anytime.</p>
           </div>
-          <div class="vip-poster-container">
-            <img src="images/image.png" alt="William Lawson's Highlandahs Only" class="vip-poster-img">
+
+          <div class="playbook-card">
+            <div class="playbook-num">02</div>
+            <div class="playbook-icon-wrap"><i data-lucide="sparkles"></i></div>
+            <h3>Spin & Conquer</h3>
+            <p>Visit any scheduled activation bar. Our ambassador spins the wheel to assign your physical challenge: Bold, Unconventional, or Good-Humored.</p>
+          </div>
+
+          <div class="playbook-card highlight-step">
+            <div class="playbook-num">03</div>
+            <div class="playbook-icon-wrap"><i data-lucide="crown"></i></div>
+            <h3>Bank 100 Points</h3>
+            <p>Locked points are credited to your pass immediately. Accumulate 100 points to enter the Grand Finale draw and hangout with the creator at the VIP table.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION SEPARATOR (BLACK TOP DISTRESSED EDGE INTO FOOTER) -->
-    <div class="section-separator sep-top-black"></div>
+    <!-- ================= ACTIVATION TOUR TEASER BANNER ================= -->
+    <section class="section section-tour-teaser" id="tour-banner" style="padding: 1rem 0 5rem;">
+      <div class="container">
+        <div class="tour-banner-card sheen-glow">
+          <div class="tour-banner-content">
+            <span class="tour-badge"><i data-lucide="map-pin"></i> NATIONWIDE ACTIVATION TOUR</span>
+            <h2 class="tour-heading">PLAY LIVE AT PARTNER OUTLETS</h2>
+            <p class="tour-subheading">
+              Experience live Highlandah energy across premier bars and lounges in Lagos, Abuja, and Port Harcourt. Meet ambassadors and rack up locked points on your pass.
+            </p>
+            <div class="tour-cities-row">
+              <span class="tour-city-pill">Lagos Venues</span>
+              <span class="tour-city-pill">Abuja Lounges</span>
+              <span class="tour-city-pill">Port Harcourt Clubs</span>
+            </div>
+            <div class="tour-actions">
+              <a href="outlets" class="btn btn-primary btn-lg">
+                <i data-lucide="calendar"></i> View Tour Dates & Outlets &rarr;
+              </a>
+              <a href="leaderboard" class="btn btn-outline btn-lg">
+                <i data-lucide="trophy"></i> National Standings
+              </a>
+            </div>
+          </div>
+          <div class="tour-banner-img-wrap">
+            <img src="images/WL_Outdoor_Can_Tower_V3_KV_Landscape.jpg" alt="William Lawson's Tour Nights" class="tour-banner-img">
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ================= CORPORATE COMPLIANCE FOOTER ================= -->
@@ -901,7 +583,7 @@ if ($pdo) {
             <li><a href="./">Campaign Homepage</a></li>
             <li><a href="leaderboard">National Leaderboard</a></li>
             <li><a href="outlets">Activation Outlets & Tour</a></li>
-            <li><a href="#scorecard">Challenge Scorecard</a></li>
+            <li><a href="promoter">Ambassador Console</a></li>
           </ul>
         </div>
 
@@ -909,7 +591,7 @@ if ($pdo) {
           <h4 class="footer-col-title">Campaign Infrastructure</h4>
           <ul class="footer-menu">
             <li><span>Official Domain: <strong>TNHNG.COM</strong></span></li>
-            <li><span>First-Party Data (1PD) Collection</span></li>
+            <li><span>Instant Clan ID Lookup & Verification</span></li>
             <li><span>Nationwide Multi-Outlet Points Aggregator</span></li>
             <li><span>Locked Scorecard Architecture</span></li>
           </ul>
