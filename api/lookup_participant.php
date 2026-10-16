@@ -90,6 +90,23 @@ if (!$participant) {
 // Ensure essential participant fields have safe defaults
 $participantId = intval($participant['id'] ?? 0);
 $totalPoints   = intval($participant['total_points'] ?? 0);
+
+// Self-heal: ensure participants.total_points reflects sum from points_log if points_log is higher
+if ($participantId > 0) {
+    try {
+        $sumStmt = $pdo->prepare("SELECT COALESCE(SUM(points), 0) FROM points_log WHERE participant_id = ?");
+        $sumStmt->execute([$participantId]);
+        $loggedSum = intval($sumStmt->fetchColumn() ?: 0);
+        if ($loggedSum > $totalPoints) {
+            $totalPoints = $loggedSum;
+            $participant['total_points'] = $totalPoints;
+            $pdo->prepare("UPDATE participants SET total_points = ? WHERE id = ?")->execute([$totalPoints, $participantId]);
+        }
+    } catch (Throwable $eSum) {
+        // Continue if points_log table is temporarily unreachable
+    }
+}
+
 $isQualified   = ($totalPoints >= 100 || !empty($participant['is_qualified'])) ? 1 : 0;
 $progressPercent = min(100, $totalPoints);
 $pointsNeeded    = max(0, 100 - $totalPoints);
@@ -126,17 +143,49 @@ if ($participantId > 0) {
     }
 }
 
-// 3. Compute Campaign Rank Safely
+// 3. Compute Campaign Rank Safely (Matching Leaderboard Order Exactly: total_points DESC, created_at ASC, id ASC)
 $rank = 1;
-try {
-    $rankStmt = $pdo->prepare("SELECT COUNT(*) + 1 AS rank FROM participants WHERE total_points > ?");
-    $rankStmt->execute([$totalPoints]);
-    $rankVal = $rankStmt->fetchColumn();
-    if ($rankVal !== false && $rankVal !== null) {
-        $rank = intval($rankVal);
+if ($participantId > 0) {
+    $rankFound = false;
+
+    // Method A: Accurate ROW_NUMBER() window function (MySQL 8.0+, MariaDB 10.2+)
+    try {
+        $rankStmt = $pdo->prepare("SELECT rank_val FROM (
+            SELECT id, ROW_NUMBER() OVER (
+                ORDER BY COALESCE(total_points, 0) DESC, 
+                         COALESCE(created_at, '9999-12-31 23:59:59') ASC, 
+                         id ASC
+            ) AS rank_val 
+            FROM participants
+        ) ranked WHERE id = ?");
+        $rankStmt->execute([$participantId]);
+        $rankVal = $rankStmt->fetchColumn();
+        if ($rankVal !== false && $rankVal !== null && intval($rankVal) > 0) {
+            $rank = intval($rankVal);
+            $rankFound = true;
+        }
+    } catch (Throwable $eRankWindow) {
+        $rankFound = false;
     }
-} catch (Throwable $eRank) {
-    $rank = 1;
+
+    // Method B: Tie-breaker count fallback (works on MySQL 5.5, 5.6, 5.7, MariaDB, SQLite)
+    if (!$rankFound) {
+        try {
+            $createdAt = !empty($participant['created_at']) ? $participant['created_at'] : '9999-12-31 23:59:59';
+            $rankStmt2 = $pdo->prepare("SELECT COUNT(*) + 1 AS rank FROM participants 
+                WHERE COALESCE(total_points, 0) > ? 
+                   OR (COALESCE(total_points, 0) = ? AND COALESCE(created_at, '9999-12-31 23:59:59') < ?)
+                   OR (COALESCE(total_points, 0) = ? AND COALESCE(created_at, '9999-12-31 23:59:59') = ? AND id < ?)");
+            $rankStmt2->execute([$totalPoints, $totalPoints, $createdAt, $totalPoints, $createdAt, $participantId]);
+            $rankVal2 = $rankStmt2->fetchColumn();
+            if ($rankVal2 !== false && $rankVal2 !== null && intval($rankVal2) > 0) {
+                $rank = intval($rankVal2);
+            }
+        } catch (Throwable $eRankCount) {
+            error_log("Failed to compute rank count: " . $eRankCount->getMessage());
+            $rank = 1;
+        }
+    }
 }
 
 // 4. Return Output JSON

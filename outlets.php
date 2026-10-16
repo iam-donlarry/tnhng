@@ -358,25 +358,7 @@ if ($pdo) {
           </div>
         </div>
 
-        <!-- Integrated Points Checker Banner -->
-        <div class="lookup-banner" id="check-points-anchor" style="margin-top: 3.5rem;">
-          <div class="lookup-banner-content">
-            <span class="lookup-pill"><i data-lucide="search" style="width: 13px; height: 13px;"></i> PARTICIPANT ARCHIVE</span>
-            <h3 class="lookup-heading">CHECK YOUR MULTI-OUTLET ACTIVITY</h3>
-            <p class="lookup-desc">
-              Want to see which outlets you've conquered? Enter your Clan ID (e.g. <code>TNH-7701</code>) or Email Address to inspect your full visit history.
-            </p>
-          </div>
-
-          <form id="points-lookup-form" class="lookup-form">
-            <div class="lookup-input-wrap">
-              <input type="text" id="lookup-query" class="form-control lookup-input" placeholder="Enter Clan ID (TNH-XXXX) or Email Address..." required>
-            </div>
-            <button type="submit" class="btn btn-primary lookup-btn">
-              <i data-lucide="search"></i> Check Points
-            </button>
-          </form>
-        </div>
+        
 
       </div>
     </section>
@@ -430,56 +412,7 @@ if ($pdo) {
     </div>
   </footer>
 
-  <!-- ================= PARTICIPANT DETAILS & AUDIT MODAL ================= -->
-  <div class="modal-overlay" id="participant-details-modal">
-    <div class="modal-card modal-details-card">
-      <button class="modal-close" aria-label="Close modal">&times;</button>
-      <div class="details-top">
-        <div>
-          <span class="details-id-badge" id="detail-clan-id">TNH-0000</span>
-          <h2 class="details-name" id="detail-name">Participant Name</h2>
-        </div>
-        <div class="details-rank-wrap">
-          <span class="details-rank-label">NATIONAL RANK</span>
-          <span class="details-rank-num" id="detail-rank">#1</span>
-        </div>
-      </div>
-      <div class="details-meter-box">
-        <div class="meter-labels">
-          <span>ROAD TO GRAND FINALE (100 PTS)</span>
-          <span class="points-val" id="detail-points">0 PTS</span>
-        </div>
-        <div class="progress-track" style="height: 12px;">
-          <div class="progress-fill" id="detail-progress" style="width: 0%;"></div>
-        </div>
-        <div id="detail-qual-badge" style="margin-top: 0.75rem;"></div>
-      </div>
-      <h4 class="details-history-title">
-        <i data-lucide="history" style="width: 16px; height: 16px;"></i> POINTS ALLOCATED ACROSS OUTLETS
-      </h4>
-      <div class="details-table-wrap">
-        <table class="details-table">
-          <thead>
-            <tr>
-              <th>Date / Time</th>
-              <th>Challenge</th>
-              <th>Points</th>
-              <th>Outlet Allocated</th>
-              <th>Staff / Ambassador</th>
-            </tr>
-          </thead>
-          <tbody id="detail-history-tbody">
-            <!-- Dynamically populated via JS -->
-          </tbody>
-        </table>
-      </div>
-      <div class="details-footer-action">
-        <button class="btn btn-outline" onclick="document.getElementById('participant-details-modal').classList.remove('active')">
-          Close Archive
-        </button>
-      </div>
-    </div>
-  </div>
+  
 
   <script src="js/highlandah-alert.js?v=<?= filemtime(__DIR__ . '/js/highlandah-alert.js') ?>"></script>
   <script src="js/main.js?v=<?= filemtime(__DIR__ . '/js/main.js') ?>"></script>

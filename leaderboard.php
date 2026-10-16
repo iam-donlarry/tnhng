@@ -33,7 +33,7 @@ if ($pdo) {
     $topThree = $pdo->query("SELECT p.id, p.clan_id, p.full_name, p.total_points, o.name AS outlet_name, o.city AS outlet_city
         FROM participants p
         LEFT JOIN outlets o ON p.outlet_id = o.id
-        ORDER BY p.total_points DESC, p.created_at ASC
+        ORDER BY p.total_points DESC, p.created_at ASC, p.id ASC
         LIMIT 3")->fetchAll();
 }
 
@@ -539,7 +539,7 @@ function getInitials($fullName) {
         </div>
         <div class="details-rank-wrap">
           <span class="details-rank-label">NATIONAL RANK</span>
-          <span class="details-rank-num" id="detail-rank">#1</span>
+          <span class="details-rank-num" id="detail-rank">--</span>
         </div>
       </div>
       <div class="details-meter-box">

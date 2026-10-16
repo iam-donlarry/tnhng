@@ -42,7 +42,7 @@ $query = "SELECT p.id, p.clan_id, p.full_name, p.phone, p.email, p.total_points,
           LEFT JOIN outlets o ON p.outlet_id = o.id
           LEFT JOIN promoters pr ON p.registered_by_promoter_id = pr.id
           WHERE {$whereSql}
-          ORDER BY p.total_points DESC, p.created_at ASC
+          ORDER BY p.total_points DESC, p.created_at ASC, p.id ASC
           LIMIT {$limit}";
 
 $stmt = $pdo->prepare($query);
