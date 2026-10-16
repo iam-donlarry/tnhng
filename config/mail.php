@@ -187,13 +187,13 @@ function sendClanWelcomeEmail($participant) {
   <title>Welcome to The Clan</title>
   {$fontStylesHtml}
 </head>
-<body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+<body style="margin: 0; padding: 0; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background-color: #000000; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto; padding: 10px 0;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 680px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BRAND BANNER HEADER -->
           <tr>
@@ -444,13 +444,13 @@ function sendClanPointsEmail($participant, $allocation) {
   <title>Points Banked Notification</title>
   {$fontStylesHtml}
 </head>
-<body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+<body style="margin: 0; padding: 0; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background-color: #000000; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto; padding: 10px 0;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 680px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BANNER HEADER -->
           <tr>
