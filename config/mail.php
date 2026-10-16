@@ -76,11 +76,17 @@ function attachBrandLogo(&$mailerInstance) {
  */
 function getEmailFontStylesHtml() {
     return '
+    <meta name="color-scheme" content="dark">
+    <meta name="supported-color-schemes" content="dark">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <!--[if !mso]><!-->
     <style>
+      :root {
+        color-scheme: dark;
+        supported-color-schemes: dark;
+      }
       @import url(\'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@700;800&family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap\');
       
       body, table, td, p, a, li, span {
@@ -183,15 +189,15 @@ function sendClanWelcomeEmail($participant) {
 </head>
 <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background-color: #000000; padding: 20px 10px;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BRAND BANNER HEADER -->
           <tr>
-            <td style="background-color: #003822; padding: 32px 24px 24px 24px; text-align: center; border-bottom: 3px solid #00c853;">
+            <td bgcolor="#003822" style="background-color: #003822; padding: 32px 24px 24px 24px; text-align: center; border-bottom: 3px solid #00c853;">
               
               <!-- Brand Logo in Header -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
@@ -401,24 +407,32 @@ function sendClanPointsEmail($participant, $allocation) {
     // Milestone notice (strictly no emojis in email body)
     if ($isQualified) {
         $milestoneHtml = '
-        <div style="background-color: #064e3b; border: 2px solid #00c853; border-radius: 6px; padding: 18px; margin: 20px 0; text-align: center;">
-          <div class="font-display" style="font-size: 22px; font-weight: bold; color: #facc15; font-family: \'Bebas Neue\', \'Syne\', Arial, sans-serif; text-transform: uppercase; letter-spacing: 2px;">
-            GRAND FINALE QUALIFIED
-          </div>
-          <p style="margin: 6px 0 0 0; color: #ecfdf5; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px; line-height: 18px;">
-            You have officially reached the <strong>100 PTS milestone</strong>. Your entry has been locked in for the celebrity VIP Table Grand Finale draw!
-          </p>
-        </div>';
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#064e3b" style="background-color: #064e3b; border: 2px solid #00c853; border-radius: 6px; margin: 20px 0;">
+          <tr>
+            <td style="padding: 18px; text-align: center;">
+              <div class="font-display" style="font-size: 22px; font-weight: bold; color: #facc15; font-family: \'Bebas Neue\', \'Syne\', Arial, sans-serif; text-transform: uppercase; letter-spacing: 2px;">
+                GRAND FINALE QUALIFIED
+              </div>
+              <p style="margin: 6px 0 0 0; color: #ecfdf5; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px; line-height: 18px;">
+                You have officially reached the <strong>100 PTS milestone</strong>. Your entry has been locked in for the celebrity VIP Table Grand Finale draw!
+              </p>
+            </td>
+          </tr>
+        </table>';
     } else {
         $milestoneHtml = '
-        <div style="background-color: #111714; border-left: 4px solid #facc15; border-radius: 4px; padding: 14px 18px; margin: 20px 0;">
-          <div class="font-heading" style="color: #facc15; font-family: \'Syne\', Arial, sans-serif; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
-            TARGET REMAINING:
-          </div>
-          <div style="color: #d1d5db; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px;">
-            Only <strong>' . $pointsNeeded . ' more points</strong> needed to unlock the 100 PTS Grand Finale VIP Table Draw.
-          </div>
-        </div>';
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#111714" style="background-color: #111714; border-left: 4px solid #facc15; border-radius: 4px; margin: 20px 0;">
+          <tr>
+            <td style="padding: 14px 18px;">
+              <div class="font-heading" style="color: #facc15; font-family: \'Syne\', Arial, sans-serif; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
+                TARGET REMAINING:
+              </div>
+              <div style="color: #cbd5e1; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px;">
+                Only <strong>' . $pointsNeeded . ' more points</strong> needed to unlock the 100 PTS Grand Finale VIP Table Draw.
+              </div>
+            </td>
+          </tr>
+        </table>';
     }
 
     $htmlBody = <<<HTML
@@ -432,15 +446,15 @@ function sendClanPointsEmail($participant, $allocation) {
 </head>
 <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <!-- CONTAINER TABLE -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 20px 10px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background-color: #000000; padding: 20px 10px;">
     <tr>
       <td align="center">
         <!-- EMAIL CARD -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0d120f" style="max-width: 600px; background-color: #0d120f; border: 1px solid #004d13; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
           
           <!-- BANNER HEADER -->
           <tr>
-            <td style="background-color: #003822; padding: 32px 24px 22px 24px; text-align: center; border-bottom: 3px solid #00c853;">
+            <td bgcolor="#003822" style="background-color: #003822; padding: 32px 24px 22px 24px; text-align: center; border-bottom: 3px solid #00c853;">
               
               <!-- Brand Logo in Header -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
@@ -470,10 +484,10 @@ function sendClanPointsEmail($participant, $allocation) {
                 Highlandah <strong style="color: #ffffff;">{$fullName}</strong> (<code style="font-family: 'JetBrains Mono', monospace; color: #facc15; font-weight: 700;">{$clanId}</code>), your challenge results were verified and locked in by Brand Ambassador <strong>{$promoterName}</strong>.
               </p>
 
-              <!-- SCORECARD SUMMARY CARD -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #060907; border: 1px solid #004d13; border-radius: 6px; margin-bottom: 20px;">
+              <!-- SCORECARD SUMMARY CARD (Shielded for both Light Mode & Dark Mode) -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#060907" style="background-color: #060907; border: 1px solid #004d13; border-radius: 8px; margin-bottom: 22px; overflow: hidden;">
                 <tr>
-                  <td style="padding: 20px; text-align: center; border-bottom: 1px solid #111714;">
+                  <td bgcolor="#060907" style="padding: 22px 20px; text-align: center; border-bottom: 1px solid #14241b; background-color: #060907;">
                     <div style="font-family: 'Syne', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">
                       Points Awarded
                     </div>
@@ -486,15 +500,35 @@ function sendClanPointsEmail($participant, $allocation) {
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding: 16px 20px; background-color: #0a0e0c;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <td bgcolor="#0a130e" style="padding: 16px 20px; background-color: #0a130e;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0a130e" style="background-color: #0a130e;">
                       <tr>
-                        <td style="color: #9ca3af; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px;">Activation Outlet:</td>
-                        <td align="right" style="color: #00c853; font-family: \'Outfit\', Arial, sans-serif; font-size: 14px; font-weight: 700;">{$outletName}</td>
+                        <td valign="middle" style="color: #cbd5e1; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                          Activation Outlet:
+                        </td>
+                        <td align="right" valign="middle">
+                          <table cellpadding="0" cellspacing="0" border="0" bgcolor="#032011" style="background-color: #032011; border: 1px solid #00c853; border-radius: 4px; display: inline-table;">
+                            <tr>
+                              <td bgcolor="#032011" style="padding: 5px 12px; color: #00c853; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; font-weight: 700; text-align: right; background-color: #032011;">
+                                {$outletName}
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="color: #9ca3af; font-family: \'Outfit\', Arial, sans-serif; font-size: 13px; padding-top: 8px;">Total Points Now:</td>
-                        <td align="right" style="color: #facc15; font-family: \'Bebas Neue\', \'Syne\', Arial, sans-serif; font-size: 20px; font-weight: 700; padding-top: 8px; letter-spacing: 1px;">{$totalPoints} PTS</td>
+                        <td valign="middle" style="color: #cbd5e1; font-family: 'Outfit', Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding-top: 12px;">
+                          Total Points Now:
+                        </td>
+                        <td align="right" valign="middle" style="padding-top: 12px;">
+                          <table cellpadding="0" cellspacing="0" border="0" bgcolor="#003822" style="background-color: #003822; border: 1px solid #00c853; border-radius: 4px; display: inline-table;">
+                            <tr>
+                              <td bgcolor="#003822" style="padding: 4px 14px; color: #facc15; font-family: 'Bebas Neue', 'Syne', Arial, sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 1.5px; text-align: right; background-color: #003822;">
+                                {$totalPoints} PTS
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
                       </tr>
                     </table>
                   </td>
